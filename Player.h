@@ -11,6 +11,7 @@ using namespace std;
 
 class Player
 {
+	// Local variables.
 	string name;
 	int numOfCoins;
 	Territory playerRegions[];
