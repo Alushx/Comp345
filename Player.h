@@ -3,7 +3,6 @@
 #define PLAYER_H
 
 #include <string>
-#include "Territory.h"
 #include "Map.h"
 #include "BiddingFacility.h"
 
@@ -27,7 +26,7 @@ public:
 	void PayCoin();
 	void PlaceNewArmies(Territory* territory);
 	void MoveArmies(Army* army, Territory* startLocation, Territory* endLocation);
-	void MoveOverLand(Army* Territory* startLocation, Territory* endLocation);
+	void MoveOverLand(Army* army, Territory* startLocation, Territory* endLocation);
 	void BuildCity(Territory* territory);
 	void DestroyArmy(Army* army);
 
