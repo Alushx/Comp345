@@ -11,6 +11,7 @@ using namespace std;
 
 class Player
 {
+private:
 	// Local variables.
 	string name;
 	int numOfCoins;
@@ -19,16 +20,20 @@ class Player
 	BiddingFacility* bidFaci;
 	Disk disks[];
 	Army armies[];
-	 
 	
 public:
 	Player(string name, BiddingFacility* bidFaci);
+	~Player();
 	void PayCoin();
 	void PlaceNewArmies(Territory* territory);
 	void MoveArmies(Army* army, Territory* startLocation, Territory* endLocation);
 	void MoveOverLand(Army* Territory* startLocation, Territory* endLocation);
 	void BuildCity(Territory* territory);
 	void DestroyArmy(Army* army);
+
+private:
+	friend ostream& operator<<(ostream&, const Player&);
+
 };
 
 #endif

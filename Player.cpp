@@ -6,6 +6,11 @@ Player::Player(string name, BiddingFacility* biddingFaci)
 	this->bidFaci = biddingFaci;
 }
 
+Player::~Player()
+{
+	// Depends on implementation.
+}
+
 void Player::PayCoin()
 {
 	if (this->numOfCoins > 0)
@@ -51,4 +56,9 @@ void Player::DestroyArmy(Army* army)
 	// Remove army from armies;
 	// delete army;
 	// army = nullptr;
+}
+
+ostream& operator<<(ostream& strm, const Player& player)
+{
+	return strm << player.name << ": " << player.numOfCoins << " coins.";
 }
