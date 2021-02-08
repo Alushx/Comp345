@@ -25,14 +25,29 @@ public:
 	~Player();
 	void PayCoin();
 	void PlaceNewArmies(Territory* territory);
-	void MoveArmies(Army* army, Territory* startLocation, Territory* endLocation);
-	void MoveOverLand(Army* army, Territory* startLocation, Territory* endLocation);
+	void MoveArmies(Army* army, Territory* endLocation);
+	void MoveOverLand(Army* army, Territory* endLocation);
 	void BuildCity(Territory* territory);
 	void DestroyArmy(Army* army);
+	string GetName();
 
 private:
 	friend ostream& operator<<(ostream&, const Player&);
 
+};
+
+class Army
+{
+private:
+	Player* owner;
+	Territory* position;
+
+public:
+	Army(Player*, Territory*);
+	~Army();
+	string GetOwnerName();
+	Territory* GetPosition();
+	void SetPosition(Territory*);
 };
 
 #endif

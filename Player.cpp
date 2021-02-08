@@ -1,5 +1,9 @@
 #include "Player.h"
 
+// ============================================
+// Player Implementation
+// ============================================
+
 Player::Player(string name, BiddingFacility* biddingFaci)
 {
 	this->name = name;
@@ -32,18 +36,20 @@ void Player::PlaceNewArmies(Territory* territory)
 	// add army to armies;
 }
 
-void Player::MoveArmies(Army* army, Territory* startLocation, Territory* endLocation)
+void Player::MoveArmies(Army* army, Territory* endLocation)
 {
-	// Validate if you can move.
-	// Move if possible.
-	// Throw exception or something if invalid.
+	Territory* oldPos = army->GetPosition();
+	oldPos->RemoveArmy(army);
+	army->SetPosition(endLocation);
+	endLocation->AddArmy(army);
 }
 
-void Player::MoveOverLand(Army* army, Territory* startLocation, Territory* endLocation)
+void Player::MoveOverLand(Army* army, Territory* endLocation)
 {
-	// Validate if you can move.
-	// Move if possible.
-	// Throw exception or something if invalid.
+	Territory* oldPos = army->GetPosition();
+	oldPos->RemoveArmy(army);
+	army->SetPosition(endLocation);
+	endLocation->AddArmy(army);
 }
 
 void Player::BuildCity(Territory* territory)
@@ -58,7 +64,44 @@ void Player::DestroyArmy(Army* army)
 	// army = nullptr;
 }
 
+string Player::GetName()
+{
+	return name;
+}
+
 ostream& operator<<(ostream& strm, const Player& player)
 {
 	return strm << player.name << ": " << player.numOfCoins << " coins.";
+}
+
+// ============================================
+// Army Implementation
+// ============================================
+
+Army::Army(Player* anOwner, Territory* aPosition)
+{
+	owner = anOwner;
+	position = aPosition;
+}
+
+Army::~Army()
+{
+	// Doesn't make sense to delete them because owner/position will exist even after an army is deleted.
+	owner = nullptr;
+	position = nullptr;
+}
+
+string Army::GetOwnerName()
+{
+	return (*owner).GetName();
+}
+
+Territory* Army::GetPosition()
+{
+	return position;
+}
+
+void Army::SetPosition(Territory* newPosition)
+{
+	position = newPosition;
 }
