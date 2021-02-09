@@ -2,14 +2,11 @@
 #include <iostream>
 #include <list>
 
-
-struct Map {
-
+struct Continent {
 	int countries;
 	std::list<int>* countriesList;
-
 public:
-	Map(int);
+	Continent(int);
 	void addEdge(int, int);
 	void printList();
 };
