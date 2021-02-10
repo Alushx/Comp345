@@ -4,11 +4,15 @@
 
 #include <string>
 #include "Map.h"
-#include "Cards.h"""
+#include "Cards.h"
 #include "BiddingFacility.h"
 
 using std::cout;
 using std::string;
+
+// Forward declarations to make compiler happy.
+class Army;
+class City;
 
 // Player class.
 class Player
@@ -34,6 +38,7 @@ public:
 	void BuildCity(Territory* territory);
 	void DestroyArmy(Army*);
 	string GetName();
+	list<Army*>* GetArmies();
 
 // Operators
 private:
