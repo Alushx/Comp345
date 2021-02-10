@@ -15,12 +15,14 @@ class Territory
 {
 private:
 	int numOfArmies;
-	std::list<Army*> armies;
 	
 public:
 	Territory();
-	~Territory();
-	void RemoveArmy(Army*);
-	void AddArmy(Army*);
-	std::string Owner();
+	void RemoveArmy();
+	void AddArmy();
+	int GetNumOfArmies() const;
+
+// Operators.
+private:
+	friend std::ostream& operator<<(std::ostream&, const Territory&);
 };

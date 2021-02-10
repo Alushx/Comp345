@@ -27,31 +27,28 @@ using namespace std;
 	Territory::Territory()
 	{
 		numOfArmies = 0;
-		armies = std::list<Army*>();
 	}
-	// Territory destructor.
-	Territory::~Territory()
-	{
-		// Delete each pointer inside the list to avoid memory leaks.
-		for (std::list<Army*>::iterator iter = armies.begin(); iter != armies.end(); iter++)
-		{
-			delete *iter;
-			*iter = nullptr;
-		}
-	}
-	void Territory::RemoveArmy(Army* army)
+
+	// Decrements army count.
+	void Territory::RemoveArmy()
 	{
 		numOfArmies--;
-		armies.remove(army); // Does this cause memory leak?
 	}
-	void Territory::AddArmy(Army* army)
+
+	// Increments army count.
+	void Territory::AddArmy()
 	{
 		numOfArmies++;
-		armies.push_back(army);
 	}
-	std::string Territory::Owner()
+
+	// Returns numOfArmies.
+	int Territory::GetNumOfArmies() const
 	{
-		// Count how many armies belong to each player.
-		// Player with the most armies has their name returned.
+		return numOfArmies;
+	}
+
+	ostream& operator<<(ostream& strm, const Territory& territory)
+	{
+		return strm << "territory with " << territory.GetNumOfArmies() << " armies.";
 	}
 
