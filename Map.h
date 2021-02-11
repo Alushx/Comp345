@@ -1,9 +1,9 @@
 #pragma once
 #include <list>
-#include <unordered_map>
+#include <map>
 
 struct Map {
-	std::unordered_map<int, std::list< std::pair<int, int>> > countriesList;
+	std::map<int, std::list< std::pair<int, int>> > countriesList;
 public:
 	Map();
 	void addEdge(int, int, int);
