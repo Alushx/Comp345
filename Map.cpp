@@ -4,7 +4,7 @@ using namespace std;
 
 	// Map constructor
 	Map::Map(){
-		unordered_map<int, list< pair<int, int>> > countriesList;
+		map<int, list< pair<int, int>> > countriesList;
 	}
 
 	// Creates an edge between countries
