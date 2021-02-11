@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream>
 #include <list>
+#include <unordered_map>
 
 struct Map {
 	std::unordered_map<int, std::list< std::pair<int, int>> > countriesList;
