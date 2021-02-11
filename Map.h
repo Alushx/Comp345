@@ -2,12 +2,11 @@
 #include <iostream>
 #include <list>
 
-struct Continent {
-	int countries;
-	std::list<int>* countriesList;
+struct Map {
+	std::unordered_map<int, std::list< std::pair<int, int>> > countriesList;
 public:
-	Continent(int);
-	void addEdge(int, int);
+	Map();
+	void addEdge(int, int, int);
 	void printList();
 };
 
