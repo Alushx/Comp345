@@ -2,22 +2,28 @@
 #include "Map.h"
 using namespace std;
 
-	Continent::Continent(int V) {
-		this->countries = V;
-		countriesList = new list<int>[V];
+	// Map constructor
+	Map::Map(){
+		unordered_map<int, list< pair<int, int>> > countriesList;
 	}
 
-	void Continent::addEdge(int x, int y) {
-		countriesList[x].push_back(y);
-		countriesList[y].push_back(x);
+	// Creates an edge between countries
+	void Map::addEdge(int a, int b, int cost) {
+		countriesList[a].push_back(make_pair(b, cost));
+		countriesList[b].push_back(make_pair(a, cost));
 	}
+	
+	// Prints countries, the adjacent countries and the cost to move
+	void Map::printList() {
+		for (auto i : countriesList) {
+			int country = i.first;
+			list < pair<int, int>> adjacent = i.second;
+			cout << "Country " << country << " ---> ";
+			for (auto j : adjacent) {
+				int destination = j.first;
+				int cost = j.second;
 
-	void Continent::printList() {
-		for (int i = 0; i < countries; i++)
-		{
-			cout << "Country " << i << "----";
-			for (int j : countriesList[i]) {
-				cout << j << ",";
+				cout << "Adj to country " << destination << " and costs " << cost << " moves | ";
 			}
 			cout << endl;
 		}
