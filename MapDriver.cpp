@@ -1,45 +1,36 @@
 #include <iostream>
 #include "Map.h"
 
-
 int main() {
 
-	Continent A(7);
-	A.addEdge(0, 1);
-	A.addEdge(1, 2);
-	A.addEdge(2, 3);
-	A.addEdge(2, 4);
-	A.addEdge(2, 5);
-	A.addEdge(5, 6);
+	Map m1;
 
-	cout << "Continent A:\n";
+	// Continent A
+	m1.addEdge(1, 2, 1);
+	m1.addEdge(2, 3, 1);
+	m1.addEdge(3, 4, 1);
+	m1.addEdge(3, 5, 1);
+	m1.addEdge(3, 6, 1);
+	m1.addEdge(6, 7, 1);
+	m1.addEdge(6, 8, 3);
 
-	A.printList();
+	// Continent B
+	m1.addEdge(8, 9, 1);
+	m1.addEdge(8, 13, 1);
+	m1.addEdge(8, 14, 1);
+	m1.addEdge(14, 15, 1);
+	m1.addEdge(9, 10, 3);
+	m1.addEdge(14, 16, 3);
 
-	Continent B(5);
-	B.addEdge(0, 1);
-	B.addEdge(1, 2);
-	B.addEdge(1, 3);
-	B.addEdge(2, 3);
-	B.addEdge(2, 4);
+	// Continent C
+	m1.addEdge(10, 11, 1);
+	m1.addEdge(11, 12, 1);
 
-	cout << "\nContinent B:\n";
+	// Continent D
+	m1.addEdge(16, 17, 1);
+	m1.addEdge(17, 18, 1);
 
-	B.printList();
+	m1.printList();
 
-	Continent C(3);
-	C.addEdge(0, 1);
-	C.addEdge(1, 2);
-
-	cout << "\nContinent C:\n";
-
-	C.printList();
-
-	Continent D(3);
-	D.addEdge(0, 1);
-	D.addEdge(1, 2);
-
-	cout << "\nContinent D:\n";
-
-	D.printList();
+	return 0;
 }
