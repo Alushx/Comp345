@@ -14,6 +14,13 @@ int main()
 	player1->MoveOverLand(army, territory1);
 	player1->DestroyArmy(army);
 
+	delete territory1;
+	delete territory2;
+	delete player1;
+	territory1 = nullptr;
+	territory2 = nullptr;
+	player1 = nullptr;
+
 	return 0;
 }
 

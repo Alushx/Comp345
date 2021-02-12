@@ -1,20 +1,43 @@
 #include "Player.h"
-
+#include <iostream>
+using namespace std;
 // ============================================
 // Player Implementation
 // ============================================
 
 // Player value constructor.
-Player::Player(string aName, BiddingFacility* aBiddingFaci)
+Player::Player(string aName, int coinNum, BiddingFacility* aBiddingFaci)
 {
 	name = aName;
 	bidFaci = aBiddingFaci;
+	numOfCoins = coinNum;
+	playerTerritory = list<Territory*>();
+	playerHand = list<Card*>();
+	cities = list<City*>();
+	armies = list<Army*>();
 }
 
 // Player destructor.
 Player::~Player()
 {
-	// Depends on implementation.
+	// Not deallocating biddingFacility because it is shared by all players, so it must be deallocated at the end of the program itself.
+	// Cards and territories must also be deallocated independently since they belong to all players.
+
+	// Deallocating all cities.
+	for (list<City*>::iterator iter = cities.begin(); iter != cities.end(); ++iter)
+	{
+		City* tempCity = *iter;
+		delete tempCity;
+		tempCity = nullptr;
+	}
+
+	// Deallocating all armies.
+	for (list<Army*>::iterator iter = armies.begin(); iter != armies.end(); ++iter)
+	{
+		Army* tempArmy = *iter;
+		delete tempArmy;
+		tempArmy = nullptr;
+	}
 }
 
 // Pay coin.
@@ -37,8 +60,8 @@ void Player::PlaceNewArmies(Territory* territory)
 	Army* army = new Army(this, territory);
 	territory->AddArmy();
 	armies.push_back(army);
-	army = nullptr;
 	cout << "Created " << *army << " in " << *territory << endl;
+	army = nullptr;
 }
 
 // Moves army. Should work for both land and water.

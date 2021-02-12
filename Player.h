@@ -7,7 +7,6 @@
 #include "Cards.h"
 #include "BiddingFacility.h"
 
-using std::cout;
 using std::string;
 
 // Forward declarations to make compiler happy.
@@ -21,15 +20,15 @@ class Player
 private:
 	string name;
 	int numOfCoins;
+	BiddingFacility* bidFaci;
 	list<Territory*> playerTerritory;
 	list<Card*> playerHand;
-	BiddingFacility* bidFaci;
 	list<City*> cities;
 	list<Army*> armies;
 
 // Public methods
 public:
-	Player(string name, BiddingFacility* bidFaci);
+	Player(string name = "Odysseus", int coinNum = 0, BiddingFacility* bidFaci = nullptr);
 	~Player();
 	void PayCoin();
 	void PlaceNewArmies(Territory* territory);
