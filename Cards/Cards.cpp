@@ -70,17 +70,17 @@ struct CombinationType {
 //Card
 
 //Constructor
-Card::Card(string good,string combinationtype, string action){
-    this->good = good;
-    this->combinationtype = combinationtype;
-    this->action[0] = action;
+Card::Card(string gd,string ctype, string actn){
+    good = gd;
+    combinationtype = ctype;
+    action[0] = actn;
 }
 
-Card::Card(string good, string combinationtype, string firstAction, string secondAction) {
-    this->good = good;
-    this->combinationtype = combinationtype;
-    this->action[0] = firstAction;
-    this->action[1] = secondAction;
+Card::Card(string gd, string ctype, string firstAction, string secondAction) {
+    good = gd;
+    combinationtype = ctype;
+    action[0] = firstAction;
+    action[1] = secondAction;
 }
 
 void Card::printCard() {
