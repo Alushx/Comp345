@@ -8,6 +8,9 @@ public:
 	Map();
 	void addEdge(int, int, int);
 	void printList();
+	bool Validate();
+private:
+	void ValidateHelper(int node, std::map<int,bool>* visitedList);
 };
 
 class Territory

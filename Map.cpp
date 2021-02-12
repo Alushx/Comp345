@@ -29,6 +29,52 @@ using namespace std;
 		}
 	}
 
+	// Validates graph connectivity.
+	bool Map::Validate()
+	{
+		map<int, bool> visitedList;
+
+		// Setting all nodes to unvisited — AKA false.
+		for (auto i : countriesList)
+		{
+			visitedList[i.first] = false;
+		}
+
+		// Traversing graph through one node (should visit all other nodes if it is truly connected).
+		ValidateHelper(countriesList.begin()->first, &visitedList);
+
+		// Check each node has been visited.
+		for (auto i : visitedList)
+		{
+			if (!i.second)
+			{
+				cout << "Invalid map. Not fully connected." << endl;
+				return false;
+			}
+		}
+
+		// If every node was visited, validate.
+		cout << "Valid map. It is fully connected." << endl;
+		return true;
+	}
+
+	// Recursive part of DFS.
+	void Map::ValidateHelper(int node, map<int, bool>* visitedList)
+	{
+		// Visit node.
+		(*visitedList)[node] = true;
+
+		// Recursively check adjacent nodes.
+		list<pair<int, int>> adjacentNodes = countriesList[node];
+		for (auto i : adjacentNodes)
+		{
+			if (!(*visitedList)[i.first])
+			{
+				ValidateHelper(i.first, visitedList);
+			}
+		}
+	}
+
 	// Territory default constructor.
 	Territory::Territory()
 	{
