@@ -8,13 +8,14 @@ class Territory;
 struct Map {
 	std::map<Territory*, std::map<Territory*, int>> countriesList; // Adjacency matrix.
 	std::list<std::list<Territory*>> continentList;
+	std::map<std::string, Territory*> territories;
 
 public:
 	Map();
 	void addEdge(Territory*, Territory*, int);
 	void printList();
-	std::list<std::list<Territory*>>* GetContinents();
-	void AddContinent(std::list<Territory*>);
+	Territory* GetTerritory(std::string);
+	void AddContinent(std::list<Territory*>&);
 	bool Validate();
 private:
 	bool IsConnectedMap();

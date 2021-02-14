@@ -10,6 +10,7 @@ using namespace std;
 	Map::Map(){
 		map<Territory*, list< pair<Territory*, int>> > countriesList;
 		list<list<Territory*>> continentList;
+		map<string, Territory*> territories;
 	}
 
 	// Creates an edge between countries
@@ -173,16 +174,22 @@ using namespace std;
 		return true;
 	}
 
-	// Returns list of continents.
-	list<list<Territory*>>* Map::GetContinents()
+	// Returns territory.
+	Territory* Map::GetTerritory(string name)
 	{
-		return &continentList;
+		return territories[name];
 	}
 
 	// Adds a new continent.
-	void Map::AddContinent(std::list<Territory*> aContinent)
+	void Map::AddContinent(std::list<Territory*>& aContinent)
 	{
 		continentList.push_back(aContinent);
+
+		// Adds territories of new continent to our list of territories.
+		for (Territory* input : aContinent)
+		{
+			territories[input->GetName()] = input;
+		}
 	}
 	
 	
