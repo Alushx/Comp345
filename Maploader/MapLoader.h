@@ -1,15 +1,10 @@
 #pragma once
-#include "../Map.h"
-#include <string>
-#include <fstream>
+#include "../Map/Map.h"
+using namespace std;
 
 class MapLoader {
-    Map *map;
 public:
-    MapLoader();
-    void readMapFile(std::string fileName);
-    Map* GetMap();
-private:
-    void CreateContinent(std::ifstream&);
-    void JoinTerritories(std::ifstream&);
+    Map *map;
+    MapLoader() = default;
+    void readMapFile(string fileName);
 };
