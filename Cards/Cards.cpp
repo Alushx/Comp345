@@ -83,6 +83,21 @@ Card::Card(string gd, string ctype, string firstAction, string secondAction) {
     action[1] = secondAction;
 }
 
+
+//Getters
+string Card ::getGood(){
+    return good;
+}
+string Card ::getCombinationType(){
+    return combinationtype;
+}
+string Card ::getFirstAction(){
+    return action[0];
+}
+string Card ::getSecondAction(){
+    return action[1];
+}
+
 void Card::printCard() {
     CombinationType comp;
     cout << "\tGood: "<< good<< endl;
@@ -109,9 +124,13 @@ void Deck::printDeck() {
         cout << endl;
     }
 }
+int Deck :: myRandomGenerator(int j) {
+   return rand() % j;
+}
 //Shuffle the content of the whole array.
 void Deck::shuffleDeck() {
-    random_shuffle(&cards[0], &cards[35]);
+    srand(time(0)); 
+    random_shuffle(&cards[0], &cards[34], myRandomGenerator);
 }
 // topCardptr points to the top of the deck
 //When a card is drawn the pointer topCard move to the next card.
@@ -174,8 +193,8 @@ void Deck ::generateDeck() {
 //Hand
 
 //Constructor
-Hand::Hand(Deck* deck) {
-    this->deck = deck;
+Hand::Hand(Deck* dk) {
+    deck = dk;
  //Initializing the cards for the face-up cards by drawing from the deck
     for (int i = 0; i < 6; i++) {
         cards[i] = deck->draw();
@@ -221,26 +240,46 @@ Card* Hand::exchange(int cardIndex, int* playerCoins) {
 
 //To be implemented
 void Hand::printHand() {
+    //get the goods for each card
+    string goodCard[6];
+    string ctypeCard[6];
+    string firstAction[6];
+    string secondAction[6];
+    for(int i=0;i<6;i++){
+        goodCard[i] = cards[i]->getGood();
+    }
+    //get the combinationtype for each card in the card space
+    for(int i=0;i<6;i++){
+        ctypeCard[i] = cards[i]->getCombinationType();
+    }
+    //get First Action for each card in the card space
+    for(int i=0;i<6;i++){
+        firstAction[i] = cards[i]->getFirstAction();
+    }
+    //get Second Action for each card in the card space
+    for(int i=0;i<6;i++){
+        secondAction[i] = cards[i]->getSecondAction();
+    }
     string spaces[6] = { "|","|" ,"|" ,"|" ,"|" ,"|" };
 
     for (int i = 0; i < 211; i++) {
         cout << "_";
     }
-     
-    printf("\n|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|\n", cards[0]->good.c_str(), cards[1]->good.c_str(), cards[2]->good.c_str(),
-        cards[3]->good.c_str(), cards[4]->good.c_str(), cards[5]->good.c_str());
+     //c_str() converts cpp string to c string.
+    printf("\n|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|\n", goodCard[0].c_str(), goodCard[1].c_str(), goodCard[2].c_str(),
+        goodCard[3].c_str(), goodCard[4].c_str(), goodCard[5].c_str());
 
     printf("|Action(s): %24sAction(s): %24sAction(s): %24sAction(s): %24sAction(s): %24sAction(s): %24s\n", 
         spaces[0].c_str(), spaces[1].c_str(), spaces[2].c_str(), spaces[3].c_str(), spaces[4].c_str(), spaces[5].c_str());
 
-    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", cards[0]->action[0].c_str(), cards[1]->action[0].c_str(), cards[2]->action[0].c_str(),
-        cards[0]->action[0].c_str(), cards[0]->action[0].c_str(), cards[0]->action[0].c_str());
+    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", firstAction[0].c_str(), firstAction[1].c_str(), firstAction[2].c_str(),
+        firstAction[3].c_str(), firstAction[4].c_str(), firstAction[5].c_str());
 
-    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", cards[0]->combinationtype.c_str(), cards[1]->combinationtype.c_str(), cards[2]->combinationtype.c_str(),
-        cards[3]->combinationtype.c_str(), cards[4]->combinationtype.c_str(), cards[5]->combinationtype.c_str());
+    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", ctypeCard[0].c_str(), ctypeCard[1].c_str(), ctypeCard[2].c_str(),
+        ctypeCard[3].c_str(), ctypeCard[4].c_str(), ctypeCard[5].c_str());
 
-    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", cards[0]->action[1].c_str(), cards[1]->action[1].c_str(), cards[2]->action[1].c_str(),
-        cards[3]->action[1].c_str(), cards[4]->action[1].c_str(), cards[5]->action[1].c_str());
+    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", secondAction[0].c_str(), secondAction[1].c_str(), secondAction[2].c_str(),
+       secondAction[3].c_str(), secondAction[4].c_str(), secondAction[5].c_str());
 
     printf("|Cost: 0 %27sCost: 1 %27sCost: 1 %27sCost: 2 %27sCost: 2 %27sCost: 3 %27s\n",
         spaces[0].c_str(), spaces[1].c_str(), spaces[2].c_str(), spaces[3].c_str(), spaces[4].c_str(), spaces[5].c_str());
