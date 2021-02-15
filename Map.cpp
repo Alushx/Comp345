@@ -1,38 +1,68 @@
 #include <iostream>
 #include "Map.h"
 using namespace std;
+	
+	//====================================
+	// Map implementation.
+	//====================================
 
 	// Map constructor
 	Map::Map(){
-		map<int, list< pair<int, int>> > countriesList;
+		map<Territory*, list< pair<Territory*, int>> > countriesList;
+		list<list<Territory*>> continentList;
+		map<string, Territory*> territories;
 	}
 
 	// Creates an edge between countries
-	void Map::addEdge(int a, int b, int cost) {
-		countriesList[a].push_back(make_pair(b, cost));
-		countriesList[b].push_back(make_pair(a, cost));
+	void Map::addEdge(Territory* a, Territory* b, int cost) {
+		countriesList[a][b] = cost;
+		countriesList[b][a] = cost;
 	}
 	
 	// Prints countries, the adjacent countries and the cost to move
 	void Map::printList() {
 		for (auto i : countriesList) {
-			int country = i.first;
-			list < pair<int, int>> adjacent = i.second;
-			cout << "Country " << country << " ---> ";
+			Territory* country = i.first;
+			map <Territory*, int> adjacent = i.second;
+			cout << "Country " << country->GetName() << " ---> ";
 			for (auto j : adjacent) {
-				int destination = j.first;
+				Territory* destination = j.first;
 				int cost = j.second;
 
-				cout << "Adj to country " << destination << " and costs " << cost << " moves | ";
+				cout << "Adj to country " << destination->GetName() << " and costs " << cost << " moves | ";
 			}
 			cout << endl;
 		}
 	}
 
-	// Validates graph connectivity.
+	// Validates if our map meets all the criteria.
 	bool Map::Validate()
 	{
-		map<int, bool> visitedList;
+		bool isConnectedMap = IsConnectedMap();
+		bool hasUniqueTerritories = HasUniqueTerritories();
+		bool isConnectedContinent = true;
+
+		for (list<Territory*> continent : continentList)
+		{
+			isConnectedContinent = isConnectedContinent && IsConnectedContinent(&continent);
+		}
+
+		if (isConnectedMap && isConnectedContinent && hasUniqueTerritories)
+		{
+			cout << "The map is valid." << endl;
+			return true;
+		}
+		else
+		{
+			cout << "The map is invalid!" << endl;
+			return false;
+		}
+	}
+
+	// Validates graph connectivity.
+	bool Map::IsConnectedMap()
+	{
+		map<Territory*, bool> visitedList;
 
 		// Setting all nodes to unvisited — AKA false.
 		for (auto i : countriesList)
@@ -41,44 +71,144 @@ using namespace std;
 		}
 
 		// Traversing graph through one node (should visit all other nodes if it is truly connected).
-		ValidateHelper(countriesList.begin()->first, &visitedList);
+		HelpVisitMap(countriesList.begin()->first, &visitedList);
 
 		// Check each node has been visited.
 		for (auto i : visitedList)
 		{
 			if (!i.second)
 			{
-				cout << "Invalid map. Not fully connected." << endl;
 				return false;
 			}
 		}
 
 		// If every node was visited, validate.
-		cout << "Valid map. It is fully connected." << endl;
 		return true;
 	}
 
 	// Recursive part of DFS.
-	void Map::ValidateHelper(int node, map<int, bool>* visitedList)
+	void Map::HelpVisitMap(Territory* node, map<Territory*, bool>* visitedList)
 	{
 		// Visit node.
 		(*visitedList)[node] = true;
 
 		// Recursively check adjacent nodes.
-		list<pair<int, int>> adjacentNodes = countriesList[node];
+		map<Territory*, int> adjacentNodes = countriesList[node];
 		for (auto i : adjacentNodes)
 		{
 			if (!(*visitedList)[i.first])
 			{
-				ValidateHelper(i.first, visitedList);
+				HelpVisitMap(i.first, visitedList);
 			}
 		}
+	}
+
+	// Checks if a continent is a connected subgraph.
+	bool Map::IsConnectedContinent(list<Territory*>* continent)
+	{
+		map<Territory*, bool> visitedList;
+
+		// Setting all territories to unvisited.
+		for (auto territory : (*continent))
+		{
+			visitedList[territory] = false;
+		}
+
+		// Traversing continent through 1 territory.
+		HelpVisitContinent(*(*continent).begin(), &visitedList);
+
+		// Check each territory has been visited.
+		for (auto territory : visitedList)
+		{
+			if (!territory.second)
+			{
+				return false;
+			}
+		}
+
+		// If every territory was visited.
+		return true;
+	}
+
+	// Helper function for IsConnectedContinent
+	void Map::HelpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList)
+	{
+		// Visit node.
+		(*visitedList)[node] = true;
+
+		// Recursively check adjacent territories that do not travel by sea.
+		map<Territory*, int> adjacentNodes = countriesList[node];
+		for (auto i : adjacentNodes)
+		{
+			if (!(*visitedList)[i.first] && i.second != 3)
+			{
+				HelpVisitContinent(i.first, visitedList);
+			}
+		}
+	}
+
+	// Helper method that checks if each territory belongs to only one continent.
+	bool Map::HasUniqueTerritories()
+	{
+		map<Territory*, bool> visitedTerritories;
+
+		// Loop through continent territories and check if a territory has been visited before.
+		for (list<list<Territory*>>::iterator continentIter = continentList.begin(); continentIter != continentList.end(); continentIter++)
+		{
+			for (list<Territory*>::iterator territoryIter = continentIter->begin(); territoryIter != continentIter->end(); territoryIter++)
+			{
+				if (visitedTerritories[*territoryIter])
+				{
+					// Has been visited before.
+					return false;
+				}
+				else
+				{
+					// Visit territory.
+					visitedTerritories[*territoryIter] = true;
+				}
+			}
+		}
+
+		// No duplicates.
+		return true;
+	}
+
+	// Returns territory.
+	Territory* Map::GetTerritory(string name)
+	{
+		return territories[name];
+	}
+
+	// Adds a new continent.
+	void Map::AddContinent(std::list<Territory*>& aContinent)
+	{
+		continentList.push_back(aContinent);
+
+		// Adds territories of new continent to our list of territories.
+		for (Territory* input : aContinent)
+		{
+			territories[input->GetName()] = input;
+		}
+	}
+	
+	
+	//====================================
+	// Territory implementation.
+	//====================================
+
+	// Territory value constructor.
+	Territory::Territory(string aName)
+	{
+		numOfArmies = 0;
+		name = aName;
 	}
 
 	// Territory default constructor.
 	Territory::Territory()
 	{
 		numOfArmies = 0;
+		name = "Ithaca";
 	}
 
 	// Decrements army count.
@@ -99,8 +229,14 @@ using namespace std;
 		return numOfArmies;
 	}
 
+	// Returns territory name.
+	string Territory::GetName() const
+	{
+		return name;
+	}
+
 	ostream& operator<<(ostream& strm, const Territory& territory)
 	{
-		return strm << "territory with " << territory.GetNumOfArmies() << " armies.";
+		return strm << territory.GetName() << " with " << territory.GetNumOfArmies() << " armies.";
 	}
 
