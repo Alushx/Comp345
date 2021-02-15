@@ -1,6 +1,10 @@
 #pragma once
 #include <list>
 #include <map>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 // Forward declaration to make compiler happy.
 class Territory;
