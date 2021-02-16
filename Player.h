@@ -4,6 +4,7 @@
 
 #include <string>
 #include "Map.h"
+#include "BiddingFacility.h"
 
 
 
@@ -13,6 +14,7 @@ using std::string;
 class Army;
 class City;
 class Card;
+class BiddingFacility;
 
 // Player class.
 class Player
