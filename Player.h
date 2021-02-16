@@ -4,14 +4,15 @@
 
 #include <string>
 #include "Map.h"
-#include "Cards.h"
-#include "BiddingFacility.h"
+
+
 
 using std::string;
 
 // Forward declarations to make compiler happy.
 class Army;
 class City;
+class Card;
 
 // Player class.
 class Player
@@ -30,7 +31,7 @@ private:
 public:
 	Player(string name = "Odysseus", int coinNum = 0, BiddingFacility* bidFaci = nullptr);
 	~Player();
-	void PayCoin();
+	bool PayCoin(int& cost);
 	void PlaceNewArmies(Territory* territory);
 	void MoveArmies(Army*, Territory*);
 	void MoveOverLand(Army*, Territory*);

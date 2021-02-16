@@ -1,9 +1,12 @@
 #include "Player.h"
 #include <iostream>
+#include "Cards/Cards.h"
 using namespace std;
 // ============================================
 // Player Implementation
 // ============================================
+
+
 
 // Player value constructor.
 Player::Player(string aName, int coinNum, BiddingFacility* aBiddingFaci)
@@ -40,17 +43,20 @@ Player::~Player()
 	}
 }
 
+// Switched Pay coin into a boolean type 
 // Pay coin.
-void Player::PayCoin()
+bool Player::PayCoin(int& cost)
 {
-	if (this->numOfCoins > 0)
+	if (this->numOfCoins > cost)
 	{
-		numOfCoins--;
-		// Do action.
+		numOfCoins = numOfCoins - cost;
+		cout << this->name << " has now " << this->numOfCoins << endl;
+		return true;
 	}
 	else
 	{
-		// Exceptions.
+		cout << this->name + " doesn't have enough coins " << endl;
+		return false;
 	}
 }
 

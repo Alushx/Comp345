@@ -4,6 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <stdio.h>
+#include "../Player.h"
 using namespace std;
 
 const struct Action {
@@ -222,11 +223,10 @@ void Hand::shiftCards(int index) {
 
 //Allows player to select the card from its position in the row
 //Then Pay the coin cost
-Card* Hand::exchange(int cardIndex, int* playerCoins) {
-    
-    if (getCardCost(cardIndex) > *playerCoins) return nullptr;//Make sure that player can afford the card
+Card* Hand::exchange(int cardIndex, Player* player) {
 
-    *playerCoins = *playerCoins - getCardCost(cardIndex);//PLAYER pays
+    int cost = getCardCost(cardIndex);
+    if ( !player->PayCoin( cost )) return nullptr;
 
     Card* pickedCard = (cards[cardIndex]);// save picked card
 

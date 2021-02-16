@@ -1,8 +1,8 @@
-#ifndef CARDS_H
-#define CARDS_H
+#pragma once
 
 #include <string>
 #include <array>
+#include "../Player.h"
 using namespace std;
 
 
@@ -50,9 +50,8 @@ private:
 public:
 	Hand(Deck* deck);
 	int getCardCost(int indexOfcard);
-	Card* exchange(int cardIndex, int* playerCoins);
+	Card* exchange(int cardIndex, Player* player);
 	void printHand();
 private:
 	void shiftCards(int index);
 };
-#endif //CARDS_H
