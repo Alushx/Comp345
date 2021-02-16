@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <iostream>
 #include "Cards/Cards.h"
+#include "BiddingFacility.h"
 using namespace std;
 // ============================================
 // Player Implementation
