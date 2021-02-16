@@ -17,21 +17,14 @@ private:
 
 
 public:
-
     // Constructor
     BiddingFacility();
 
-    // Gameplay Methods
+    //Copy constructor
+    BiddingFacility(const BiddingFacility& bf);
+
+    // Game Methods
    static int biddingPhase(vector<Player*>& player);
    void setBid(int bid);
    int getBid() const;
-
-
-    // Accessors
- //   int getBid() const;
-
-    // Mutators
- //   void setBid(int bid);
-
-
 };
