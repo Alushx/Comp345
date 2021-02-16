@@ -83,8 +83,15 @@ Card::Card(string gd, string ctype, string firstAction, string secondAction) {
     action[0] = firstAction;
     action[1] = secondAction;
 }
-
-
+//Copy constructor
+Card :: Card(const Card &c){
+    good = c.good;
+    combinationtype = c.combinationtype;
+    action[0] = c.action[0];
+    action[1] = c.action[1];
+}
+//Deconstructor
+Card :: ~Card(){}; // There are no pointers for this class
 //Getters
 string Card ::getGood(){
     return good;
@@ -111,12 +118,30 @@ void Card::printCard() {
    
     
 }
+// toString Cards
+ostream& operator<<(ostream& strm, const Card& card)
+{
+	return strm << "Good: " << card.good 
+    << "\nAction(s): " << card.action[0] << "\n" << card.combinationtype << "\n"
+    << card.action[1] << endl;
+}
 
 //Deck
 Deck::Deck() {
     topCardptr = &cards[0];//Points to the top of the deck.
 }
-
+//CopyConstructor
+Deck::Deck(const Deck &d){
+    topCardptr = d.topCardptr;
+    for(int i=0;i<34;i++){
+        cards[i] = d.cards[i];
+    }
+}
+//Deconstructor
+Deck :: ~Deck(){
+    // topCardptr is not dynamically allocated therefore, no need to delete it.
+    topCardptr = nullptr;
+}
 //Displays the whole deck
 void Deck::printDeck() {
     for (int i = 0; i < 34; i++) {
@@ -190,6 +215,11 @@ void Deck ::generateDeck() {
 
 }
 
+// toString Deck
+ostream& operator<<(ostream& strm, const Deck& deck)
+{
+	return strm << "Deck has 34 cards";
+}
 
 //Hand
 
@@ -201,7 +231,20 @@ Hand::Hand(Deck* dk) {
         cards[i] = deck->draw();
     }
 }
-
+//CopyConstructor
+Hand::Hand(const Hand &h){
+    deck = h.deck;
+    for (int i = 0; i < 6; i++)
+    {
+        cards[i] = h.cards[i];
+    }
+    
+}
+//Destructor
+Hand::~Hand(){
+    //deck is not dynamically allocated pointer therefore, no need to delete it
+    deck = nullptr;
+}
 //Returns the cost of a card depending on where the card is placed in the cards space
 int Hand::getCardCost(int indexOfcard) {
     if (indexOfcard == 0) return 0;
@@ -296,5 +339,9 @@ void Hand::printHand() {
     cout << ""<<endl;
 }
 
-
+// toString Hand
+ostream& operator<<(ostream& strm, const Hand& hand)
+{
+	return strm << "Hand have 6 cards to choose from";
+}
 
