@@ -38,6 +38,10 @@ public:
 	void BuildCity(Territory* territory);
 	void DestroyArmy(Army*);
 	string GetName();
+	void SetName(string n);
+	int getCoins();
+	void setCoins(int c);
+	BiddingFacility* getBidFaci() const;
 	list<Army*>* GetArmies();
 
 // Operators
