@@ -9,11 +9,11 @@ using namespace std;
 
 
 // Player value constructor.
-Player::Player(string aName, int coinNum, BiddingFacility* aBiddingFaci)
+Player::Player(string aName, int coinNum)
 {
 	name = aName;
-	bidFaci = aBiddingFaci;
 	numOfCoins = coinNum;
+	bidFaci = new BiddingFacility();
 	playerTerritory = list<Territory*>();
 	playerHand = list<Card*>();
 	cities = list<City*>();
@@ -115,6 +115,22 @@ void Player::DestroyArmy(Army* army)
 string Player::GetName()
 {
 	return name;
+}
+
+void Player::SetName(string n) {
+	name = n;
+}
+
+int Player::getCoins() {
+	return numOfCoins;
+}
+
+void Player::setCoins(int c) {
+	numOfCoins = c;
+}
+
+BiddingFacility* Player::getBidFaci() const { 
+	return bidFaci;
 }
 
 // Returns list of player armies.
