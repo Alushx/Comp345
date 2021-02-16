@@ -31,7 +31,7 @@ private:
 
 // Public methods
 public:
-	Player(string name = "Odysseus", int coinNum = 0, BiddingFacility* bidFaci = nullptr);
+	Player(string name = "Odysseus", int coinNum = 0);
 	~Player();
 	bool PayCoin(int& cost);
 	void PlaceNewArmies(Territory* territory);

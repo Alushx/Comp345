@@ -2,10 +2,9 @@
 
 int main()
 {
-	BiddingFacility* bidding = new BiddingFacility();
 	Territory* territory1 = new Territory();
 	Territory* territory2 = new Territory();
-	Player* player1 = new Player("Achilles", bidding);
+	Player* player1 = new Player("Achilles", 12);
 
 	player1->PlaceNewArmies(territory1);
 

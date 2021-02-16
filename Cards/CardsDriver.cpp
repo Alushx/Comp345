@@ -7,6 +7,7 @@ using namespace std;
 int main() {
 
 	int hello;
+    Player* player = new Player();
 
     // create a deck
     Deck deck = Deck();
@@ -35,6 +36,6 @@ int main() {
         hand.printHand();
         cout << "Please enter the index of the card you want tp pick or a negative number to exit: ";
         cin >> index;
-        hand.exchange(index, &coins);
+        hand.exchange(index, player);
     }
 }

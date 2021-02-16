@@ -25,7 +25,7 @@ MapLoader::MapLoader(MapLoader& otherMap)
 {
     if (otherMap.map)
     {
-        map = new Map(otherMap.map);
+        map = new Map(*otherMap.map);
     }
     else
     {
@@ -35,6 +35,7 @@ MapLoader::MapLoader(MapLoader& otherMap)
 
 // Creates map by reading a map text file.
 void MapLoader::readMapFile(string fileName){
+    bool shouldContinue = true;
     ifstream inFile;
     inFile.open(fileName);
 
@@ -44,7 +45,7 @@ void MapLoader::readMapFile(string fileName){
     }
 
     string task;
-    while (!inFile.eof())
+    while (!inFile.eof() && shouldContinue)
     {
         inFile >> task;
         if (task == "CONTINENT")
@@ -54,6 +55,14 @@ void MapLoader::readMapFile(string fileName){
         else if (task == "JOIN")
         {
             JoinTerritories(inFile);
+        }
+        else if (task == "BOARD")
+        {
+            CreateBoard(inFile);
+        }
+        else if (task == "OPTIONAL")
+        {
+            shouldContinue = ShouldCreateBoard();
         }
     }
 
@@ -76,7 +85,15 @@ void MapLoader::CreateContinent(ifstream& input)
     // Parse line for each territory.
     while (stream >> name)
     {
-        territory = new Territory(name);
+        // Check if the territory already exists or not.
+        if (!map->GetTerritory(name))
+        {
+            territory = new Territory(name);
+        }
+        else
+        {
+            territory = map->GetTerritory(name);
+        }
         continent.push_back(territory);
     }
 
@@ -98,6 +115,33 @@ void MapLoader::JoinTerritories(ifstream& input)
 
     // Add edge.
     map->addEdge(map->GetTerritory(terr1), map->GetTerritory(terr2), cost);
+}
+
+// Adds boards to map.
+void MapLoader::CreateBoard(ifstream& input)
+{
+
+}
+
+// Asks whether player wants the fourth board or not.
+bool MapLoader::ShouldCreateBoard()
+{
+    int response = 0;
+    do
+    {
+        cout << "Do you want to use the fourth board?" << endl;
+        cout << "\t 1) Yes" << endl;
+        cout << "\t 2) No" << endl;
+    } while (!(response == 1 || response == 2));
+
+    if (response == 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 // Returns map to be used for game.
