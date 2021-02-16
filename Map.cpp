@@ -6,11 +6,65 @@ using namespace std;
 	// Map implementation.
 	//====================================
 
-	// Map constructor
+	// Map default constructor
 	Map::Map(){
-		map<Territory*, list< pair<Territory*, int>> > countriesList;
-		list<list<Territory*>> continentList;
-		map<string, Territory*> territories;
+		countriesList = map<Territory*, map<Territory*, int>>();
+		continentList = list<list<Territory*>>();
+		territories = map<string, Territory*>();
+	}
+
+	// Copy constructor.
+	Map::Map(Map& anotherMap)
+	{
+		for (pair<string, Territory*> otherPair : anotherMap.territories)
+		{
+			// Create deep copy.
+			territories[otherPair.first] = new Territory(*(otherPair.second));
+		}
+
+		// Copies each continent.
+		list<Territory*> tempContinent;
+		Territory* myTerritory = nullptr;
+		Territory* secondTerritory = nullptr;
+		for (list<Territory*> otherContinent : anotherMap.continentList)
+		{
+			tempContinent = list<Territory*>();
+			for (Territory* otherTerritory : otherContinent)
+			{
+				myTerritory = territories[otherTerritory->GetName()];
+				tempContinent.push_back(myTerritory);
+			}
+			continentList.push_back(tempContinent);
+		}
+
+		// Copies adjacency list.
+		for (pair<Territory*, map<Territory*, int>> otherPair: anotherMap.countriesList)
+		{
+			myTerritory = territories[otherPair.first->GetName()];
+			for (pair<Territory*, int> otherAdjacentTerritory : otherPair.second)
+			{
+				secondTerritory = territories[otherAdjacentTerritory.first->GetName()];
+				countriesList[myTerritory][secondTerritory] = otherAdjacentTerritory.second;
+			}
+		}
+	}
+
+	// Destructor.
+	Map::~Map()
+	{
+		Territory* tempTerritory = nullptr;
+
+		// Deallocating each territory in map. Since all territories of the map are in this list,
+		// There's no reason to deallocate the memory in other pointers. The rest are now dangling.
+		for (pair<string, Territory*> pair : territories)
+		{
+			tempTerritory = territories[pair.first];
+			if (tempTerritory)
+			{
+				delete tempTerritory;
+				tempTerritory = nullptr;
+			}
+		}
 	}
 
 	// Creates an edge between countries
@@ -191,6 +245,12 @@ using namespace std;
 			territories[input->GetName()] = input;
 		}
 	}
+
+	// Stream insertion operator overload.
+	std::ostream& operator<<(std::ostream& strm, const Map& otherMap)
+	{
+		return strm << "Map"; // Can't think of anything more clever.
+	}
 	
 	
 	//====================================
@@ -209,6 +269,14 @@ using namespace std;
 	{
 		numOfArmies = 0;
 		name = "Ithaca";
+	}
+
+	// Territory copy constructor.
+	Territory::Territory(Territory& aTerritory)
+	{
+		// Basic/Immutable types, so it's safe to assign them.
+		numOfArmies = aTerritory.numOfArmies;
+		name = aTerritory.name;
 	}
 
 	// Decrements army count.
@@ -235,6 +303,7 @@ using namespace std;
 		return name;
 	}
 
+	// Stream insertion operator overload.
 	ostream& operator<<(ostream& strm, const Territory& territory)
 	{
 		return strm << territory.GetName() << " with " << territory.GetNumOfArmies() << " armies.";

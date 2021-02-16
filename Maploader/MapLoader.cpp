@@ -12,6 +12,27 @@ MapLoader::MapLoader()
     map = new Map();
 }
 
+// Destructors. Not necessary, but I wanted to mention the point below.
+MapLoader::~MapLoader()
+{
+    // Map loader should be deleted near the start of the game, so doesn't make sense to deallocate map memory. 
+    // It should be passed on to an independent map pointer at that point.
+    map = nullptr;
+}
+
+// Copy constructor.
+MapLoader::MapLoader(MapLoader& otherMap)
+{
+    if (otherMap.map)
+    {
+        map = new Map(otherMap.map);
+    }
+    else
+    {
+        map = nullptr;
+    }
+}
+
 // Creates map by reading a map text file.
 void MapLoader::readMapFile(string fileName){
     ifstream inFile;
@@ -83,4 +104,10 @@ void MapLoader::JoinTerritories(ifstream& input)
 Map* MapLoader::GetMap()
 {
     return map;
+}
+
+// Stream insertion operator.
+ostream& operator<<(ostream& strm, const MapLoader& map)
+{
+    return strm << "MapBuilder"; // I can't think of anything clever for this.
 }

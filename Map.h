@@ -16,6 +16,8 @@ struct Map {
 
 public:
 	Map();
+	Map(Map&);
+	~Map();
 	void addEdge(Territory*, Territory*, int);
 	void printList();
 	Territory* GetTerritory(std::string);
@@ -27,6 +29,7 @@ private:
 	bool IsConnectedContinent(std::list<Territory*>*);
 	void HelpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList);
 	bool HasUniqueTerritories();
+	friend std::ostream& operator<<(std::ostream&, const Map&);
 };
 
 class Territory
@@ -38,6 +41,8 @@ private:
 public:
 	Territory();
 	Territory(std::string);
+	Territory(Territory&);
+	// No pointers so I do not need to define a destructor.
 	void RemoveArmy();
 	void AddArmy();
 	int GetNumOfArmies() const;
