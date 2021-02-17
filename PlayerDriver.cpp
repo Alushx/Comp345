@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include "Player.h"
 
 int main()
@@ -6,12 +18,12 @@ int main()
 	Territory* territory2 = new Territory();
 	Player* player1 = new Player("Achilles", 12);
 
-	player1->PlaceNewArmies(territory1);
+	player1->placeNewArmies(territory1);
 
-	Army* army = player1->GetArmies()->front();
-	player1->MoveArmies(army, territory2);
-	player1->MoveOverLand(army, territory1);
-	player1->DestroyArmy(army);
+	Army* army = player1->getArmies()->front();
+	player1->moveArmies(army, territory2);
+	player1->moveOverLand(army, territory1);
+	player1->destroyArmy(army);
 
 	delete territory1;
 	delete territory2;

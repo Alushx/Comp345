@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -55,19 +67,19 @@ void MapLoader::readMapFile(string fileName){
         inFile >> task;
         if (task == "CONTINENT")
         {
-            CreateContinent(inFile);
+            createContinent(inFile);
         }
         else if (task == "JOIN")
         {
-            JoinTerritories(inFile);
+            joinTerritories(inFile);
         }
         else if (task == "BOARD")
         {
-            CreateBoard(inFile, boardConnections, numOfBoards, shouldMakeL);
+            createBoard(inFile, boardConnections, numOfBoards, shouldMakeL);
         }
         else if (task == "OPTIONAL")
         {
-            shouldContinue = ShouldCreateBoard();
+            shouldContinue = shouldCreateBoard();
         }
     }
 
@@ -76,7 +88,7 @@ void MapLoader::readMapFile(string fileName){
 }
 
 // Creates a continent.
-void MapLoader::CreateContinent(ifstream& input)
+void MapLoader::createContinent(ifstream& input)
 {
     string territoryName;
     list<Territory*> continent;
@@ -91,23 +103,23 @@ void MapLoader::CreateContinent(ifstream& input)
     while (stream >> name)
     {
         // Check if the territory already exists or not.
-        if (!map->GetTerritory(name))
+        if (!map->getTerritory(name))
         {
             territory = new Territory(name);
         }
         else
         {
-            territory = map->GetTerritory(name);
+            territory = map->getTerritory(name);
         }
         continent.push_back(territory);
     }
 
     // Add continent.
-    map->AddContinent(continent);
+    map->addContinent(continent);
 }
 
 // Adds an edge between the territories in the file.
-void MapLoader::JoinTerritories(ifstream& input)
+void MapLoader::joinTerritories(ifstream& input)
 {
     string terr1;
     string terr2;
@@ -119,11 +131,11 @@ void MapLoader::JoinTerritories(ifstream& input)
     input >> cost;
 
     // Add edge.
-    map->addEdge(map->GetTerritory(terr1), map->GetTerritory(terr2), cost);
+    map->addEdge(map->getTerritory(terr1), map->getTerritory(terr2), cost);
 }
 
 // Adds boards to map.
-void MapLoader::CreateBoard(ifstream& input, std::map<int, std::map<std::string, Territory*>>& boardConnections, int& numOfBoards, bool& shouldMakeL)
+void MapLoader::createBoard(ifstream& input, std::map<int, std::map<std::string, Territory*>>& boardConnections, int& numOfBoards, bool& shouldMakeL)
 {
     Territory* connectionDirection = nullptr;
     string directions[4] = { "NORTH", "EAST", "SOUTH", "WEST" };
@@ -133,13 +145,13 @@ void MapLoader::CreateBoard(ifstream& input, std::map<int, std::map<std::string,
     for (int i = 0; i < 4; i++)
     {
         input >> territoryName;
-        if (! map->GetTerritory(territoryName))
+        if (! map->getTerritory(territoryName))
         {
             cout << "The map connection does not exist!";
             exit(1); // Territory should exist.
         }
 
-        connectionDirection = map->GetTerritory(territoryName);
+        connectionDirection = map->getTerritory(territoryName);
         boardConnections[numOfBoards][directions[i]] = connectionDirection;
     }
 
@@ -197,7 +209,7 @@ void MapLoader::CreateBoard(ifstream& input, std::map<int, std::map<std::string,
 }
 
 // Asks whether player wants the fourth board or not.
-bool MapLoader::ShouldCreateBoard()
+bool MapLoader::shouldCreateBoard()
 {
     int response = 0;
     do
@@ -218,7 +230,7 @@ bool MapLoader::ShouldCreateBoard()
 }
 
 // Returns map to be used for game.
-Map* MapLoader::GetMap()
+Map* MapLoader::getMap()
 {
     return map;
 }

@@ -1,13 +1,36 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include "Player.h"
 #include <iostream>
 #include "Cards/Cards.h"
 #include "BiddingFacility.h"
 using namespace std;
+
 // ============================================
 // Player Implementation
 // ============================================
 
-
+// Player default constructor.
+Player::Player()
+{
+	name = "Odysseus";
+	numOfCoins = 0;
+	bidFaci = new BiddingFacility();
+	playerTerritory = list<Territory*>();
+	playerHand = list<Card*>();
+	cities = list<City*>();
+	armies = list<Army*>();
+}
 
 // Player value constructor.
 Player::Player(string aName, int coinNum)
@@ -21,11 +44,49 @@ Player::Player(string aName, int coinNum)
 	armies = list<Army*>();
 }
 
+// Player copy constructor.
+Player::Player(Player& anotherPlayer)
+{
+	name = anotherPlayer.name;
+	numOfCoins = anotherPlayer.numOfCoins;
+
+	if (anotherPlayer.bidFaci)
+		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
+	else
+		bidFaci = nullptr;
+
+	// Shallow copy because the map is the same.
+	for (Territory* territory : anotherPlayer.playerTerritory)
+	{
+		playerTerritory.push_back(territory);
+	}
+
+	for (Card* card : anotherPlayer.playerHand)
+	{
+		playerHand.push_back(new Card(*card));
+	}
+
+	for (City* city : anotherPlayer.cities)
+	{
+		cities.push_back(new City(*city));
+	}
+
+	for (Army* army : anotherPlayer.armies)
+	{
+		armies.push_back(new Army(*army));
+	}
+}
+
 // Player destructor.
 Player::~Player()
 {
-	// Not deallocating biddingFacility because it is shared by all players, so it must be deallocated at the end of the program itself.
-	// Cards and territories must also be deallocated independently since they belong to all players.
+	// Cards and territories must be deallocated independently since they belong to all players.
+
+	if (bidFaci)
+	{
+		delete bidFaci;
+		bidFaci = nullptr;
+	}
 
 	// Deallocating all cities.
 	for (list<City*>::iterator iter = cities.begin(); iter != cities.end(); ++iter)
@@ -46,7 +107,7 @@ Player::~Player()
 
 // Switched Pay coin into a boolean type 
 // Pay coin.
-bool Player::PayCoin(int& cost)
+bool Player::payCoin(int& cost)
 {
 	if (this->numOfCoins >= cost)
 	{
@@ -62,39 +123,39 @@ bool Player::PayCoin(int& cost)
 }
 
 // Creates new army.
-void Player::PlaceNewArmies(Territory* territory)
+void Player::placeNewArmies(Territory* territory)
 {
 	Army* army = new Army(this, territory);
-	territory->AddArmy();
+	territory->addArmy();
 	armies.push_back(army);
 	cout << "Created " << *army << " in " << *territory << endl;
 	army = nullptr;
 }
 
 // Moves army. Should work for both land and water.
-void Player::MoveArmies(Army* army, Territory* endLocation)
+void Player::moveArmies(Army* army, Territory* endLocation)
 {
-	Territory* oldPos = army->GetPosition();
-	oldPos->RemoveArmy();
-	army->SetPosition(endLocation);
-	endLocation->AddArmy();
+	Territory* oldPos = army->getPosition();
+	oldPos->removeArmy();
+	army->setPosition(endLocation);
+	endLocation->addArmy();
 	cout << "Moved " << *army << " from " << *oldPos << " to " << *endLocation << endl;
 	oldPos = nullptr;
 }
 
 // Moves army over land.
-void Player::MoveOverLand(Army* army, Territory* endLocation)
+void Player::moveOverLand(Army* army, Territory* endLocation)
 {
-	Territory* oldPos = army->GetPosition();
-	oldPos->RemoveArmy();
-	army->SetPosition(endLocation);
-	endLocation->AddArmy();
+	Territory* oldPos = army->getPosition();
+	oldPos->removeArmy();
+	army->setPosition(endLocation);
+	endLocation->addArmy();
 	cout << "Moved " << *army << " overland from " << *oldPos << " to " << *endLocation << endl;
 	oldPos = nullptr;
 }
 
 // Creates a city on the territory. Is not currently functional because we have no idea of what a city is.
-void Player::BuildCity(Territory* territory)
+void Player::buildCity(Territory* territory)
 {
 	City* city = new City(this, territory);
 	this->cities.push_back(city);
@@ -103,22 +164,22 @@ void Player::BuildCity(Territory* territory)
 }
 
 // Destroys army and deallocates dynamic memory.
-void Player::DestroyArmy(Army* army)
+void Player::destroyArmy(Army* army)
 {
-	army->GetPosition()->RemoveArmy();
-	army->GetOwner()->armies.remove(army);
+	army->getPosition()->removeArmy();
+	army->getOwner()->armies.remove(army);
 	cout << *army << " is destroyed!";
 	delete army;
 	army = nullptr;
 }
 
 // Returns player name.
-string Player::GetName()
+string Player::getName()
 {
 	return name;
 }
 
-void Player::SetName(string n) {
+void Player::setName(string n) {
 	name = n;
 }
 
@@ -135,7 +196,7 @@ BiddingFacility* Player::getBidFaci() const {
 }
 
 // Returns list of player armies.
-list<Army*>* Player::GetArmies()
+list<Army*>* Player::getArmies()
 {
 	return &armies;
 }
@@ -153,7 +214,11 @@ Player& Player::operator= (const Player& anotherPlayer)
 
 	name = anotherPlayer.name;
 	numOfCoins = anotherPlayer.numOfCoins;
-	bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
+
+	if (anotherPlayer.bidFaci)
+		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
+	else
+		bidFaci = nullptr;
 
 	// Shallow copy because the map is the same.
 	for (Territory* territory : anotherPlayer.playerTerritory)
@@ -183,11 +248,41 @@ Player& Player::operator= (const Player& anotherPlayer)
 // Army Implementation
 // ============================================
 
+// Default constructor.
+Army::Army()
+{
+	owner = nullptr;
+	position = nullptr;
+}
+
 // Army constructor.
 Army::Army(Player* anOwner, Territory* aPosition)
 {
 	owner = anOwner;
 	position = aPosition;
+}
+
+// Copy constructor.
+Army::Army(Army& anotherArmy)
+{
+	// Shallow copies because the owner and position will the same.
+	if (anotherArmy.owner)
+	{
+		owner = anotherArmy.owner;
+	}
+	else
+	{
+		owner = nullptr;
+	}
+
+	if (anotherArmy.position)
+	{
+		position = anotherArmy.position;
+	}
+	else
+	{
+		position = nullptr;
+	}
 }
 
 // Army destructor.
@@ -199,25 +294,25 @@ Army::~Army()
 }
 
 // Returns owner name.
-string Army::GetOwnerName()
+string Army::getOwnerName()
 {
-	return (*owner).GetName();
+	return (*owner).getName();
 }
 
 // Returns pointer to owner.
-Player* Army::GetOwner()
+Player* Army::getOwner()
 {
 	return owner;
 }
 
 // Returns pointer to current position.
-Territory* Army::GetPosition()
+Territory* Army::getPosition()
 {
 	return position;
 }
 
 // Changes position.
-void Army::SetPosition(Territory* newPosition)
+void Army::setPosition(Territory* newPosition)
 {
 	position = newPosition;
 }
@@ -225,7 +320,7 @@ void Army::SetPosition(Territory* newPosition)
 // Army's toString
 ostream& operator<<(ostream& strm, const Army& army)
 {
-	return strm << army.owner->GetName() << "'s army";
+	return strm << army.owner->getName() << "'s army";
 }
 
 // Assignment operator overload.
@@ -260,11 +355,40 @@ Army& Army::operator=(Army& anotherArmy)
 // City Implementation
 // ============================================
 
+// Default constructor.
+City::City()
+{
+	owner = nullptr;
+	position = nullptr;
+}
+
 // City constructor.
 City::City(Player* anOwner, Territory* aPosition)
 {
 	owner = anOwner;
 	position = aPosition;
+}
+
+City::City(City& anotherCity)
+{
+	// Shallow copies because the owner and position will the same.
+	if (anotherCity.owner)
+	{
+		owner = anotherCity.owner;
+	}
+	else
+	{
+		owner = nullptr;
+	}
+
+	if (anotherCity.position)
+	{
+		position = anotherCity.position;
+	}
+	else
+	{
+		position = nullptr;
+	}
 }
 
 // City destructor.
@@ -276,19 +400,19 @@ City::~City()
 }
 
 // Returns owner name.
-string City::GetOwnerName()
+string City::getOwnerName()
 {
-	return owner->GetName();
+	return owner->getName();
 }
 
 // Returns pointer to owner.
-Player* City::GetOwner()
+Player* City::getOwner()
 {
 	return owner;
 }
 
 // Returns pointer to current position.
-Territory* City::GetPosition()
+Territory* City::getPosition()
 {
 	return position;
 }
@@ -296,7 +420,7 @@ Territory* City::GetPosition()
 // City's toString
 ostream& operator<<(ostream& strm, const City& city)
 {
-	return strm << city.owner->GetName() << "'s city";
+	return strm << city.owner->getName() << "'s city";
 }
 
 // Assignment operator overload.

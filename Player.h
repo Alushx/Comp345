@@ -1,3 +1,14 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -5,8 +16,6 @@
 #include <string>
 #include "Map.h"
 #include "BiddingFacility.h"
-
-
 
 using std::string;
 
@@ -31,20 +40,25 @@ private:
 
 // Public methods
 public:
+	// Constructors and destructors.
+	Player();
 	Player(string name = "Odysseus", int coinNum = 0);
+	Player(Player&);
 	~Player();
-	bool PayCoin(int& cost);
-	void PlaceNewArmies(Territory* territory);
-	void MoveArmies(Army*, Territory*);
-	void MoveOverLand(Army*, Territory*);
-	void BuildCity(Territory* territory);
-	void DestroyArmy(Army*);
-	string GetName();
-	void SetName(string n);
+
+	// Methods.
+	bool payCoin(int& cost);
+	void placeNewArmies(Territory* territory);
+	void moveArmies(Army*, Territory*);
+	void moveOverLand(Army*, Territory*);
+	void buildCity(Territory* territory);
+	void destroyArmy(Army*);
+	string getName();
+	void setName(string n);
 	int getCoins();
 	void setCoins(int c);
 	BiddingFacility* getBidFaci() const;
-	list<Army*>* GetArmies();
+	list<Army*>* getArmies();
 	Player& operator= (const Player&);
 
 // Operators
@@ -62,12 +76,16 @@ private:
 
 // Public methods.
 public:
+	// Constructors and destructors.
+	Army();
 	Army(Player*, Territory*);
+	Army(Army&);
 	~Army();
-	string GetOwnerName();
-	Player* GetOwner();
-	Territory* GetPosition();
-	void SetPosition(Territory*);
+	// Useful methods.
+	string getOwnerName();
+	Player* getOwner();
+	Territory* getPosition();
+	void setPosition(Territory*);
 	Army& operator=(Army&);
 
 // Operators.
@@ -81,11 +99,15 @@ class City
 	Territory* position;
 	// Public methods.
 public:
+	// Constructors and destructors.
+	City();
 	City(Player*, Territory*);
+	City(City&);
 	~City();
-	string GetOwnerName();
-	Player* GetOwner();
-	Territory* GetPosition();
+	// Useful methods.
+	string getOwnerName();
+	Player* getOwner();
+	Territory* getPosition();
 	City& operator=(City&);
 
 	// Operators.

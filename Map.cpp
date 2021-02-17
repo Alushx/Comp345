@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include <iostream>
 #include "Map.h"
 using namespace std;
@@ -31,7 +43,7 @@ using namespace std;
 			tempContinent = list<Territory*>();
 			for (Territory* otherTerritory : otherContinent)
 			{
-				myTerritory = territories[otherTerritory->GetName()];
+				myTerritory = territories[otherTerritory->getName()];
 				tempContinent.push_back(myTerritory);
 			}
 			continentList.push_back(tempContinent);
@@ -40,10 +52,10 @@ using namespace std;
 		// Copies adjacency list.
 		for (pair<Territory*, map<Territory*, int>> otherPair: anotherMap.countriesList)
 		{
-			myTerritory = territories[otherPair.first->GetName()];
+			myTerritory = territories[otherPair.first->getName()];
 			for (pair<Territory*, int> otherAdjacentTerritory : otherPair.second)
 			{
-				secondTerritory = territories[otherAdjacentTerritory.first->GetName()];
+				secondTerritory = territories[otherAdjacentTerritory.first->getName()];
 				countriesList[myTerritory][secondTerritory] = otherAdjacentTerritory.second;
 			}
 		}
@@ -78,30 +90,30 @@ using namespace std;
 		for (auto i : countriesList) {
 			Territory* country = i.first;
 			map <Territory*, int> adjacent = i.second;
-			cout << "Country " << country->GetName() << " ---> ";
+			cout << "Country " << country->getName() << " ---> ";
 			for (auto j : adjacent) {
 				Territory* destination = j.first;
 				int cost = j.second;
 
-				cout << "Adj to country " << destination->GetName() << " and costs " << cost << " moves | ";
+				cout << "Adj to country " << destination->getName() << " and costs " << cost << " moves | ";
 			}
 			cout << endl;
 		}
 	}
 
 	// Validates if our map meets all the criteria.
-	bool Map::Validate()
+	bool Map::validate()
 	{
-		bool isConnectedMap = IsConnectedMap();
-		bool hasUniqueTerritories = HasUniqueTerritories();
-		bool isConnectedContinent = true;
+		bool isConnectedGraph = isConnectedMap();
+		bool hasUniqueRegions = hasUniqueTerritories();
+		bool isConnectedSubgraph = true;
 
 		for (list<Territory*> continent : continentList)
 		{
-			isConnectedContinent = isConnectedContinent && IsConnectedContinent(&continent);
+			isConnectedSubgraph = isConnectedSubgraph && isConnectedContinent(&continent);
 		}
 
-		if (isConnectedMap && isConnectedContinent && hasUniqueTerritories)
+		if (isConnectedGraph && hasUniqueRegions && isConnectedSubgraph)
 		{
 			cout << "The map is valid." << endl;
 			return true;
@@ -114,7 +126,7 @@ using namespace std;
 	}
 
 	// Validates graph connectivity.
-	bool Map::IsConnectedMap()
+	bool Map::isConnectedMap()
 	{
 		map<Territory*, bool> visitedList;
 
@@ -125,7 +137,7 @@ using namespace std;
 		}
 
 		// Traversing graph through one node (should visit all other nodes if it is truly connected).
-		HelpVisitMap(countriesList.begin()->first, &visitedList);
+		helpVisitMap(countriesList.begin()->first, &visitedList);
 
 		// Check each node has been visited.
 		for (auto i : visitedList)
@@ -142,7 +154,7 @@ using namespace std;
 	}
 
 	// Recursive part of DFS.
-	void Map::HelpVisitMap(Territory* node, map<Territory*, bool>* visitedList)
+	void Map::helpVisitMap(Territory* node, map<Territory*, bool>* visitedList)
 	{
 		// Visit node.
 		(*visitedList)[node] = true;
@@ -153,13 +165,13 @@ using namespace std;
 		{
 			if (!(*visitedList)[i.first])
 			{
-				HelpVisitMap(i.first, visitedList);
+				helpVisitMap(i.first, visitedList);
 			}
 		}
 	}
 
 	// Checks if a continent is a connected subgraph.
-	bool Map::IsConnectedContinent(list<Territory*>* continent)
+	bool Map::isConnectedContinent(list<Territory*>* continent)
 	{
 		map<Territory*, bool> visitedList = map<Territory*, bool>();
 
@@ -170,7 +182,7 @@ using namespace std;
 		}
 
 		// Traversing continent through 1 territory.
-		HelpVisitContinent(*(*continent).begin(), &visitedList);
+		helpVisitContinent(*(*continent).begin(), &visitedList);
 
 		// Check each territory has been visited.
 		for (auto territory : visitedList)
@@ -187,7 +199,7 @@ using namespace std;
 	}
 
 	// Helper function for IsConnectedContinent
-	void Map::HelpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList)
+	void Map::helpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList)
 	{
 		// Visit node.
 		(*visitedList)[node] = true;
@@ -198,13 +210,13 @@ using namespace std;
 		{
 			if (i.second != 3 && !(*visitedList)[i.first] )
 			{
-				HelpVisitContinent(i.first, visitedList);
+				helpVisitContinent(i.first, visitedList);
 			}
 		}
 	}
 
 	// Helper method that checks if each territory belongs to only one continent.
-	bool Map::HasUniqueTerritories()
+	bool Map::hasUniqueTerritories()
 	{
 		map<Territory*, bool> visitedTerritories;
 
@@ -232,20 +244,20 @@ using namespace std;
 	}
 
 	// Returns territory.
-	Territory* Map::GetTerritory(string name)
+	Territory* Map::getTerritory(string name)
 	{
 		return territories[name];
 	}
 
 	// Adds a new continent.
-	void Map::AddContinent(std::list<Territory*>& aContinent)
+	void Map::addContinent(std::list<Territory*>& aContinent)
 	{
 		continentList.push_back(aContinent);
 
 		// Adds territories of new continent to our list of territories.
 		for (Territory* input : aContinent)
 		{
-			territories[input->GetName()] = input;
+			territories[input->getName()] = input;
 		}
 	}
 
@@ -275,7 +287,7 @@ using namespace std;
 			tempContinent = list<Territory*>();
 			for (Territory* otherTerritory : otherContinent)
 			{
-				myTerritory = territories[otherTerritory->GetName()];
+				myTerritory = territories[otherTerritory->getName()];
 				tempContinent.push_back(myTerritory);
 			}
 			continentList.push_back(tempContinent);
@@ -284,10 +296,10 @@ using namespace std;
 		// Copies adjacency list.
 		for (pair<Territory*, map<Territory*, int>> otherPair : anotherMap.countriesList)
 		{
-			myTerritory = territories[otherPair.first->GetName()];
+			myTerritory = territories[otherPair.first->getName()];
 			for (pair<Territory*, int> otherAdjacentTerritory : otherPair.second)
 			{
-				secondTerritory = territories[otherAdjacentTerritory.first->GetName()];
+				secondTerritory = territories[otherAdjacentTerritory.first->getName()];
 				countriesList[myTerritory][secondTerritory] = otherAdjacentTerritory.second;
 			}
 		}
@@ -323,25 +335,25 @@ using namespace std;
 	}
 
 	// Decrements army count.
-	void Territory::RemoveArmy()
+	void Territory::removeArmy()
 	{
 		numOfArmies--;
 	}
 
 	// Increments army count.
-	void Territory::AddArmy()
+	void Territory::addArmy()
 	{
 		numOfArmies++;
 	}
 
 	// Returns numOfArmies.
-	int Territory::GetNumOfArmies() const
+	int Territory::getNumOfArmies() const
 	{
 		return numOfArmies;
 	}
 
 	// Returns territory name.
-	string Territory::GetName() const
+	string Territory::getName() const
 	{
 		return name;
 	}
@@ -349,7 +361,7 @@ using namespace std;
 	// Stream insertion operator overload.
 	ostream& operator<<(ostream& strm, const Territory& territory)
 	{
-		return strm << territory.GetName() << " with " << territory.GetNumOfArmies() << " armies.";
+		return strm << territory.getName() << " with " << territory.getNumOfArmies() << " armies.";
 	}
 
 	Territory& Territory::operator=(const Territory& otherTerritory)

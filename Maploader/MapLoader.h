@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #pragma once
 #include "../Map.h"
 #include <string>
@@ -10,13 +22,13 @@ public:
     ~MapLoader();
     MapLoader(MapLoader&);
     void readMapFile(std::string fileName);
-    Map* GetMap();
+    Map* getMap();
     MapLoader& operator=(const MapLoader&);
     
 private:
-    void CreateContinent(std::ifstream&);
-    void JoinTerritories(std::ifstream&);
-    void CreateBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&);
-    bool ShouldCreateBoard();
+    void createContinent(std::ifstream&);
+    void joinTerritories(std::ifstream&);
+    void createBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&);
+    bool shouldCreateBoard();
     friend ostream& operator<<(ostream&, const MapLoader&);
 };

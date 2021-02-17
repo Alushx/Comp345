@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #pragma once
 #include <list>
 #include <map>
@@ -20,16 +32,16 @@ public:
 	~Map();
 	void addEdge(Territory*, Territory*, int);
 	void printList();
-	Territory* GetTerritory(std::string);
-	void AddContinent(std::list<Territory*>&);
-	bool Validate();
+	Territory* getTerritory(std::string);
+	void addContinent(std::list<Territory*>&);
+	bool validate();
 	Map& operator=(const Map&);
 private:
-	bool IsConnectedMap();
-	void HelpVisitMap(Territory* node, std::map<Territory*,bool>* visitedList);
-	bool IsConnectedContinent(std::list<Territory*>*);
-	void HelpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList);
-	bool HasUniqueTerritories();
+	bool isConnectedMap();
+	void helpVisitMap(Territory* node, std::map<Territory*,bool>* visitedList);
+	bool isConnectedContinent(std::list<Territory*>*);
+	void helpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList);
+	bool hasUniqueTerritories();
 	friend std::ostream& operator<<(std::ostream&, const Map&);
 	
 };
@@ -45,10 +57,10 @@ public:
 	Territory(std::string);
 	Territory(Territory&);
 	// No pointers so I do not need to define a destructor.
-	void RemoveArmy();
-	void AddArmy();
-	int GetNumOfArmies() const;
-	std::string GetName() const;
+	void removeArmy();
+	void addArmy();
+	int getNumOfArmies() const;
+	std::string getName() const;
 
 // Operators.
 private:

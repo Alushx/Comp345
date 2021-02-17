@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include <string>
 #include "Cards.h"
 #include <iostream>
@@ -296,7 +308,7 @@ void Hand::shiftCards(int index) {
 Card* Hand::exchange(int cardIndex, Player* player) {
 
     int cost = getCardCost(cardIndex);
-    if ( !player->PayCoin( cost )) return nullptr;
+    if ( !player->payCoin( cost )) return nullptr;
 
     Card* pickedCard = (cards[cardIndex]);// save picked card
 

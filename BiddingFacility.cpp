@@ -1,3 +1,15 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
+
 #include <iostream>
 #include <vector>
 #include "BiddingFacility.h"
@@ -55,7 +67,7 @@ int BiddingFacility::biddingPhase(vector<Player*>& player) {
 
     //Prompt each player to enter a valid bid value and set this value as that player's bid
     for (int i = 0; i < player.size(); i++) {
-        cout << player[i]->GetName() << ", how much would you like to bid?" << std::endl;
+        cout << player[i]->getName() << ", how much would you like to bid?" << std::endl;
         cin >> bid;
         while (bid < 0 || bid > player[i]->getCoins()) {
             std::cout << "This amount is not valid! Please enter a number between 0 and " << player[i]->getCoins() << ": " << std::endl;
@@ -70,21 +82,21 @@ int BiddingFacility::biddingPhase(vector<Player*>& player) {
     for (int i = 0; i < player.size(); i++) {
         if (player[i]->getBidFaci()->getBid() > highBid) {
             highBid = player[i]->getBidFaci()->getBid();
-            bidWinner = player[i]->GetName();
+            bidWinner = player[i]->getName();
             index = i;
         }
         if (i < (player.size() - 1)) {
             //If a player's bid is equal to the next player's bid (can also be 0), then determine the player whose alphabetical last name order wins
             if (player[i + 1]->getBidFaci()->getBid() == highBid) {
-                for (int j = 0; j < player[index]->GetName().length(); ++j) {
-                    if (player[index]->GetName()[j] > player[i + 1]->GetName()[j]) {
-                        bidWinner = player[i + 1]->GetName();
+                for (int j = 0; j < player[index]->getName().length(); ++j) {
+                    if (player[index]->getName()[j] > player[i + 1]->getName()[j]) {
+                        bidWinner = player[i + 1]->getName();
                         highBid = player[i + 1]->getBidFaci()->getBid();
                         index = i+1;
                         break;
                     }
-                    if (player[index]->GetName()[j] < player[i + 1]->GetName()[j]) {
-                        bidWinner = player[index]->GetName();
+                    if (player[index]->getName()[j] < player[i + 1]->getName()[j]) {
+                        bidWinner = player[index]->getName();
                         highBid = player[index]->getBidFaci()->getBid();
                         index = i;
                         break;
@@ -93,7 +105,7 @@ int BiddingFacility::biddingPhase(vector<Player*>& player) {
             }
         }
         //Display each player's bid value at the same time
-        cout << player[i]->GetName() << " bids " << player[i]->getBidFaci()->getBid() << std::endl;
+        cout << player[i]->getName() << " bids " << player[i]->getBidFaci()->getBid() << std::endl;
     }
     //Display the bid winner
     cout << "The bid winner is: " << bidWinner << " with a bid value of " << highBid << std::endl;
