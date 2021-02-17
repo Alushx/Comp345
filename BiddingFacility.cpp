@@ -15,6 +15,26 @@ BiddingFacility::BiddingFacility(const BiddingFacility &bf) {
     bid = bf.bid;
 }
 
+// Destructor
+BiddingFacility::~BiddingFacility() {
+    if (bid) {
+        delete bid;
+        bid = NULL;
+    }
+}
+
+//Stream insertion operator
+ostream& operator << (ostream &out, const BiddingFacility &bf) {
+    out << "Bid is: " << bf.getBid() << endl;
+    return out;
+}
+
+istream& operator >> (istream &in, BiddingFacility &bf) {
+    cout << "Enter bid: ";
+    in >> bf.setBid();
+    return in;
+}
+
 // Returns the index of the player who won the bid
 int BiddingFacility::biddingPhase(vector<Player*>& player) {
 
