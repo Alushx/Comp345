@@ -45,6 +45,7 @@ public:
 	void setCoins(int c);
 	BiddingFacility* getBidFaci() const;
 	list<Army*>* GetArmies();
+	Player& operator= (const Player&);
 
 // Operators
 private:
@@ -67,6 +68,7 @@ public:
 	Player* GetOwner();
 	Territory* GetPosition();
 	void SetPosition(Territory*);
+	Army& operator=(Army&);
 
 // Operators.
 private:
@@ -84,6 +86,7 @@ public:
 	string GetOwnerName();
 	Player* GetOwner();
 	Territory* GetPosition();
+	City& operator=(City&);
 
 	// Operators.
 private:

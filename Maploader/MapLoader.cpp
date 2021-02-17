@@ -228,3 +228,19 @@ ostream& operator<<(ostream& strm, const MapLoader& map)
 {
     return strm << "MapBuilder"; // I can't think of anything clever for this.
 }
+
+// Assignment operator
+MapLoader& MapLoader::operator=(const MapLoader& anotherMapLoader)
+{
+    if (&anotherMapLoader == this)
+        return *this;
+
+    if (anotherMapLoader.map)
+    {
+        map = new Map(*(anotherMapLoader.map));
+    }
+    else
+        map = nullptr;
+
+    return *this;
+}

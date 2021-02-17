@@ -132,6 +132,7 @@ using namespace std;
 		{
 			if (!i.second)
 			{
+				cout << "Map is not a connected graph." << endl;
 				return false;
 			}
 		}
@@ -160,7 +161,7 @@ using namespace std;
 	// Checks if a continent is a connected subgraph.
 	bool Map::IsConnectedContinent(list<Territory*>* continent)
 	{
-		map<Territory*, bool> visitedList;
+		map<Territory*, bool> visitedList = map<Territory*, bool>();
 
 		// Setting all territories to unvisited.
 		for (auto territory : (*continent))
@@ -176,6 +177,7 @@ using namespace std;
 		{
 			if (!territory.second)
 			{
+				cout << "Continents are not connected subgraphs." << endl;
 				return false;
 			}
 		}
@@ -194,7 +196,7 @@ using namespace std;
 		map<Territory*, int> adjacentNodes = countriesList[node];
 		for (auto i : adjacentNodes)
 		{
-			if (!(*visitedList)[i.first] && i.second != 3)
+			if (i.second != 3 && !(*visitedList)[i.first] )
 			{
 				HelpVisitContinent(i.first, visitedList);
 			}
@@ -214,6 +216,7 @@ using namespace std;
 				if (visitedTerritories[*territoryIter])
 				{
 					// Has been visited before.
+					cout << "A territory exists in two different continents!" << endl;
 					return false;
 				}
 				else
@@ -250,6 +253,46 @@ using namespace std;
 	std::ostream& operator<<(std::ostream& strm, const Map& otherMap)
 	{
 		return strm << "Map"; // Can't think of anything more clever.
+	}
+
+	Map& Map::operator=(const Map& anotherMap)
+	{
+		if (&anotherMap == this)
+			return *this;
+		
+		for (pair<string, Territory*> otherPair : anotherMap.territories)
+		{
+			// Create deep copy.
+			territories[otherPair.first] = new Territory(*(otherPair.second));
+		}
+
+		// Copies each continent.
+		list<Territory*> tempContinent;
+		Territory* myTerritory = nullptr;
+		Territory* secondTerritory = nullptr;
+		for (list<Territory*> otherContinent : anotherMap.continentList)
+		{
+			tempContinent = list<Territory*>();
+			for (Territory* otherTerritory : otherContinent)
+			{
+				myTerritory = territories[otherTerritory->GetName()];
+				tempContinent.push_back(myTerritory);
+			}
+			continentList.push_back(tempContinent);
+		}
+
+		// Copies adjacency list.
+		for (pair<Territory*, map<Territory*, int>> otherPair : anotherMap.countriesList)
+		{
+			myTerritory = territories[otherPair.first->GetName()];
+			for (pair<Territory*, int> otherAdjacentTerritory : otherPair.second)
+			{
+				secondTerritory = territories[otherAdjacentTerritory.first->GetName()];
+				countriesList[myTerritory][secondTerritory] = otherAdjacentTerritory.second;
+			}
+		}
+
+		return *this;
 	}
 	
 	
@@ -307,5 +350,19 @@ using namespace std;
 	ostream& operator<<(ostream& strm, const Territory& territory)
 	{
 		return strm << territory.GetName() << " with " << territory.GetNumOfArmies() << " armies.";
+	}
+
+	Territory& Territory::operator=(const Territory& otherTerritory)
+	{
+		// Check for same object.
+		if (&otherTerritory == this)
+			return *this;
+
+		// Assign each value.
+		numOfArmies = otherTerritory.numOfArmies;
+		name = otherTerritory.name;
+
+		// Return.
+		return *this;
 	}
 

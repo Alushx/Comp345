@@ -23,6 +23,7 @@ public:
 	Territory* GetTerritory(std::string);
 	void AddContinent(std::list<Territory*>&);
 	bool Validate();
+	Map& operator=(const Map&);
 private:
 	bool IsConnectedMap();
 	void HelpVisitMap(Territory* node, std::map<Territory*,bool>* visitedList);
@@ -30,6 +31,7 @@ private:
 	void HelpVisitContinent(Territory* node, std::map<Territory*, bool>* visitedList);
 	bool HasUniqueTerritories();
 	friend std::ostream& operator<<(std::ostream&, const Map&);
+	
 };
 
 class Territory
@@ -51,4 +53,6 @@ public:
 // Operators.
 private:
 	friend std::ostream& operator<<(std::ostream&, const Territory&);
+public:
+	Territory& operator=(const Territory&);
 };

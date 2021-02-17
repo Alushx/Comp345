@@ -29,10 +29,20 @@ ostream& operator << (ostream &out, const BiddingFacility &bf) {
     return out;
 }
 
-istream& operator >> (istream &in, BiddingFacility &bf) {
-    cout << "Enter bid: ";
-    in >> bf.setBid();
-    return in;
+BiddingFacility& BiddingFacility::operator= (const BiddingFacility& anotherBid)
+{
+    if (&anotherBid == this)
+        return *this;
+
+    if (anotherBid.bid)
+    {
+        int tempBid = *(anotherBid.bid);
+        bid = &tempBid;
+    }
+    else
+        bid = nullptr;
+
+    return *this;
 }
 
 // Returns the index of the player who won the bid
@@ -66,16 +76,16 @@ int BiddingFacility::biddingPhase(vector<Player*>& player) {
         if (i < (player.size() - 1)) {
             //If a player's bid is equal to the next player's bid (can also be 0), then determine the player whose alphabetical last name order wins
             if (player[i + 1]->getBidFaci()->getBid() == highBid) {
-                for (int j = 0; j < player[i]->GetName().length(); ++j) {
-                    if (player[i]->GetName()[j] > player[i + 1]->GetName()[j]) {
+                for (int j = 0; j < player[index]->GetName().length(); ++j) {
+                    if (player[index]->GetName()[j] > player[i + 1]->GetName()[j]) {
                         bidWinner = player[i + 1]->GetName();
                         highBid = player[i + 1]->getBidFaci()->getBid();
                         index = i+1;
                         break;
                     }
-                    if (player[i]->GetName()[j] < player[i + 1]->GetName()[j]) {
-                        bidWinner = player[i]->GetName();
-                        highBid = player[i]->getBidFaci()->getBid();
+                    if (player[index]->GetName()[j] < player[i + 1]->GetName()[j]) {
+                        bidWinner = player[index]->GetName();
+                        highBid = player[index]->getBidFaci()->getBid();
                         index = i;
                         break;
                     }

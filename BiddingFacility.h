@@ -26,10 +26,14 @@ public:
     //Destructor
     ~BiddingFacility();
 
+
+    BiddingFacility& operator= (const BiddingFacility&);
+private:
     //Stream insertion operator
     friend ostream& operator << (ostream& out, const BiddingFacility &bf);
-    friend istream& operator >> (istream& in, BiddingFacility &bf);
+    
 
+public:
     // Game Methods
    static int biddingPhase(vector<Player*>& player);
    void setBid(int bid);

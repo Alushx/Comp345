@@ -48,7 +48,7 @@ Player::~Player()
 // Pay coin.
 bool Player::PayCoin(int& cost)
 {
-	if (this->numOfCoins > cost)
+	if (this->numOfCoins >= cost)
 	{
 		numOfCoins = numOfCoins - cost;
 		cout << this->name << " has now " << this->numOfCoins << endl;
@@ -146,6 +146,39 @@ ostream& operator<<(ostream& strm, const Player& player)
 	return strm << player.name << ": " << player.numOfCoins << " coins.";
 }
 
+Player& Player::operator= (const Player& anotherPlayer)
+{
+	if (&anotherPlayer == this)
+		return *this;
+
+	name = anotherPlayer.name;
+	numOfCoins = anotherPlayer.numOfCoins;
+	bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
+
+	// Shallow copy because the map is the same.
+	for (Territory* territory : anotherPlayer.playerTerritory)
+	{
+		playerTerritory.push_back(territory);
+	}
+
+	for (Card* card : anotherPlayer.playerHand)
+	{
+		playerHand.push_back(new Card(*card));
+	}
+
+	for (City* city : anotherPlayer.cities)
+	{
+		cities.push_back(new City(*city));
+	}
+
+	for (Army* army : anotherPlayer.armies)
+	{
+		armies.push_back(new Army(*army));
+	}
+
+	return *this;
+}
+
 // ============================================
 // Army Implementation
 // ============================================
@@ -195,6 +228,34 @@ ostream& operator<<(ostream& strm, const Army& army)
 	return strm << army.owner->GetName() << "'s army";
 }
 
+// Assignment operator overload.
+Army& Army::operator=(Army& anotherArmy)
+{
+	if (&anotherArmy == this)
+		return *this;
+
+	// Shallow copies because the owner and position will the same.
+	if (anotherArmy.owner)
+	{
+		owner = anotherArmy.owner;
+	}
+	else
+	{
+		owner = nullptr;
+	}
+
+	if (anotherArmy.position)
+	{
+		position = anotherArmy.position;
+	}
+	else
+	{
+		position = nullptr;
+	}
+
+	return *this;
+}
+
 // ============================================
 // City Implementation
 // ============================================
@@ -236,4 +297,32 @@ Territory* City::GetPosition()
 ostream& operator<<(ostream& strm, const City& city)
 {
 	return strm << city.owner->GetName() << "'s city";
+}
+
+// Assignment operator overload.
+City& City::operator=(City& anotherCity)
+{
+	if (&anotherCity == this)
+		return *this;
+
+	// Shallow copies because the owner and position will the same.
+	if (anotherCity.owner)
+	{
+		owner = anotherCity.owner;
+	}
+	else
+	{
+		owner = nullptr;
+	}
+
+	if (anotherCity.position)
+	{
+		position = anotherCity.position;
+	}
+	else
+	{
+		position = nullptr;
+	}
+
+	return *this;
 }

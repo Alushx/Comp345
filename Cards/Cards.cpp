@@ -126,6 +126,19 @@ ostream& operator<<(ostream& strm, const Card& card)
     << card.action[1] << endl;
 }
 
+Card& Card::operator=(const Card& anotherCard)
+{
+    if (&anotherCard == this)
+        return *this;
+
+    good = anotherCard.good;
+    combinationtype = anotherCard.combinationtype;
+    action[0] = anotherCard.action[0];
+    action[1] = anotherCard.action[1];
+
+    return *this;
+}
+
 //Deck
 Deck::Deck() {
     topCardptr = &cards[0];//Points to the top of the deck.
@@ -221,6 +234,20 @@ ostream& operator<<(ostream& strm, const Deck& deck)
 	return strm << "Deck has 34 cards";
 }
 
+// Assignment operator.
+Deck& Deck::operator=(const Deck& anotherDeck)
+{
+    if (&anotherDeck == this)
+        return *this;
+
+    for (int i = 0; i < 34; i++)
+    {
+        cards[i] = anotherDeck.cards[i];
+    }
+
+    topCardptr = &cards[0];
+}   
+
 //Hand
 
 //Constructor
@@ -233,10 +260,10 @@ Hand::Hand(Deck* dk) {
 }
 //CopyConstructor
 Hand::Hand(const Hand &h){
-    deck = h.deck;
+    deck = new Deck(*(h.deck));
     for (int i = 0; i < 6; i++)
     {
-        cards[i] = h.cards[i];
+        cards[i] = deck->draw();
     }
     
 }
@@ -343,5 +370,25 @@ void Hand::printHand() {
 ostream& operator<<(ostream& strm, const Hand& hand)
 {
 	return strm << "Hand have 6 cards to choose from";
+}
+
+Hand& Hand::operator=(const Hand& anotherHand)
+{
+    if (&anotherHand == this)
+        return *this;
+
+    if (anotherHand.deck)
+    {
+        deck = new Deck(*anotherHand.deck);
+
+        for (int i = 0; i < 6; i++)
+        {
+            cards[i] = deck->draw();
+        }
+    }
+    else
+        deck = nullptr;
+    
+    return *this;
 }
 

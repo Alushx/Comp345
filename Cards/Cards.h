@@ -28,10 +28,12 @@ public:
 
 	//display card
 	void printCard();
-
+	
 	// Operators
+	Card& operator=(const Card&);
 private:
 	friend ostream& operator<<(ostream&, const Card&);
+	
 };
 
 class Deck {
@@ -53,6 +55,8 @@ private:
 	static int  myRandomGenerator(int j);
 		// Operators
 	friend ostream& operator<<(ostream&, const Deck&);
+public:
+	Deck& operator=(const Deck&);
 };
 
 class Hand {
@@ -73,4 +77,6 @@ private:
 	void shiftCards(int index);
 		// Operators
 	friend ostream& operator<<(ostream&, const Hand&);
+public:
+	Hand& operator=(const Hand&);
 };

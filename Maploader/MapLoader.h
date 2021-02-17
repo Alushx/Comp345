@@ -11,6 +11,7 @@ public:
     MapLoader(MapLoader&);
     void readMapFile(std::string fileName);
     Map* GetMap();
+    MapLoader& operator=(const MapLoader&);
     
 private:
     void CreateContinent(std::ifstream&);
