@@ -15,7 +15,7 @@ public:
 private:
     void CreateContinent(std::ifstream&);
     void JoinTerritories(std::ifstream&);
-    void CreateBoard(std::ifstream&);
+    void CreateBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&);
     bool ShouldCreateBoard();
     friend ostream& operator<<(ostream&, const MapLoader&);
 };

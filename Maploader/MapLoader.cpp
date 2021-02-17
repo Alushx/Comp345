@@ -12,11 +12,11 @@ MapLoader::MapLoader()
     map = new Map();
 }
 
-// Destructors. Not necessary, but I wanted to mention the point below.
+// Destructors. Assumes the map loader is present throughout the game.
 MapLoader::~MapLoader()
 {
-    // Map loader should be deleted near the start of the game, so doesn't make sense to deallocate map memory. 
-    // It should be passed on to an independent map pointer at that point.
+    if (map)
+        delete map;
     map = nullptr;
 }
 
@@ -35,7 +35,12 @@ MapLoader::MapLoader(MapLoader& otherMap)
 
 // Creates map by reading a map text file.
 void MapLoader::readMapFile(string fileName){
+
     bool shouldContinue = true;
+    int numOfBoards = 0;
+    bool shouldMakeL = false;
+    std::map<int, std::map<std::string, Territory*>> boardConnections;
+
     ifstream inFile;
     inFile.open(fileName);
 
@@ -58,7 +63,7 @@ void MapLoader::readMapFile(string fileName){
         }
         else if (task == "BOARD")
         {
-            CreateBoard(inFile);
+            CreateBoard(inFile, boardConnections, numOfBoards, shouldMakeL);
         }
         else if (task == "OPTIONAL")
         {
@@ -118,9 +123,77 @@ void MapLoader::JoinTerritories(ifstream& input)
 }
 
 // Adds boards to map.
-void MapLoader::CreateBoard(ifstream& input)
+void MapLoader::CreateBoard(ifstream& input, std::map<int, std::map<std::string, Territory*>>& boardConnections, int& numOfBoards, bool& shouldMakeL)
 {
+    Territory* connectionDirection = nullptr;
+    string directions[4] = { "NORTH", "EAST", "SOUTH", "WEST" };
+    string territoryName = "";
 
+    // Adding four directions.
+    for (int i = 0; i < 4; i++)
+    {
+        input >> territoryName;
+        if (! map->GetTerritory(territoryName))
+        {
+            cout << "The map connection does not exist!";
+            exit(1); // Territory should exist.
+        }
+
+        connectionDirection = map->GetTerritory(territoryName);
+        boardConnections[numOfBoards][directions[i]] = connectionDirection;
+    }
+
+
+    int choice = 0;
+    // Ask for board arrangement.
+    if (numOfBoards == 0)
+    {
+        do
+        {
+            cout << "Enter [1] or [2] to decide the board arrangement: " << endl;
+            cout << "\t 1) Form a straight line." << endl;
+            cout << "\t 2) For an L shape." << endl;
+            cin >> choice;
+        } while (choice != 1 && choice != 2);
+
+        if (choice == 1)
+        {
+            shouldMakeL = false;
+        }
+        else
+        {
+            shouldMakeL = true;
+        }
+    }
+
+    Territory* tempTerritory1 = nullptr;
+    Territory* tempTerritory2 = nullptr;
+
+    // Connecting first three boards in a row.
+    if (numOfBoards == 1 || numOfBoards == 2)
+    {
+        tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
+        tempTerritory2 = boardConnections[numOfBoards]["WEST"];
+        map->addEdge(tempTerritory1, tempTerritory2, 3);
+    }
+
+    // Connecting the last piece. An L or a row.
+    if (numOfBoards == 3)
+    {
+        if (shouldMakeL)
+        {
+            tempTerritory1 = boardConnections[numOfBoards - 1]["NORTH"];
+            tempTerritory2 = boardConnections[numOfBoards]["SOUTH"];
+        }
+        else
+        {
+            tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
+            tempTerritory2 = boardConnections[numOfBoards]["WEST"];
+        }
+        map->addEdge(tempTerritory1, tempTerritory2, 3);
+    }
+
+    numOfBoards++;
 }
 
 // Asks whether player wants the fourth board or not.

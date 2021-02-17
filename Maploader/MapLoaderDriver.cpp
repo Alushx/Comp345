@@ -12,6 +12,8 @@ int main()
 
 	loader->GetMap()->printList();
 
+	loader->GetMap()->Validate(); // Expected invalid. Because territory1 appears twice!
+
 	delete loader;
 
 	return 0;

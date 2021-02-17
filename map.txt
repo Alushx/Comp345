@@ -5,3 +5,7 @@ JOIN territory2 territory3 1
 JOIN territory2 territory4 1
 JOIN territory4 territory5 3
 BOARD territory4 territory3 territory2 territory1
+CONTINENT territory1 territory6 territory7
+JOIN territory1 territory6 1
+JOIN territory6 territory7 1
+BOARD territory1 territory6 territory7 territory6
