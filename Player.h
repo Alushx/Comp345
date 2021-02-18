@@ -42,7 +42,7 @@ private:
 public:
 	// Constructors and destructors.
 	Player();
-	Player(string name = "Odysseus", int coinNum = 0);
+	Player(string name, int coinNum);
 	Player(Player&);
 	~Player();
 

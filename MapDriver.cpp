@@ -13,58 +13,92 @@
 #include <iostream>
 #include<map>
 #include "Map.h"
+#include <vector>
+#include <string>
 
 int main() {
 
-	Map m1;
-	Territory city1("City 1");
-	Territory city2("City 2");
-	Territory city3("City 3");
-	Territory city4("City 4");
-	Territory city5("City 5");
-	Territory city6("City 6");
-	Territory city7("City 7");
-	Territory city8("City 8");
-	Territory city9("City 9");
-	Territory city10("City 10");
-	Territory city11("City 11");
-	Territory city12("City 12");
-	Territory city13("City 13");
-	Territory city14("City 14");
-	Territory city15("City 15");
-	Territory city16("City 16");
-	Territory city17("City 17");
-	Territory city18("City 18");
-	Territory city19("City 19");
-	Territory city20("City 20");
+	Map* m1 = new Map();
+	std::vector<Territory*> cities = vector<Territory*>();
+	std::list<Territory*> continent = list<Territory*>();
+	std::string name = "City ";
+	for (int i = 0; i < 18; i++)
+	{
+		name = "City ";
+		name.append(to_string(i+1));
+		cities.push_back(new Territory(name));
+	}
 
-	// Continent A
-	m1.addEdge(&city1, &city2, 1);
-	m1.addEdge(&city2, &city3, 1);
-	m1.addEdge(&city3, &city4, 1);
-	m1.addEdge(&city3, &city5, 1);
-	m1.addEdge(&city3, &city6, 1);
-	m1.addEdge(&city6, &city7, 1);
-	m1.addEdge(&city6, &city8, 3);
 
-	// Continent B
-	m1.addEdge(&city8, &city9, 1);
-	m1.addEdge(&city8, &city13, 1);
-	m1.addEdge(&city8, &city14, 1);
-	m1.addEdge(&city14, &city15, 1);
-	m1.addEdge(&city9, &city10, 3);
-	m1.addEdge(&city14, &city16, 3);
+	// Continent A: cities 0, 1, 2, 3, 4, 5, 6
+	for (int i = 0; i <= 6; i++)
+	{
+		continent.push_back(cities[i]);
+	}
+	m1->addContinent(continent);
+	continent.clear();
 
-	// Continent C
-	m1.addEdge(&city10, &city11, 1);
-	m1.addEdge(&city11, &city12, 1);
+	// Continent Edges
+	m1->addEdge(cities[0], cities[1], 1);
+	m1->addEdge(cities[1], cities[2], 1);
+	m1->addEdge(cities[2], cities[3], 1);
+	m1->addEdge(cities[2], cities[4], 1);
+	m1->addEdge(cities[2], cities[5], 1);
+	m1->addEdge(cities[5], cities[6], 1);
+	
 
-	// Continent D
-	m1.addEdge(&city16, &city17, 1);
-	m1.addEdge(&city17, &city18, 1);
+	// Continent B - 7, 8, 12, 13, 14
+	for (int i = 7; i <= 14; i++)
+	{
+		if (i <= 8 || i >= 12)
+			continent.push_back(cities[i]);
+	}
+	m1->addContinent(continent);
+	continent.clear();
 
-	m1.printList();
-	m1.validate();
+	// Continent edges.
+	m1->addEdge(cities[7], cities[8], 1);
+	m1->addEdge(cities[7], cities[12], 1);
+	m1->addEdge(cities[7], cities[13], 1);
+	m1->addEdge(cities[13], cities[14], 1);
+	
+
+	// Continent C - 9, 10, 11
+	for (int i = 9; i <= 11; i++)
+	{
+		continent.push_back(cities[i]);
+	}
+	m1->addContinent(continent);
+	continent.clear();
+
+	// Continent edges.
+	m1->addEdge(cities[9], cities[10], 1);
+	m1->addEdge(cities[10], cities[11], 1);
+
+	// Continent D - 15, 16, 17
+	for (int i = 15; i <= 17; i++)
+	{
+		continent.push_back(cities[i]);
+	}
+	m1->addContinent(continent);
+	continent.clear();
+
+	// Continent edges.
+	m1->addEdge(cities[15], cities[16], 1);
+	m1->addEdge(cities[16], cities[17], 1);
+
+	// Connecting Continents
+	m1->addEdge(cities[5], cities[7], 3);
+	m1->addEdge(cities[8], cities[9], 3);
+	m1->addEdge(cities[13], cities[15], 3);
+
+	// Printing map.
+	m1->printList();
+	m1->validate();
+
+	// Deallocating memory;
+	delete m1; // only one that's needed.
+	m1 = nullptr;
 
 	return 0;
 }
