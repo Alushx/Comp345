@@ -45,7 +45,7 @@ Player::Player(string aName, int coinNum)
 }
 
 // Player copy constructor.
-Player::Player(Player& anotherPlayer)
+Player::Player(const Player& anotherPlayer)
 {
 	name = anotherPlayer.name;
 	numOfCoins = anotherPlayer.numOfCoins;
@@ -263,7 +263,7 @@ Army::Army(Player* anOwner, Territory* aPosition)
 }
 
 // Copy constructor.
-Army::Army(Army& anotherArmy)
+Army::Army(const Army& anotherArmy)
 {
 	// Shallow copies because the owner and position will the same.
 	if (anotherArmy.owner)
@@ -369,7 +369,7 @@ City::City(Player* anOwner, Territory* aPosition)
 	position = aPosition;
 }
 
-City::City(City& anotherCity)
+City::City(const City& anotherCity)
 {
 	// Shallow copies because the owner and position will the same.
 	if (anotherCity.owner)

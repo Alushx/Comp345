@@ -43,7 +43,7 @@ public:
 	// Constructors and destructors.
 	Player();
 	Player(string name, int coinNum);
-	Player(Player&);
+	Player(const Player&);
 	~Player();
 
 	// Methods.
@@ -79,7 +79,7 @@ public:
 	// Constructors and destructors.
 	Army();
 	Army(Player*, Territory*);
-	Army(Army&);
+	Army(const Army&);
 	~Army();
 	// Useful methods.
 	string getOwnerName();
@@ -102,7 +102,7 @@ public:
 	// Constructors and destructors.
 	City();
 	City(Player*, Territory*);
-	City(City&);
+	City(const City&);
 	~City();
 	// Useful methods.
 	string getOwnerName();

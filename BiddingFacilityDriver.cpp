@@ -51,6 +51,12 @@ int main() {
     // Determine the first Player within the bidding phase
     bidWinner = BiddingFacility::biddingPhase(player);
 
+    // Deallocating heap.
+    for (int i = 0; i < player.size(); i++)
+    {
+        if (player[i])
+            delete player[i];
+    }
     return 0;
 }
 

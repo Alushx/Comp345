@@ -16,27 +16,26 @@
 using namespace std;
 
 int main() {
-
 	int hello;
     Player* player = new Player();
 
     // create a deck
-    Deck deck = Deck();
+    Deck* deck = new Deck();
 
     // generate the cards
-    deck.generateDeck();
+    deck->generateDeck();
     cout << "\n\n___________________________________________________Initial Deck\n\n" << endl;
-    deck.printDeck();
+    deck->printDeck();
 
     // shuffle the deck
-    deck.shuffleDeck();
+    deck->shuffleDeck();
     cout << "\n\n____________________________________________________ Shuffled Deck\n\n" << endl;
-    deck.printDeck();
+    deck->printDeck();
 
 
     cout << "\n\n___________________________________________________Card Space\n\n" << endl;
     // draw initial hand
-    Hand hand = Hand(&deck);
+    Hand* hand = new Hand(deck);
    // hand.printHand();
 	//
 
@@ -44,9 +43,20 @@ int main() {
     int coins = 8;
     int index = 0;
     while (index >= 0) {
-        hand.printHand();
+        hand->printHand();
         cout << "Please enter the index of the card you want tp pick or a negative number to exit: ";
         cin >> index;
-        hand.exchange(index, player);
+        hand->exchange(index, player);
     }
+
+    // Deallocating heap.
+    if (hand)
+        delete hand;
+    hand = nullptr;
+    if (deck)
+        delete deck;
+    deck = nullptr;
+    if (player)
+        delete player;
+    player = nullptr;
 }

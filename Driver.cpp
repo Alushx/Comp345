@@ -83,30 +83,29 @@ int main()
                 break;
         }
     }
+
+    // Using the player methods.
     firstPlayer->placeNewArmies(map->getTerritory("territory1"));
     firstPlayer->moveArmies(firstPlayer->getArmies()->front(), map->getTerritory("territory2"));
     firstPlayer->destroyArmy(firstPlayer->getArmies()->front());
 
+    // Deallocating heap.
     if (hand)
     {
         delete hand;
         hand = nullptr;
     }
-
     if (deck)
     {
         delete deck;
         deck = nullptr;
     }
-        
-
     for (Player* individual : player)
     {
         if (individual)
             delete individual;
         individual = nullptr;
     }
-
 	delete mapLoaderObj;
 	mapLoaderObj = nullptr;
     return 0;

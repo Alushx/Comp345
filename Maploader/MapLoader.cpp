@@ -33,7 +33,7 @@ MapLoader::~MapLoader()
 }
 
 // Copy constructor.
-MapLoader::MapLoader(MapLoader& otherMap)
+MapLoader::MapLoader(const MapLoader& otherMap)
 {
     if (otherMap.map)
     {
@@ -47,9 +47,9 @@ MapLoader::MapLoader(MapLoader& otherMap)
 
 // Creates map by reading a map text file.
 void MapLoader::readMapFile(string fileName){
-
-    bool shouldContinue = true;
+    int numOfPlayers = 0;
     int numOfBoards = 0;
+    bool shouldContinue = true;
     bool shouldMakeL = false;
     std::map<int, std::map<std::string, Territory*>> boardConnections;
 
@@ -59,6 +59,35 @@ void MapLoader::readMapFile(string fileName){
     if (!inFile) {
         cout << "Unable to open file";
         exit(1); // terminate with error
+    }
+
+    // Seeing how many players there are.
+    do
+    {
+        cout << "\n Please enter the number of players in the game: ";
+        cin >> numOfPlayers;
+    } while (numOfPlayers <= 1 || numOfPlayers > 4);
+
+    // Asking players to pick arrangement (if there are less than 4 players)
+    if (numOfPlayers < 4)
+    {
+        int choice = 0;
+        do
+        {
+            cout << "Enter [1] or [2] to decide the board arrangement: " << endl;
+            cout << "\t 1) Form a straight line." << endl;
+            cout << "\t 2) For an L shape." << endl;
+            cin >> choice;
+        } while (choice != 1 && choice != 2);
+
+        if (choice == 1)
+        {
+            shouldMakeL = false;
+        }
+        else
+        {
+            shouldMakeL = true;
+        }
     }
 
     string task;
@@ -75,11 +104,11 @@ void MapLoader::readMapFile(string fileName){
         }
         else if (task == "BOARD")
         {
-            createBoard(inFile, boardConnections, numOfBoards, shouldMakeL);
+            createBoard(inFile, boardConnections, numOfBoards, shouldMakeL, numOfPlayers);
         }
         else if (task == "OPTIONAL")
         {
-            shouldContinue = shouldCreateBoard();
+            shouldContinue = shouldCreateBoard(numOfPlayers);
         }
     }
 
@@ -135,7 +164,7 @@ void MapLoader::joinTerritories(ifstream& input)
 }
 
 // Adds boards to map.
-void MapLoader::createBoard(ifstream& input, std::map<int, std::map<std::string, Territory*>>& boardConnections, int& numOfBoards, bool& shouldMakeL)
+void MapLoader::createBoard(ifstream& input, std::map<int, std::map<std::string, Territory*>>& boardConnections, int& numOfBoards, bool& shouldMakeL, int& numOfPlayers)
 {
     Territory* connectionDirection = nullptr;
     string directions[4] = { "NORTH", "EAST", "SOUTH", "WEST" };
@@ -155,78 +184,83 @@ void MapLoader::createBoard(ifstream& input, std::map<int, std::map<std::string,
         boardConnections[numOfBoards][directions[i]] = connectionDirection;
     }
 
-
-    int choice = 0;
-    // Ask for board arrangement.
-    if (numOfBoards == 0)
-    {
-        do
-        {
-            cout << "Enter [1] or [2] to decide the board arrangement: " << endl;
-            cout << "\t 1) Form a straight line." << endl;
-            cout << "\t 2) For an L shape." << endl;
-            cin >> choice;
-        } while (choice != 1 && choice != 2);
-
-        if (choice == 1)
-        {
-            shouldMakeL = false;
-        }
-        else
-        {
-            shouldMakeL = true;
-        }
-    }
-
     Territory* tempTerritory1 = nullptr;
     Territory* tempTerritory2 = nullptr;
 
-    // Connecting first three boards in a row.
-    if (numOfBoards == 1 || numOfBoards == 2)
+    // Creating full board with 4 players.
+    if (numOfPlayers == 4)
     {
-        tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
-        tempTerritory2 = boardConnections[numOfBoards]["WEST"];
-        map->addEdge(tempTerritory1, tempTerritory2, 3);
-    }
-
-    // Connecting the last piece. An L or a row.
-    if (numOfBoards == 3)
-    {
-        if (shouldMakeL)
-        {
-            tempTerritory1 = boardConnections[numOfBoards - 1]["NORTH"];
-            tempTerritory2 = boardConnections[numOfBoards]["SOUTH"];
-        }
-        else
+        // Adding second board. (To the right of first)
+        if (numOfBoards == 1)
         {
             tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
             tempTerritory2 = boardConnections[numOfBoards]["WEST"];
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
         }
-        map->addEdge(tempTerritory1, tempTerritory2, 3);
+
+        // Adding third board. (Above second)
+        else if (numOfBoards == 2)
+        {
+            tempTerritory1 = boardConnections[numOfBoards - 1]["NORTH"];
+            tempTerritory2 = boardConnections[numOfBoards]["SOUTH"];
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
+        }
+
+        // Adding fourth board. (To the left of third and above first)
+        else if (numOfBoards == 3)
+        {
+            // Connecting to third board.
+            tempTerritory1 = boardConnections[numOfBoards - 1]["WEST"];
+            tempTerritory2 = boardConnections[numOfBoards]["EAST"];
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
+
+            // Connecting to first board to make circle complete.
+            tempTerritory1 = boardConnections[0]["NORTH"];
+            tempTerritory2 = boardConnections[numOfBoards]["SOUTH"];
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
+        }
+    }
+    // Creating board for less players.
+    else
+    {
+        // Placing second board
+        if (numOfBoards == 1)
+        {
+            // Place below first if we should make an L
+            if (shouldMakeL)
+            {
+                tempTerritory1 = boardConnections[numOfBoards - 1]["SOUTH"];
+                tempTerritory2 = boardConnections[numOfBoards]["NORTH"];
+            }
+            // Place to the right of the first board if we should make a row.
+            else
+            {
+                tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
+                tempTerritory2 = boardConnections[numOfBoards]["WEST"];
+            }
+            
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
+        }
+
+        // Placing third board (to the right of second)
+        if (numOfBoards == 2)
+        {
+            tempTerritory1 = boardConnections[numOfBoards - 1]["EAST"];
+            tempTerritory2 = boardConnections[numOfBoards]["WEST"];
+            map->addEdge(tempTerritory1, tempTerritory2, 3);
+        }
     }
 
     numOfBoards++;
 }
 
 // Asks whether player wants the fourth board or not.
-bool MapLoader::shouldCreateBoard()
+bool MapLoader::shouldCreateBoard(int& numOfPlayers)
 {
-    int response = 0;
-    do
-    {
-        cout << "Do you want to use the fourth board?" << endl;
-        cout << "\t 1) Yes" << endl;
-        cout << "\t 2) No" << endl;
-    } while (!(response == 1 || response == 2));
-
-    if (response == 1)
-    {
-        return true;
-    }
-    else
-    {
+    if (numOfPlayers < 4)
         return false;
-    }
+    else
+        return true;
 }
 
 // Returns map to be used for game.

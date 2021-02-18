@@ -20,7 +20,7 @@ class MapLoader {
 public:
     MapLoader();
     ~MapLoader();
-    MapLoader(MapLoader&);
+    MapLoader(const MapLoader&);
     void readMapFile(std::string fileName);
     Map* getMap();
     MapLoader& operator=(const MapLoader&);
@@ -28,7 +28,7 @@ public:
 private:
     void createContinent(std::ifstream&);
     void joinTerritories(std::ifstream&);
-    void createBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&);
-    bool shouldCreateBoard();
+    void createBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&, int&);
+    bool shouldCreateBoard(int&);
     friend ostream& operator<<(ostream&, const MapLoader&);
 };

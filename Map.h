@@ -28,7 +28,7 @@ struct Map {
 
 public:
 	Map();
-	Map(Map&);
+	Map(const Map&);
 	~Map();
 	void addEdge(Territory*, Territory*, int);
 	void printList();
@@ -55,7 +55,7 @@ private:
 public:
 	Territory();
 	Territory(std::string);
-	Territory(Territory&);
+	Territory(const Territory&);
 	// No pointers so I do not need to define a destructor.
 	void removeArmy();
 	void addArmy();

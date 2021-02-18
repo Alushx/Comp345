@@ -26,7 +26,7 @@ using namespace std;
 	}
 
 	// Copy constructor.
-	Map::Map(Map& anotherMap)
+	Map::Map(const Map& anotherMap)
 	{
 		for (pair<string, Territory*> otherPair : anotherMap.territories)
 		{
@@ -327,7 +327,7 @@ using namespace std;
 	}
 
 	// Territory copy constructor.
-	Territory::Territory(Territory& aTerritory)
+	Territory::Territory(const Territory& aTerritory)
 	{
 		// Basic/Immutable types, so it's safe to assign them.
 		numOfArmies = aTerritory.numOfArmies;
