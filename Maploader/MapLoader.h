@@ -16,16 +16,26 @@
 #include <fstream>
 
 class MapLoader {
+    // Map being built.
     Map *map;
+
 public:
+    // Constructors.
     MapLoader();
-    ~MapLoader();
     MapLoader(const MapLoader&);
+
+    // Destructor.
+    ~MapLoader();
+    
+    // Public methods.
     void readMapFile(std::string fileName);
     Map* getMap();
+
+    // Overloaded assignment operator.
     MapLoader& operator=(const MapLoader&);
     
 private:
+    // Helper methods for reading a map file.
     void createContinent(std::ifstream&);
     void joinTerritories(std::ifstream&);
     void createBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&, int&);

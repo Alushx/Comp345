@@ -17,7 +17,7 @@ using namespace std;
 
 int main() {
 	int hello;
-    Player* player = new Player();
+    Player* player = new Player("Anakin", 14);
 
     // create a deck
     Deck* deck = new Deck();

@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include "Map.h"
+#include "Player.h"
 using namespace std;
 	
 	//====================================
@@ -317,6 +318,7 @@ using namespace std;
 	{
 		numOfArmies = 0;
 		name = aName;
+		armies = map <Player*, list<Army*>>();
 	}
 
 	// Territory default constructor.
@@ -324,26 +326,32 @@ using namespace std;
 	{
 		numOfArmies = 0;
 		name = "Ithaca";
+		armies = map <Player*, list<Army*>>();
 	}
 
 	// Territory copy constructor.
 	Territory::Territory(const Territory& aTerritory)
 	{
-		// Basic/Immutable types, so it's safe to assign them.
-		numOfArmies = aTerritory.numOfArmies;
+		// Basic/Immutable type, so it's safe to assign it.
 		name = aTerritory.name;
+		numOfArmies = aTerritory.numOfArmies;
+		
+		// Making shallow copy.
+		armies = map <Player*, list<Army*>>(aTerritory.armies);
 	}
 
-	// Decrements army count.
-	void Territory::removeArmy()
+	// Decrements army count. And remove army from list.
+	void Territory::removeArmy(Army* army)
 	{
 		numOfArmies--;
+		armies[army->getOwner()].remove(army);
 	}
 
-	// Increments army count.
-	void Territory::addArmy()
+	// Increments army count. And add army to list.
+	void Territory::addArmy(Army* army)
 	{
 		numOfArmies++;
+		armies[army->getOwner()].push_back(army);
 	}
 
 	// Returns numOfArmies.
@@ -358,10 +366,37 @@ using namespace std;
 		return name;
 	}
 
+	Player* Territory::getOwner()
+	{
+		int max = 0;
+		Player* owner = nullptr;
+
+		for (pair <Player*, list<Army*>> playerArmies : armies)
+		{
+			if (playerArmies.second.size() > max)
+			{
+				// Finding the player with the most armies.
+				owner = playerArmies.first;
+				max = playerArmies.second.size();
+			}
+			else if (playerArmies.second.size() == max)
+			{
+				// If there is a tie, then there is no clear owner.
+				owner = nullptr;
+			}
+		}
+
+		if (owner)
+			std::cout << *owner << " is the owner of " << *this << endl;
+		else
+			std::cout << *this << " has no owner" << endl;
+
+		return owner;
+	}
 	// Stream insertion operator overload.
 	ostream& operator<<(ostream& strm, const Territory& territory)
 	{
-		return strm << territory.getName() << " with " << territory.getNumOfArmies() << " armies.";
+		return strm << territory.getName() << " with " << territory.getNumOfArmies() << " armies";
 	}
 
 	Territory& Territory::operator=(const Territory& otherTerritory)
@@ -371,8 +406,11 @@ using namespace std;
 			return *this;
 
 		// Assign each value.
-		numOfArmies = otherTerritory.numOfArmies;
 		name = otherTerritory.name;
+		numOfArmies = otherTerritory.numOfArmies;
+		
+		// Clear old one and create shallow copy.
+		armies = map <Player*, list<Army*>>(otherTerritory.armies);
 
 		// Return.
 		return *this;

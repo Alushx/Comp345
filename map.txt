@@ -1,7 +1,0 @@
-CONTINENT territory1 territory2 territory3 territory4
-CONTINENT territory5
-JOIN territory1 territory2 1
-JOIN territory2 territory3 1
-JOIN territory4 territory5 3
-JOIN territory5 territory3 3
-BOARD territory4 territory3 territory2 territory1

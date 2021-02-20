@@ -18,11 +18,25 @@
 
 int main()
 {
+    //==================
+    // MapLoader Part
+    //==================
+    
+    std::cout << "\n Reading and validating map... ";
+
 	MapLoader* mapLoaderObj = new MapLoader();
-	mapLoaderObj->readMapFile("map.txt");
+	mapLoaderObj->readMapFile("map1.txt");
     Map* map = mapLoaderObj->getMap();
+    
+    std::cout << std::endl;
     map->validate();
 	
+    //=======================
+    // BiddingFacility Part
+    //=======================
+
+    std::cout << "\n Processing bidding facility... " << std::endl;
+
     // Local variables
     int numOfPlayers = 0;
     int bidWinner;
@@ -59,6 +73,12 @@ int main()
     int numOfCoins = firstPlayer->getBidFaci()->getBid();
     firstPlayer->payCoin(numOfCoins);
 
+    //=============
+    // Cards Part
+    //=============
+
+    std::cout << "\n Processing Deck... " << std::endl;
+
     // create a deck
     Deck* deck = new Deck();
 
@@ -84,9 +104,18 @@ int main()
         }
     }
 
+    //=============
+    // Player Part
+    //=============
+
+    std::cout << "\n Processing Player... " << std::endl;
+
     // Using the player methods.
+    std::cout << "\n Army Creation: ";
     firstPlayer->placeNewArmies(map->getTerritory("territory1"));
+    std::cout << "\n Army Movement: ";
     firstPlayer->moveArmies(firstPlayer->getArmies()->front(), map->getTerritory("territory2"));
+    std::cout << "\n Army Destruction: ";
     firstPlayer->destroyArmy(firstPlayer->getArmies()->front());
 
     // Deallocating heap.

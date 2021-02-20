@@ -1,0 +1,26 @@
+CONTINENT territory1 territory2 territory3 territory4
+JOIN territory1 territory2 1
+JOIN territory1 territory4 1
+JOIN territory2 territory4 1
+JOIN territory4 territory3 1
+BOARD territory1 territory2 territory3 territory4
+CONTINENT territory5 territory6 territory7 territory8
+JOIN territory5 territory6 1
+JOIN territory5 territory7 1
+JOIN territory6 territory7 1
+JOIN territory6 territory8 1
+JOIN territory7 territory8 1
+BOARD territory5 territory6 territory8 territory7
+CONTINENT territory9 territory10 territory11 territory12 territory13
+JOIN territory9 territory10 1
+JOIN territory9 territory13 1
+JOIN territory10 territory13 1
+JOIN territory11 territory13 1
+JOIN territory12 territory13 1
+BOARD territory9 territory11 territory12 territory10
+OPTIONAL
+CONTINENT territory14 territory15
+CONTINENT territory16 territory17
+JOIN territory15 territory16 3
+JOIN territory16 territory17 1
+BOARD territory17 territory17 territory14 territory17

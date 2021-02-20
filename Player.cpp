@@ -126,7 +126,7 @@ bool Player::payCoin(int& cost)
 void Player::placeNewArmies(Territory* territory)
 {
 	Army* army = new Army(this, territory);
-	territory->addArmy();
+	territory->addArmy(army);
 	armies.push_back(army);
 	cout << "Created " << *army << " in " << *territory << endl;
 	army = nullptr;
@@ -136,9 +136,9 @@ void Player::placeNewArmies(Territory* territory)
 void Player::moveArmies(Army* army, Territory* endLocation)
 {
 	Territory* oldPos = army->getPosition();
-	oldPos->removeArmy();
+	oldPos->removeArmy(army);
 	army->setPosition(endLocation);
-	endLocation->addArmy();
+	endLocation->addArmy(army);
 	cout << "Moved " << *army << " from " << *oldPos << " to " << *endLocation << endl;
 	oldPos = nullptr;
 }
@@ -147,9 +147,9 @@ void Player::moveArmies(Army* army, Territory* endLocation)
 void Player::moveOverLand(Army* army, Territory* endLocation)
 {
 	Territory* oldPos = army->getPosition();
-	oldPos->removeArmy();
+	oldPos->removeArmy(army);
 	army->setPosition(endLocation);
-	endLocation->addArmy();
+	endLocation->addArmy(army);
 	cout << "Moved " << *army << " overland from " << *oldPos << " to " << *endLocation << endl;
 	oldPos = nullptr;
 }
@@ -166,7 +166,7 @@ void Player::buildCity(Territory* territory)
 // Destroys army and deallocates dynamic memory.
 void Player::destroyArmy(Army* army)
 {
-	army->getPosition()->removeArmy();
+	army->getPosition()->removeArmy(army);
 	army->getOwner()->armies.remove(army);
 	cout << *army << " is destroyed!";
 	delete army;
@@ -204,7 +204,7 @@ list<Army*>* Player::getArmies()
 // toString
 ostream& operator<<(ostream& strm, const Player& player)
 {
-	return strm << player.name << ": " << player.numOfCoins << " coins.";
+	return strm << player.name << ": " << player.numOfCoins << " coins";
 }
 
 Player& Player::operator= (const Player& anotherPlayer)

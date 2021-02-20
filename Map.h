@@ -22,14 +22,22 @@ using namespace std;
 class Territory;
 
 struct Map {
-	std::map<Territory*, std::map<Territory*, int>> countriesList; // Adjacency matrix.
-	std::list<std::list<Territory*>> continentList;
+
+private:
+	// Data members.
+	std::map<Territory*, std::map<Territory*, int>> countriesList;
+	std::list<std::list<Territory*>> continentList; 
 	std::map<std::string, Territory*> territories;
 
 public:
+	// Constructors.
 	Map();
 	Map(const Map&);
+
+	// Destructor.
 	~Map();
+
+	// Public methods.
 	void addEdge(Territory*, Territory*, int);
 	void printList();
 	Territory* getTerritory(std::string);
@@ -37,6 +45,7 @@ public:
 	bool validate();
 	Map& operator=(const Map&);
 private:
+	// Helper methods for validating.
 	bool isConnectedMap();
 	void helpVisitMap(Territory* node, std::map<Territory*,bool>* visitedList);
 	bool isConnectedContinent(std::list<Territory*>*);
@@ -46,21 +55,26 @@ private:
 	
 };
 
+class Army; // Forward declaration to make compiler happy.
+class Player;
+
 class Territory
 {
 private:
 	int numOfArmies;
 	std::string name;
+	std::map<Player*, std::list<Army*>> armies;
 	
 public:
 	Territory();
 	Territory(std::string);
 	Territory(const Territory&);
 	// No pointers so I do not need to define a destructor.
-	void removeArmy();
-	void addArmy();
+	void removeArmy(Army*);
+	void addArmy(Army*);
 	int getNumOfArmies() const;
 	std::string getName() const;
+	Player* getOwner();
 
 // Operators.
 private:

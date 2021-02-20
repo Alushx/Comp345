@@ -11,20 +11,42 @@
 //===================================================================
 
 #include "Player.h"
+#include <iostream>
 
 int main()
 {
 	Territory* territory1 = new Territory();
-	Territory* territory2 = new Territory();
+	Territory* territory2 = new Territory("Troy");
 	Player* player1 = new Player("Achilles", 12);
 
+	// Creating army.
+	std::cout << "\n Creating new army:\t";
 	player1->placeNewArmies(territory1);
-
 	Army* army = player1->getArmies()->front();
-	player1->moveArmies(army, territory2);
-	player1->moveOverLand(army, territory1);
-	player1->destroyArmy(army);
 
+	// Moving army.
+	std::cout << "\n Moving army:\t";
+	player1->moveArmies(army, territory2);
+
+	// Moving army overland.
+	std::cout << "\n Moving army overland:\t";
+	player1->moveOverLand(army, territory1);
+
+	// Territory1 owner.
+	std::cout << "\n Finding territory1 owner:\t";
+	territory1->getOwner();
+
+	// Territory2 owner.
+	std::cout << "\n Finding territory2 owner:\t";
+	territory2->getOwner();
+
+	// Destroying army.
+	std::cout << "\n Destroying army:\t";
+	player1->destroyArmy(army);
+	
+	std::cout << "\n" << std::endl;
+
+	// Deallocating heap.
 	delete territory1;
 	delete territory2;
 	delete player1;
