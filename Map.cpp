@@ -387,9 +387,9 @@ using namespace std;
 		}
 
 		if (owner)
-			std::cout << *owner << " is the owner of " << *this << endl;
+			std::cout << owner->getName() << " is the owner of " << name << endl;
 		else
-			std::cout << *this << " has no owner" << endl;
+			std::cout << name << " has no owner" << endl;
 
 		return owner;
 	}

@@ -32,6 +32,8 @@ class Player
 private:
 	string name;
 	int numOfCoins;
+	int numOfCubes;
+	int numOfDisks;
 	BiddingFacility* bidFaci;
 	list<Territory*> playerTerritory;
 	list<Card*> playerHand;

@@ -30,6 +30,8 @@ Player::Player()
 	playerHand = list<Card*>();
 	cities = list<City*>();
 	armies = list<Army*>();
+	numOfCubes = 18;
+	numOfDisks = 3;
 }
 
 // Player value constructor.
@@ -42,6 +44,8 @@ Player::Player(string aName, int coinNum)
 	playerHand = list<Card*>();
 	cities = list<City*>();
 	armies = list<Army*>();
+	numOfCubes = 18;
+	numOfDisks = 3;
 }
 
 // Player copy constructor.
@@ -75,6 +79,9 @@ Player::Player(const Player& anotherPlayer)
 	{
 		armies.push_back(new Army(*army));
 	}
+
+	numOfCubes = anotherPlayer.numOfCubes;
+	numOfDisks = anotherPlayer.numOfDisks;
 }
 
 // Player destructor.
@@ -125,11 +132,17 @@ bool Player::payCoin(int& cost)
 // Creates new army.
 void Player::placeNewArmies(Territory* territory)
 {
+	if (numOfCubes <= 0)
+	{
+		cout << name << " does not have enough cubes to place a new army." << endl;
+		return;
+	}
 	Army* army = new Army(this, territory);
 	territory->addArmy(army);
 	armies.push_back(army);
-	cout << "Created " << *army << " in " << *territory << endl;
+	cout << "Created " << *army << " in " << territory->getName() << endl;
 	army = nullptr;
+	numOfCubes--;
 }
 
 // Moves army. Should work for both land and water.
@@ -139,7 +152,7 @@ void Player::moveArmies(Army* army, Territory* endLocation)
 	oldPos->removeArmy(army);
 	army->setPosition(endLocation);
 	endLocation->addArmy(army);
-	cout << "Moved " << *army << " from " << *oldPos << " to " << *endLocation << endl;
+	cout << "Moved " << *army << " from " << oldPos->getName() << " to " << endLocation->getName() << endl;
 	oldPos = nullptr;
 }
 
@@ -150,17 +163,23 @@ void Player::moveOverLand(Army* army, Territory* endLocation)
 	oldPos->removeArmy(army);
 	army->setPosition(endLocation);
 	endLocation->addArmy(army);
-	cout << "Moved " << *army << " overland from " << *oldPos << " to " << *endLocation << endl;
+	cout << "Moved " << *army << " overland from " << oldPos->getName() << " to " << endLocation->getName() << endl;
 	oldPos = nullptr;
 }
 
 // Creates a city on the territory. Is not currently functional because we have no idea of what a city is.
 void Player::buildCity(Territory* territory)
 {
+	if (numOfDisks <= 0)
+	{
+		cout << name << " does not have enough disks to place a new city." << endl;
+		return;
+	}
 	City* city = new City(this, territory);
 	this->cities.push_back(city);
-	cout << *city << " is built in " << *territory;
+	cout << *city << " is built in " << territory->getName();
 	city = nullptr;
+	numOfDisks--;
 }
 
 // Destroys army and deallocates dynamic memory.
@@ -240,6 +259,9 @@ Player& Player::operator= (const Player& anotherPlayer)
 	{
 		armies.push_back(new Army(*army));
 	}
+
+	numOfCubes = anotherPlayer.numOfCubes;
+	numOfDisks = anotherPlayer.numOfDisks;
 
 	return *this;
 }
