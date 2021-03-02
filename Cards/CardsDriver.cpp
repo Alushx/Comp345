@@ -20,7 +20,7 @@ int main() {
     Player* player = new Player("Anakin", 14);
 
     // create a deck
-    Deck* deck = new Deck();
+    Deck* deck = new Deck(3);
 
     // generate the cards
     deck->generateDeck();
