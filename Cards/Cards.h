@@ -52,9 +52,11 @@ class Deck {
 private:
 	Card *topCardptr;
 	Card cards[34];
+	int numPlayer;
 public:
 	//Constructor
 	Deck();//Default
+	Deck(int numPlayer);
 	//Copy constructor
 	Deck(const Deck &d);
 	//Deconstructor
@@ -65,6 +67,7 @@ public:
 	Card *draw();
 private:
 	static int  myRandomGenerator(int j);
+	int getNumCards();
 		// Operators
 	friend ostream& operator<<(ostream&, const Deck&);
 public:
