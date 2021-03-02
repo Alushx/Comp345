@@ -154,11 +154,16 @@ Card& Card::operator=(const Card& anotherCard)
 //Deck
 Deck::Deck() {
     topCardptr = &cards[0];//Points to the top of the deck.
+    numPlayer = 2;
 }
+Deck::Deck(int nPlayer){
+    topCardptr = &cards[0];
+    numPlayer = nPlayer;
+} 
 //CopyConstructor
 Deck::Deck(const Deck &d){
     topCardptr = d.topCardptr;
-    for(int i=0;i<34;i++){
+    for(int i=0;i<getNumCards();i++){
         cards[i] = d.cards[i];
     }
 }
@@ -167,9 +172,15 @@ Deck :: ~Deck(){
     // topCardptr is not dynamically allocated therefore, no need to delete it.
     topCardptr = nullptr;
 }
+//Return the number of cards that will be used
+int Deck :: getNumCards(){
+    if(numPlayer == 2) return 27;
+    if(numPlayer == 3) return 32;
+    if(numPlayer == 4) return 34;
+}  
 //Displays the whole deck
 void Deck::printDeck() {
-    for (int i = 0; i < 34; i++) {
+    for (int i = 0; i < getNumCards(); i++) {
         cout << "Card " << i + 1 << endl;
         cards[i].printCard();
         cout << endl;
@@ -181,7 +192,7 @@ int Deck :: myRandomGenerator(int j) {
 //Shuffle the content of the whole array.
 void Deck::shuffleDeck() {
     srand(time(0)); 
-    random_shuffle(&cards[0], &cards[34], myRandomGenerator);
+    random_shuffle(&cards[0], &cards[getNumCards()], myRandomGenerator);
 }
 // topCardptr points to the top of the deck
 //When a card is drawn the pointer topCard move to the next card.
@@ -198,45 +209,47 @@ void Deck ::generateDeck() {
     Action act;
     CombinationType ctype;
     
-    cards[0] = Card(gd.ARCANE_SPHINX, ctype.OR, act.ADD_3_ARMY, act.MOVE_4_ARMY);
-    cards[1] = Card(gd.ARCANE_MANTICORE, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
-    cards[2] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY);
-    cards[3] = Card(gd.ANCIENT_PHOENIX, ctype.SINGLE, act.MOVE_5_ARMY);
-    cards[4] = Card(gd.ANCIENT_TREE_SPIRIT, ctype.SINGLE, act.ADD_4_ARMY);
-    cards[5] = Card(gd.ANCIENT_WOODS, ctype.AND, act.BUILD_CITY, act.ADD_1_ARMY);
+    cards[0] = Card(gd.FOREST_PIXIE, ctype.SINGLE, act.MOVE_4_ARMY);
+    cards[1] = Card(gd.STRONGHOLD, ctype.SINGLE, act.BUILD_CITY);
+    cards[2] = Card(gd.ANCIENT_PHOENIX, ctype.SINGLE, act.MOVE_5_ARMY);
+    cards[3] = Card(gd.ANCIENT_TREE_SPIRIT, ctype.SINGLE, act.ADD_4_ARMY);
+    cards[4] = Card(gd.ANCIENT_WOODS, ctype.AND, act.BUILD_CITY, act.ADD_1_ARMY);
+    cards[5] = Card(gd.ANCIENT_SAGE , ctype.SINGLE, act.MOVE_3_ARMY);
+    cards[6] = Card(gd.CURSED_BANSHEE, ctype.SINGLE, act.MOVE_6_ARMY);
+    cards[7] = Card(gd.CURSED_GARGOYLES, ctype.SINGLE, act.MOVE_5_ARMY);
+    cards[8] = Card(gd.CURSED_KING , ctype.OR, act.ADD_3_ARMY,act.MOVE_4_ARMY);
+    cards[9] = Card(gd.CURSED_MAUSOLEUM, ctype.SINGLE, act.BUILD_CITY);
+    cards[10] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY);
+    cards[11] = Card(gd.DIRE_DRAGON, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
+    cards[12] = Card(gd.DIRE_GIANT, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
+    cards[13] = Card(gd.DIRE_EYE, ctype.SINGLE, act.ADD_4_ARMY);
+    cards[14] = Card(gd.DIRE_GOBLIN, ctype.SINGLE, act.MOVE_4_ARMY);
+    cards[15] = Card(gd.DIRE_OGRE, ctype.SINGLE, act.MOVE_2_ARMY);
+    cards[16] = Card(gd.LAKE, ctype.OR, act.ADD_2_ARMY,act.MOVE_3_ARMY);
+    cards[17] = Card(gd.FOREST_ELF, ctype.OR,  act.ADD_3_ARMY,act.MOVE_2_ARMY);
+    cards[18] = Card(gd.FOREST_GNOME, ctype.SINGLE,act.MOVE_2_ARMY);
+    cards[19] = Card(gd.FOREST_TREE_TOWN , ctype.SINGLE, act.BUILD_CITY);
+    cards[20] = Card(gd.GRAVEYARD, ctype.SINGLE, act.ADD_2_ARMY);
+    cards[21] = Card(gd.NOBLE_HILLS, ctype.SINGLE, act.ADD_3_ARMY);
+    cards[22] = Card(gd.NOBLE_KNIGHT, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
+    cards[23] = Card(gd.NOBLE_UNICORN, ctype.AND, act.MOVE_4_ARMY, act.ADD_1_ARMY);
+    cards[24] = Card(gd.NIGHT_HYDRA, ctype.AND, act.MOVE_4_ARMY,act.DESTROY_1_ARMY);
+    cards[25] = Card(gd.NIGHT_VILLAGE, ctype.SINGLE, act.BUILD_CITY);
+    cards[26] = Card(gd.NIGHT_WIZARD, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
 
-    cards[6] = Card(gd.ANCIENT_SAGE , ctype.SINGLE, act.MOVE_3_ARMY);
-    cards[7] = Card(gd.CURSED_BANSHEE, ctype.SINGLE, act.MOVE_6_ARMY);
-    cards[8] = Card(gd.CURSED_GARGOYLES, ctype.SINGLE, act.MOVE_5_ARMY);
-    cards[9] = Card(gd.CURSED_KING , ctype.OR, act.ADD_3_ARMY,act.MOVE_4_ARMY);
-    cards[10] = Card(gd.CURSED_MAUSOLEUM, ctype.SINGLE, act.BUILD_CITY);
-    cards[11] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY);
-
-    cards[12] = Card(gd.DIRE_DRAGON, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
-    cards[13] = Card(gd.DIRE_GIANT, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
-    cards[14] = Card(gd.DIRE_EYE, ctype.SINGLE, act.ADD_4_ARMY);
-    cards[15] = Card(gd.DIRE_GOBLIN, ctype.SINGLE, act.MOVE_4_ARMY);
-    cards[16] = Card(gd.DIRE_OGRE, ctype.SINGLE, act.MOVE_2_ARMY);
-
-    cards[17] = Card(gd.LAKE, ctype.OR, act.ADD_2_ARMY,act.MOVE_3_ARMY);
-    cards[18] = Card(gd.FOREST_ELF, ctype.OR,  act.ADD_3_ARMY,act.MOVE_2_ARMY);
-    cards[19] = Card(gd.FOREST_GNOME, ctype.SINGLE,act.MOVE_2_ARMY);
-    cards[20] = Card(gd.FOREST_TREE_TOWN , ctype.SINGLE, act.BUILD_CITY);
-    cards[21] = Card(gd.GRAVEYARD, ctype.SINGLE, act.ADD_2_ARMY);
-    cards[22] = Card(gd.NOBLE_HILLS, ctype.SINGLE, act.ADD_3_ARMY);
-
-    cards[23] = Card(gd.NOBLE_KNIGHT, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
-    cards[24] = Card(gd.NOBLE_UNICORN, ctype.AND, act.MOVE_4_ARMY, act.ADD_1_ARMY);
-    cards[25] = Card(gd.NIGHT_HYDRA, ctype.AND, act.MOVE_4_ARMY,act.DESTROY_1_ARMY);
-    cards[26] = Card(gd.NIGHT_VILLAGE, ctype.SINGLE, act.BUILD_CITY);
-    cards[27] = Card(gd.NIGHT_WIZARD, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
-    cards[28] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY);
-
-    cards[29] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY);
-    cards[30] = Card(gd.CASTLE, ctype.OR, act.ADD_4_ARMY,act. BUILD_CITY);
-    cards[31] = Card(gd.CASTLE_2, ctype.AND, act.MOVE_3_ARMY,act.BUILD_CITY);
-    cards[32] = Card(gd.FOREST_PIXIE, ctype.SINGLE, act.MOVE_4_ARMY);
-    cards[33] = Card(gd.STRONGHOLD, ctype.SINGLE, act.BUILD_CITY);
+    //3 Player cards
+    if(numPlayer >= 3){
+    cards[27] = Card(gd.ARCANE_SPHINX, ctype.OR, act.ADD_3_ARMY, act.MOVE_4_ARMY);// 3 Player
+    cards[28] = Card(gd.ARCANE_MANTICORE, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);//3 Player
+    cards[29] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY);// 3Player
+    cards[30] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY);//3 Player
+    cards[31] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY);// 3 Player
+    }
+    //4 Player cards
+    if(numPlayer >= 4){
+    cards[32] = Card(gd.CASTLE, ctype.OR, act.ADD_4_ARMY,act. BUILD_CITY);//4 player 
+    cards[33] = Card(gd.CASTLE_2, ctype.AND, act.MOVE_3_ARMY,act.BUILD_CITY);//4 Player
+   }
 
 }
 
