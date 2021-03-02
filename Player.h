@@ -40,6 +40,10 @@ private:
 	list<City*> cities;
 	list<Army*> armies;
 
+	// Static variables.
+	static vector<Player*> playerList;
+	static int playerNum;
+
 // Public methods
 public:
 	// Constructors and destructors.
@@ -64,9 +68,21 @@ public:
 	list<Army*>* getArmies();
 	Player& operator= (const Player&);
 
-// Operators
-private:
+	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
+
+	// Static operators.
+	static int getPlayerNum();
+	static vector<Player*>& getPlayerList();
+
+private:
+	void playCard(Card*);
+	void andOrAction(Card*, string&);
+	void playCardAction(string);
+	void moveArmiesAction(int);
+	void buildCityAction();
+	void addArmiesAction(int);
+	void destroyArmyAction();
 
 };
 

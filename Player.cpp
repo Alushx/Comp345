@@ -14,6 +14,7 @@
 #include <iostream>
 #include "Cards/Cards.h"
 #include "BiddingFacility.h"
+#include <sstream>
 using namespace std;
 
 // ============================================
@@ -32,6 +33,10 @@ Player::Player()
 	armies = list<Army*>();
 	numOfCubes = 18;
 	numOfDisks = 3;
+
+	// Handling static variables.
+	playerNum++;
+	playerList.push_back(this);
 }
 
 // Player value constructor.
@@ -110,6 +115,21 @@ Player::~Player()
 		delete tempArmy;
 		tempArmy = nullptr;
 	}
+}
+
+// Initializing static variable.
+int Player::playerNum = 0;
+vector<Player*> Player::playerList = vector<Player*>();
+
+// Returns the number of players currently playing.
+int Player::getPlayerNum()
+{
+	return playerNum;
+}
+
+vector<Player*>& Player::getPlayerList()
+{
+	return playerList;
 }
 
 // Switched Pay coin into a boolean type 
@@ -229,6 +249,140 @@ list<Army*>* Player::getArmies()
 {
 	return &armies;
 }
+
+void Player::playCard(Card* aCard)
+{
+	if (!aCard)
+	{
+		cout << "ERROR! Dangling Passed! In Player::PlayCard()." << endl;
+		exit(1);
+	}
+
+	string combinationType = aCard->getCombinationType();
+
+	// No combination.
+	if (combinationType == " ")
+	{
+		playCardAction(aCard->getFirstAction());
+	}
+	else
+	{
+		andOrAction(aCard, combinationType);
+	}
+}
+
+// Handles and/or case.
+void Player::andOrAction(Card* aCard, string& combinationType)
+{
+	if (!aCard)
+	{
+		cout << "ERROR! Dangling Passed! In Player::AndOrAction()." << endl;
+		exit(1);
+	}
+	
+	// Or case.
+	if (combinationType == "OR")
+	{
+		int choiceNum = 0;
+
+		// Player makes a decision.
+		do
+		{
+			cout << "Which of the following actions would you like to take?" << endl;
+			cout << "\t 1) " << aCard->getFirstAction() << endl;
+			cout << "\t 2) " << aCard->getSecondAction() << endl;
+
+			cin >> choiceNum;
+
+		} while (!(choiceNum == 1 || choiceNum == 2));
+		
+		// Appropriate action is played.
+
+		if (choiceNum == 1)
+		{
+			playCardAction(aCard->getFirstAction());
+		}
+		else if (choiceNum == 2)
+		{
+			playCardAction(aCard->getSecondAction());
+		}
+
+	}
+	// And case. Plays both actions.
+	else if (combinationType == "AND")
+	{
+		playCardAction(aCard->getFirstAction());
+		playCardAction(aCard->getSecondAction());
+	}
+}
+
+void Player::playCardAction(string anAction)
+{
+	istringstream actionStream(anAction);
+	string keyWord = "";
+	
+	actionStream >> keyWord;
+
+	if (keyWord == "Move")
+	{
+		int numOfArmiesToMove = 0;
+		actionStream >> numOfArmiesToMove;
+		moveArmiesAction(numOfArmiesToMove);
+	}
+	else if (keyWord == "Build")
+	{
+		buildCityAction();
+	}
+	else if (keyWord == "Add")
+	{
+		int numOfArmiesToCreate = 0;
+		actionStream >> numOfArmiesToCreate;
+		addArmiesAction(numOfArmiesToCreate);
+	}
+	else if (keyWord == "Destroy")
+	{
+		destroyArmyAction();
+	}
+}
+
+void Player::moveArmiesAction(int numOfArmiesToMove)
+{
+	Army* army = nullptr;
+	Territory* endLocation = nullptr;
+
+	for (int i = 0; i < numOfArmiesToMove; i++)
+	{
+		army = selectArmy();
+		endLocation = selectTerritory(army->getPosition(), "NEIGHBOUR");
+		moveArmies(army, endLocation);
+	}
+}
+
+void Player::buildCityAction()
+{
+	Territory* position = selectTerritory("CURRENTLY_ON");
+	buildCity(position);
+}
+
+void Player::addArmiesAction(int numOfArmiesToAdd)
+{
+	Territory* position = nullptr;
+	for (int i = 0; i < numOfArmiesToAdd; i++)
+	{
+		position = selectTerritory("HAS_CITY");
+		placeNewArmies(position);
+	}
+}
+
+void Player::destroyArmyAction()
+{
+	Player* player = Player.selectPlayer();
+	Army* army = player.selectArmy();
+
+	destroyArmy(army);
+}
+
+
 
 // toString
 ostream& operator<<(ostream& strm, const Player& player)
