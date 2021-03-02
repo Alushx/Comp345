@@ -167,6 +167,16 @@ void Player::moveOverLand(Army* army, Territory* endLocation)
 	oldPos = nullptr;
 }
 
+// Moves the army over land.
+void Player::moveOverWater(Army* army, Territory* endLocation)
+{
+	Territory* oldPos = army->getPosition();
+	oldPos->removeArmy(army);
+	army->setPosition(endLocation);
+	endLocation->addArmy(army);
+	cout << "Moved " << *army << " over water from " << oldPos->getName() << " to " << endLocation->getName() << endl;
+}
+
 // Creates a city on the territory. Is not currently functional because we have no idea of what a city is.
 void Player::buildCity(Territory* territory)
 {
