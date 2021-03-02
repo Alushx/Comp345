@@ -74,9 +74,15 @@ public:
 	// Static operators.
 	static int getPlayerNum();
 	static vector<Player*>& getPlayerList();
-
+	static Player* selectPlayer();
+	
 private:
+	Army* selectArmy();
+	
+	// Card Operations
+public:
 	void playCard(Card*);
+private:
 	void andOrAction(Card*, string&);
 	void playCardAction(string);
 	void moveArmiesAction(int);

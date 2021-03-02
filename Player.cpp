@@ -250,6 +250,7 @@ list<Army*>* Player::getArmies()
 	return &armies;
 }
 
+// Plays the card and executes all its actions.
 void Player::playCard(Card* aCard)
 {
 	if (!aCard)
@@ -316,6 +317,7 @@ void Player::andOrAction(Card* aCard, string& combinationType)
 	}
 }
 
+// Executes the appropriate methods for the player action.
 void Player::playCardAction(string anAction)
 {
 	istringstream actionStream(anAction);
@@ -323,33 +325,41 @@ void Player::playCardAction(string anAction)
 	
 	actionStream >> keyWord;
 
+	// Handles all "Move X Armies" actions.
 	if (keyWord == "Move")
 	{
 		int numOfArmiesToMove = 0;
 		actionStream >> numOfArmiesToMove;
 		moveArmiesAction(numOfArmiesToMove);
 	}
+	// Handles "Build City" action.
 	else if (keyWord == "Build")
 	{
 		buildCityAction();
 	}
+	// Handles "Add X Armies" actions.
 	else if (keyWord == "Add")
 	{
 		int numOfArmiesToCreate = 0;
 		actionStream >> numOfArmiesToCreate;
 		addArmiesAction(numOfArmiesToCreate);
 	}
+	// Handles "Destroy Army" action.
 	else if (keyWord == "Destroy")
 	{
 		destroyArmyAction();
 	}
 }
 
+// Moves all the armies in the action.
 void Player::moveArmiesAction(int numOfArmiesToMove)
 {
 	Army* army = nullptr;
 	Territory* endLocation = nullptr;
 
+	// ? I should check for land/sky here, shouldn't I? And deduct the appropriate number of moves.
+
+	// Moves an army for each number of moves a player has.
 	for (int i = 0; i < numOfArmiesToMove; i++)
 	{
 		army = selectArmy();
@@ -358,14 +368,17 @@ void Player::moveArmiesAction(int numOfArmiesToMove)
 	}
 }
 
+// Builds a city.
 void Player::buildCityAction()
 {
 	Territory* position = selectTerritory("CURRENTLY_ON");
 	buildCity(position);
 }
 
+// Creates the appropriate number of armies.
 void Player::addArmiesAction(int numOfArmiesToAdd)
 {
+	// Adds an army according to the number of armies in the argument.
 	Territory* position = nullptr;
 	for (int i = 0; i < numOfArmiesToAdd; i++)
 	{
@@ -374,12 +387,84 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 	}
 }
 
+// Allows the player to select an enemy and one of its armies to destroy.
 void Player::destroyArmyAction()
 {
-	Player* player = Player.selectPlayer();
-	Army* army = player.selectArmy();
+	Player* player = Player::selectPlayer();
+	Army* army = player->selectArmy();
 
 	destroyArmy(army);
+}
+
+// Returns a pointer to one of the players in the game.
+Player* Player::selectPlayer()
+{
+	if (playerNum == 0)
+	{
+		cout << "There are no players to choose from." << endl;
+		return nullptr;
+	}
+
+
+	int playerChoice = -1;
+
+	// Lists all players and allows user to select which one.
+	do
+	{
+		cout << "There are " << playerNum << " players." << endl;
+
+		for (int i = 0; i < playerNum; i++)
+		{
+			cout << "\t " << (i + 1) << ") " << *playerList[i] << endl;
+		}
+
+		cout << "Select the player you want: ";
+		cin >> playerChoice;
+
+	} while (playerChoice < 1 || playerChoice > playerNum);
+
+	// Returns pointer to player.
+	return playerList[playerChoice - 1];
+}
+
+// Select one of the player's armies.
+Army* Player::selectArmy()
+{
+	if (armies.size() == 0)
+	{
+		cout << "There are no armies to choose from." << endl;
+		return nullptr;
+	}
+
+	int playerChoice = -1;
+	int i = 0;
+
+	// Prints all armies and allows player to select one.
+	do
+	{
+		cout << name << " has " << armies.size() << " armies.";
+
+		i = 0;
+		for (Army* army : armies)
+		{
+			cout << "\t " << (i + 1) << ") " << *army << " in " << army->getPosition()->getName() << endl;
+			i++;
+		}
+
+		cout << "Choose an army: ";
+		cin >> playerChoice;
+	} while (playerChoice > armies.size() || playerChoice < 0);
+
+	// Iterates over the list of armies to return the army.
+	int j = 0;
+	for (list<Army*>::iterator armyIterator = armies.begin(); armyIterator != armies.end(); armyIterator++)
+	{
+		j++;
+		if (j == playerChoice)
+		{
+			return *armyIterator;
+		}
+	}
 }
 
 
@@ -387,7 +472,7 @@ void Player::destroyArmyAction()
 // toString
 ostream& operator<<(ostream& strm, const Player& player)
 {
-	return strm << player.name << ": " << player.numOfCoins << " coins";
+	return strm << player.name << ": " << player.numOfCoins << " coins" << " : " << player.armies.size() << " armies";
 }
 
 Player& Player::operator= (const Player& anotherPlayer)
