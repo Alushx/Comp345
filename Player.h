@@ -53,6 +53,7 @@ public:
 	void placeNewArmies(Territory* territory);
 	void moveArmies(Army*, Territory*);
 	void moveOverLand(Army*, Territory*);
+	void moveOverWater(Army*, Territory*);
 	void buildCity(Territory* territory);
 	void destroyArmy(Army*);
 	string getName();
