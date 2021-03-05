@@ -120,6 +120,19 @@ Player::~Player()
 // Initializing static variable.
 int Player::playerNum = 0;
 vector<Player*> Player::playerList = vector<Player*>();
+Territory* Player::startingRegion = nullptr;
+
+// Set the starting region that all players share.
+void Player::setStartingRegion(Territory* aStartingRegion)
+{
+	startingRegion = aStartingRegion;
+}
+
+// Get the starting region shared by all players.
+Territory* Player::getStartingRegion()
+{
+	return startingRegion;
+}
 
 // Returns the number of players currently playing.
 int Player::getPlayerNum()
@@ -363,7 +376,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove)
 	for (int i = 0; i < numOfArmiesToMove; i++)
 	{
 		army = selectArmy();
-		endLocation = selectTerritory(army->getPosition(), "NEIGHBOUR");
+		endLocation = selectNeighbouringTerritory(army->getPosition());
 		moveArmies(army, endLocation);
 	}
 }
@@ -371,7 +384,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove)
 // Builds a city.
 void Player::buildCityAction()
 {
-	Territory* position = selectTerritory("CURRENTLY_ON");
+	Territory* position = selectTerritoryCurrentlyOn();
 	buildCity(position);
 }
 
@@ -382,7 +395,7 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 	Territory* position = nullptr;
 	for (int i = 0; i < numOfArmiesToAdd; i++)
 	{
-		position = selectTerritory("HAS_CITY");
+		position = selectTerritoryWithCity();
 		placeNewArmies(position);
 	}
 }
@@ -453,7 +466,7 @@ Army* Player::selectArmy()
 
 		cout << "Choose an army: ";
 		cin >> playerChoice;
-	} while (playerChoice > armies.size() || playerChoice < 0);
+	} while (playerChoice > armies.size() || playerChoice <= 0);
 
 	// Iterates over the list of armies to return the army.
 	int j = 0;
@@ -465,6 +478,112 @@ Army* Player::selectArmy()
 			return *armyIterator;
 		}
 	}
+
+	return nullptr;
+}
+
+// Helps player choose a territory to build a city on.
+Territory* Player::selectTerritoryCurrentlyOn()
+{
+	if (armies.size() == 0)
+	{
+		cout << "There are no territories to choose from." << endl;
+		return nullptr;
+	}
+
+	map<Territory*, Territory*> territoriesCurrentlyOn = map<Territory*, Territory*>();
+	
+	// Make a set of all territories currently on.
+	for (Army* army : armies)
+	{
+		territoriesCurrentlyOn[army->getPosition()] = army->getPosition();
+	}
+
+	int playerChoice = -1;
+	int i = 0;
+	Territory* territory = nullptr;
+
+	// Prints all territories and allows player to select one.
+	do
+	{
+		i = 0;
+
+		for (pair<Territory*, Territory*> territoryPair : territoriesCurrentlyOn)
+		{
+			territory = territoryPair.first;
+			cout << "\t " << (i + 1) << ") " << *territory << endl;
+			i++;
+		}
+
+		// Player makes a choice.
+		cout << "Choose a territory: ";
+		cin >> playerChoice;
+
+	} while (playerChoice > armies.size() || playerChoice <= 0);
+	
+	int j = 1;
+
+	// Looping through and finding the territory again.
+	for (pair<Territory*, Territory*> territoryPair : territoriesCurrentlyOn)
+	{
+		if (j == playerChoice)
+		{
+			return territoryPair.first;
+		}
+		j++;
+	}
+
+	// Returning null if nothing found.
+	return nullptr;
+}
+
+// Helps player choose a territory to build an army on.
+Territory* Player::selectTerritoryWithCity()
+{
+	int i = 0;
+	int playerChoice = -1;
+	
+	// Display options for player.
+	do
+	{
+		cout << "Choose one of the following territories with cities.";
+
+		i = 1;
+
+		cout << "\t 1) Starting Region" << endl;
+
+		for (City* city : cities)
+		{
+			cout << "\t " << (++i) << ") " << *(city->getPosition()) << endl;
+		} 
+	} while (playerChoice <= 0 || playerChoice > (cities.size() + 1));
+
+	// Special case when starting region is selected.
+	if (playerChoice == 1)
+	{
+		return getStartingRegion();
+	}
+	
+	int j = 2; // Other cities start from 2 in the player's eyes.
+
+	// Loops through list and returns the appropriate position.
+	for (City* city : cities)
+	{
+		if (playerChoice == j++)
+		{
+			return city->getPosition();
+		}
+	}
+
+	cout << "\n DEBUG Player::selectTerritoryWithCity() - city not found. j = " << j << endl;
+	return nullptr;
+}
+
+// Helps player choose a territory to move an army to.
+Territory* Player::selectNeighbouringTerritory(Territory* currentTerritory)
+{
+	// TODO implement this.
+	return nullptr;
 }
 
 

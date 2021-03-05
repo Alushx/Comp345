@@ -43,6 +43,7 @@ private:
 	// Static variables.
 	static vector<Player*> playerList;
 	static int playerNum;
+	static Territory* startingRegion;
 
 // Public methods
 public:
@@ -75,6 +76,8 @@ public:
 	static int getPlayerNum();
 	static vector<Player*>& getPlayerList();
 	static Player* selectPlayer();
+	static void setStartingRegion(Territory*);
+	static Territory* getStartingRegion();
 	
 private:
 	Army* selectArmy();
@@ -89,7 +92,9 @@ private:
 	void buildCityAction();
 	void addArmiesAction(int);
 	void destroyArmyAction();
-
+	Territory* selectTerritoryCurrentlyOn();
+	Territory* selectTerritoryWithCity();
+	Territory* selectNeighbouringTerritory(Territory*);
 };
 
 class Army
