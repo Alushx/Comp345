@@ -262,6 +262,17 @@ using namespace std;
 		}
 	}
 
+	std::map<Territory*, int> Map::getAdjacentTerritories(Territory* aTerritory)
+	{
+		if (aTerritory == NULL)
+		{
+			cout << "ERROR: Null pointer passed.";
+			exit(1);
+		}
+
+		return countriesList[aTerritory];
+	}
+
 	// Stream insertion operator overload.
 	std::ostream& operator<<(std::ostream& strm, const Map& otherMap)
 	{

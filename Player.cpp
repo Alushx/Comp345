@@ -264,9 +264,9 @@ list<Army*>* Player::getArmies()
 }
 
 // Plays the card and executes all its actions.
-void Player::playCard(Card* aCard)
+void Player::playCard(Card* aCard, Map* map)
 {
-	if (!aCard)
+	if (aCard == NULL)
 	{
 		cout << "ERROR! Dangling Passed! In Player::PlayCard()." << endl;
 		exit(1);
@@ -277,16 +277,16 @@ void Player::playCard(Card* aCard)
 	// No combination.
 	if (combinationType == " ")
 	{
-		playCardAction(aCard->getFirstAction());
+		playCardAction(aCard->getFirstAction(), map);
 	}
 	else
 	{
-		andOrAction(aCard, combinationType);
+		andOrAction(aCard, combinationType, map);
 	}
 }
 
 // Handles and/or case.
-void Player::andOrAction(Card* aCard, string& combinationType)
+void Player::andOrAction(Card* aCard, string& combinationType, Map* map)
 {
 	if (!aCard)
 	{
@@ -314,24 +314,24 @@ void Player::andOrAction(Card* aCard, string& combinationType)
 
 		if (choiceNum == 1)
 		{
-			playCardAction(aCard->getFirstAction());
+			playCardAction(aCard->getFirstAction(), map);
 		}
 		else if (choiceNum == 2)
 		{
-			playCardAction(aCard->getSecondAction());
+			playCardAction(aCard->getSecondAction(), map);
 		}
 
 	}
 	// And case. Plays both actions.
 	else if (combinationType == "AND")
 	{
-		playCardAction(aCard->getFirstAction());
-		playCardAction(aCard->getSecondAction());
+		playCardAction(aCard->getFirstAction(), map);
+		playCardAction(aCard->getSecondAction(), map);
 	}
 }
 
 // Executes the appropriate methods for the player action.
-void Player::playCardAction(string anAction)
+void Player::playCardAction(string anAction, Map* map)
 {
 	istringstream actionStream(anAction);
 	string keyWord = "";
@@ -343,7 +343,7 @@ void Player::playCardAction(string anAction)
 	{
 		int numOfArmiesToMove = 0;
 		actionStream >> numOfArmiesToMove;
-		moveArmiesAction(numOfArmiesToMove);
+		moveArmiesAction(numOfArmiesToMove, map);
 	}
 	// Handles "Build City" action.
 	else if (keyWord == "Build")
@@ -365,19 +365,33 @@ void Player::playCardAction(string anAction)
 }
 
 // Moves all the armies in the action.
-void Player::moveArmiesAction(int numOfArmiesToMove)
+void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 {
 	Army* army = nullptr;
-	Territory* endLocation = nullptr;
+	pair<Territory*, int> endLocation;
 
 	// ? I should check for land/sky here, shouldn't I? And deduct the appropriate number of moves.
 
 	// Moves an army for each number of moves a player has.
-	for (int i = 0; i < numOfArmiesToMove; i++)
+	while (numOfArmiesToMove > 0)
 	{
 		army = selectArmy();
-		endLocation = selectNeighbouringTerritory(army->getPosition());
-		moveArmies(army, endLocation);
+		endLocation = selectNeighbouringTerritory(army->getPosition(), map);
+
+		// TODO check for the number of flight bonus the player has. Wait, do we even have the flight bonus system anymore?
+		
+		// Check if player has the needed number of moves.
+		if (endLocation.second > numOfArmiesToMove)
+		{
+			cout << "Invalid move. You do not have enough moves for that. Please pic again." << endl;
+		}
+		else
+		{
+			// Move army and deduct cost.
+			moveArmies(army, endLocation.first);
+			numOfArmiesToMove -= endLocation.second;
+		}
+		
 	}
 }
 
@@ -580,10 +594,44 @@ Territory* Player::selectTerritoryWithCity()
 }
 
 // Helps player choose a territory to move an army to.
-Territory* Player::selectNeighbouringTerritory(Territory* currentTerritory)
+pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerritory, Map* map)
 {
 	// TODO implement this.
-	return nullptr;
+
+	std::map<Territory*, int> adjacentTerritories = map->getAdjacentTerritories(currentTerritory);
+
+	int i = 0;
+	int playerChoice = -1;
+
+	do
+	{
+		i = 1;
+		playerChoice = -1;
+
+		cout << "Select the neighbouring territory: " << endl;
+
+		// Display all options.
+		for (pair<Territory*, int> neighbour : adjacentTerritories)
+		{
+			cout << "\t " << i << ") " << neighbour.first->getName() << ". Move cost: " << neighbour.second << endl;
+		}
+
+		cin >> playerChoice;
+
+	} while (playerChoice <= 0 || playerChoice > adjacentTerritories.size());
+
+	int j = 1;
+	
+	// Find the option and return it.
+	for (pair<Territory*, int> neighbour : adjacentTerritories)
+	{
+		if (j == playerChoice)
+		{
+			return neighbour;
+		}
+
+		j++;
+	}
 }
 
 

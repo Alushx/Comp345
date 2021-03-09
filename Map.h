@@ -42,6 +42,7 @@ public:
 	void printList();
 	Territory* getTerritory(std::string);
 	void addContinent(std::list<Territory*>&);
+	std::map<Territory*, int> getAdjacentTerritories(Territory*);
 	bool validate();
 	Map& operator=(const Map&);
 private:

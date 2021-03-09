@@ -75,6 +75,9 @@ public:
 	// Static operators.
 	static int getPlayerNum();
 	static vector<Player*>& getPlayerList();
+
+
+
 	static Player* selectPlayer();
 	static void setStartingRegion(Territory*);
 	static Territory* getStartingRegion();
@@ -84,17 +87,17 @@ private:
 	
 	// Card Operations
 public:
-	void playCard(Card*);
+	void playCard(Card*, Map*);
 private:
-	void andOrAction(Card*, string&);
-	void playCardAction(string);
-	void moveArmiesAction(int);
+	void andOrAction(Card*, string&, Map*);
+	void playCardAction(string, Map*);
+	void moveArmiesAction(int, Map*);
 	void buildCityAction();
 	void addArmiesAction(int);
 	void destroyArmyAction();
 	Territory* selectTerritoryCurrentlyOn();
 	Territory* selectTerritoryWithCity();
-	Territory* selectNeighbouringTerritory(Territory*);
+	pair<Territory*,int> selectNeighbouringTerritory(Territory*, Map*);
 };
 
 class Army
