@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include "MapLoader.h"
+#include "../Player.h""
 using namespace std;
 
 // Default constructor.
@@ -27,7 +28,7 @@ MapLoader::MapLoader()
 // Destructors. Assumes the map loader is present throughout the game.
 MapLoader::~MapLoader()
 {
-    if (map)
+    if (map == NULL)
         delete map;
     map = nullptr;
 }
@@ -46,7 +47,7 @@ MapLoader::MapLoader(const MapLoader& otherMap)
 }
 
 // Creates map by reading a map text file.
-void MapLoader::readMapFile(string fileName){
+void MapLoader::readMapFile(string fileName, int numOfPlayers){
     int numOfPlayers = 0;
     int numOfBoards = 0;
     bool shouldContinue = true;
@@ -60,13 +61,6 @@ void MapLoader::readMapFile(string fileName){
         cout << "Unable to open file";
         exit(1); // terminate with error
     }
-
-    // Seeing how many players there are.
-    do
-    {
-        cout << "\n Please enter the number of players in the game: ";
-        cin >> numOfPlayers;
-    } while (numOfPlayers <= 1 || numOfPlayers > 4);
 
     // Asking players to pick arrangement (if there are less than 4 players)
     if (numOfPlayers < 4)
@@ -289,4 +283,65 @@ MapLoader& MapLoader::operator=(const MapLoader& anotherMapLoader)
         map = nullptr;
 
     return *this;
+}
+
+// Function that starts creates loads a map, builds it, creates players, and the bidding facility.
+// Callers of this function are responsible for deallocating memory of MapLoader and the player created here.
+// Note that the player have to be retrieved with the static Player method.
+MapLoader* startGame()
+{
+    MapLoader* mapLoader = new MapLoader();
+    int numOfPlayers;
+    int playerChoice;
+    string fileName;
+
+    // Hard coded.
+    const int NUMBER_OF_VALID_MAPS = 3;
+    string validMaps[NUMBER_OF_VALID_MAPS] = { "map1.txt", "map2.txt", "map3.txt" };
+
+    // Player chooses a file.
+    do
+    {
+        cout << "Please select a map: " << endl;
+
+        for (int i = 1; i < NUMBER_OF_VALID_MAPS; i++)
+        {
+            cout << "\t" << i << ") " << validMaps[i - 1] << endl;
+        }
+
+        cin >> playerChoice;
+
+    } while (playerChoice < 1 || playerChoice > NUMBER_OF_VALID_MAPS);
+
+    fileName = validMaps[playerChoice];
+
+    // Seeing how many players there are.
+    do
+    {
+        cout << "\n Please enter the number of players in the game: ";
+        cin >> numOfPlayers;
+    } while (numOfPlayers <= 1 || numOfPlayers > 4);
+
+    // Creating map.
+    // ? Maybe check for validity here?
+    mapLoader->readMapFile(fileName, numOfPlayers);
+
+    int coins;
+    string lName;
+
+    //Determine number of coins allocated based on number of players
+    if (numOfPlayers == 4) coins = 9;
+    if (numOfPlayers == 3) coins = 11;
+    if (numOfPlayers == 2) coins = 14;
+
+    // Create all players. Can later be retrieved through the static method.
+    for (int i = 1; i <= numOfPlayers; i++) {
+        cout << "Player " << i << " last name: " << std::endl;
+        cin >> lName;
+        new Player(lName, coins);
+    }
+
+    // Armies, tokens, cities, and bidding facility is all created within each instance of Player.
+
+
 }

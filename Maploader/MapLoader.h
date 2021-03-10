@@ -28,7 +28,7 @@ public:
     ~MapLoader();
     
     // Public methods.
-    void readMapFile(std::string fileName);
+    void readMapFile(std::string fileName, int);
     Map* getMap();
 
     // Overloaded assignment operator.
@@ -42,3 +42,8 @@ private:
     bool shouldCreateBoard(int&);
     friend ostream& operator<<(ostream&, const MapLoader&);
 };
+
+// Forward declaration to make compiler happy.
+class Player;
+
+MapLoader* startGame();
