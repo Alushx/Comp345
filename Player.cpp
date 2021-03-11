@@ -51,6 +51,10 @@ Player::Player(string aName, int coinNum)
 	armies = list<Army*>();
 	numOfCubes = 18;
 	numOfDisks = 3;
+
+	// Handling static variables.
+	playerNum++;
+	playerList.push_back(this);
 }
 
 // Player copy constructor.
@@ -87,6 +91,10 @@ Player::Player(const Player& anotherPlayer)
 
 	numOfCubes = anotherPlayer.numOfCubes;
 	numOfDisks = anotherPlayer.numOfDisks;
+
+	// Handling static variables.
+	playerNum++;
+	playerList.push_back(this);
 }
 
 // Player destructor.
@@ -220,7 +228,7 @@ void Player::buildCity(Territory* territory)
 	}
 	City* city = new City(this, territory);
 	this->cities.push_back(city);
-	cout << *city << " is built in " << territory->getName();
+	cout << *city << " is built in " << territory->getName() << endl;
 	city = nullptr;
 	numOfDisks--;
 }
@@ -341,6 +349,8 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles all "Move X Armies" actions.
 	if (keyWord == "Move")
 	{
+		cout << endl;
+		cout << name << " is moving armies..." << endl;
 		int numOfArmiesToMove = 0;
 		actionStream >> numOfArmiesToMove;
 		moveArmiesAction(numOfArmiesToMove, map);
@@ -348,11 +358,15 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Build City" action.
 	else if (keyWord == "Build")
 	{
+		cout << endl;
+		cout << name << " is building a city..." << endl;
 		buildCityAction();
 	}
 	// Handles "Add X Armies" actions.
 	else if (keyWord == "Add")
 	{
+		cout << endl;
+		cout << name << " is adding armies..." << endl;
 		int numOfArmiesToCreate = 0;
 		actionStream >> numOfArmiesToCreate;
 		addArmiesAction(numOfArmiesToCreate);
@@ -360,6 +374,8 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Destroy Army" action.
 	else if (keyWord == "Destroy")
 	{
+		cout << endl;
+		cout << name << " is destroying an army..." << endl;
 		destroyArmyAction();
 	}
 }
@@ -375,6 +391,8 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 	// Moves an army for each number of moves a player has.
 	while (numOfArmiesToMove > 0)
 	{
+		cout << endl;
+		cout << name << " has " << numOfArmiesToMove << " moves left..." << endl;
 		army = selectArmy();
 		endLocation = selectNeighbouringTerritory(army->getPosition(), map);
 
@@ -383,7 +401,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 		// Check if player has the needed number of moves.
 		if (endLocation.second > numOfArmiesToMove)
 		{
-			cout << "Invalid move. You do not have enough moves for that. Please pic again." << endl;
+			cout << "Invalid move. You do not have enough moves for that. Please pick again." << endl;
 		}
 		else
 		{
@@ -409,6 +427,8 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 	Territory* position = nullptr;
 	for (int i = 0; i < numOfArmiesToAdd; i++)
 	{
+		cout << endl;
+		cout << name << " has " << numOfArmiesToAdd - i<< " armies left to add..." << endl;
 		position = selectTerritoryWithCity();
 		placeNewArmies(position);
 	}
@@ -445,7 +465,7 @@ Player* Player::selectPlayer()
 			cout << "\t " << (i + 1) << ") " << *playerList[i] << endl;
 		}
 
-		cout << "Select the player you want: ";
+		cout << "Select a player: ";
 		cin >> playerChoice;
 
 	} while (playerChoice < 1 || playerChoice > playerNum);
@@ -469,7 +489,7 @@ Army* Player::selectArmy()
 	// Prints all armies and allows player to select one.
 	do
 	{
-		cout << name << " has " << armies.size() << " armies.";
+		cout << name << " has " << armies.size() << " armies." << endl;
 
 		i = 0;
 		for (Army* army : armies)
@@ -560,7 +580,7 @@ Territory* Player::selectTerritoryWithCity()
 	// Display options for player.
 	do
 	{
-		cout << "Choose one of the following territories with cities.";
+		cout << "Choose one of the following territories with cities." << endl;
 
 		i = 1;
 
@@ -570,6 +590,10 @@ Territory* Player::selectTerritoryWithCity()
 		{
 			cout << "\t " << (++i) << ") " << *(city->getPosition()) << endl;
 		} 
+
+		cout << "Select a territory: ";
+		cin >> playerChoice;
+
 	} while (playerChoice <= 0 || playerChoice > (cities.size() + 1));
 
 	// Special case when starting region is selected.
@@ -613,9 +637,10 @@ pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerri
 		// Display all options.
 		for (pair<Territory*, int> neighbour : adjacentTerritories)
 		{
-			cout << "\t " << i << ") " << neighbour.first->getName() << ". Move cost: " << neighbour.second << endl;
+			cout << "\t " << i++ << ") " << neighbour.first->getName() << ". Move cost: " << neighbour.second << endl;
 		}
 
+		cout << "Select the neighbouring territory you want: ";
 		cin >> playerChoice;
 
 	} while (playerChoice <= 0 || playerChoice > adjacentTerritories.size());

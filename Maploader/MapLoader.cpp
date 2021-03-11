@@ -28,7 +28,7 @@ MapLoader::MapLoader()
 // Destructors. Assumes the map loader is present throughout the game.
 MapLoader::~MapLoader()
 {
-    if (map == NULL)
+    if (map != NULL)
         delete map;
     map = nullptr;
 }
@@ -48,7 +48,6 @@ MapLoader::MapLoader(const MapLoader& otherMap)
 
 // Creates map by reading a map text file.
 void MapLoader::readMapFile(string fileName, int numOfPlayers){
-    int numOfPlayers = 0;
     int numOfBoards = 0;
     bool shouldContinue = true;
     bool shouldMakeL = false;
@@ -326,7 +325,7 @@ MapLoader* startGame()
     // ? Maybe check for validity here?
     mapLoader->readMapFile(fileName, numOfPlayers);
 
-    int coins;
+    int coins = 0;
     string lName;
 
     //Determine number of coins allocated based on number of players
@@ -342,6 +341,6 @@ MapLoader* startGame()
     }
 
     // Armies, tokens, cities, and bidding facility is all created within each instance of Player.
-
+    return mapLoader;
 
 }
