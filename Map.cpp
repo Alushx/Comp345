@@ -126,6 +126,34 @@ using namespace std;
 		}
 	}
 
+	Territory* Map::selectTerritory()
+	{
+		int playerChoice = -1;
+		int i = 0;
+		do
+		{
+			i = 0;
+
+			std::cout << "You can select a territory. " << std::endl;
+
+			for (pair<string,Territory*> territory : territories)
+			{
+				std::cout << "\t" << ++i << ") " << *(territory.second) << std::endl;
+			}
+			std::cout << "Choose a territory: ";
+			std::cin >> playerChoice;
+
+		} while (playerChoice < 1 || playerChoice > territories.size());
+
+		int j = 1;
+		for (pair<string, Territory*> territory : territories)
+		{
+			if (j = playerChoice)
+				return territory.second;
+			j++;
+		}
+	}
+
 	// Validates graph connectivity.
 	bool Map::isConnectedMap()
 	{

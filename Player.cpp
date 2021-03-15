@@ -40,7 +40,7 @@ Player::Player()
 }
 
 // Player value constructor.
-Player::Player(string aName, int coinNum)
+Player::Player(string aName, int coinNum, bool isBot)
 {
 	name = aName;
 	numOfCoins = coinNum;
@@ -53,8 +53,15 @@ Player::Player(string aName, int coinNum)
 	numOfDisks = 3;
 
 	// Handling static variables.
-	playerNum++;
-	playerList.push_back(this);
+	if (isBot)
+	{
+		Player::setBot(this);
+	}
+	else
+	{
+		playerNum++;
+		playerList.push_back(this);
+	}
 }
 
 // Player copy constructor.
@@ -129,6 +136,7 @@ Player::~Player()
 int Player::playerNum = 0;
 vector<Player*> Player::playerList = vector<Player*>();
 Territory* Player::startingRegion = nullptr;
+Player* Player::bot = nullptr;
 
 // Set the starting region that all players share.
 void Player::setStartingRegion(Territory* aStartingRegion)
@@ -148,9 +156,38 @@ int Player::getPlayerNum()
 	return playerNum;
 }
 
+// Returns a list of all non-bot players.
 vector<Player*>& Player::getPlayerList()
 {
 	return playerList;
+}
+
+// Returns the last created bot.
+Player* Player::getBot()
+{
+	return bot;
+}
+
+// Sets a player to be a bot.
+void Player::setBot(Player* aBot)
+{
+	bot = aBot;
+}
+
+void Player::placeBotArmies(int n, Map* map)
+{
+	if (map == NULL || getBot() == NULL)
+	{
+		cout << "ERROR!" << endl;
+		exit(1);
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << "You can place " << n - i << " armies." << std::endl;
+		Territory* territory = map->selectTerritory();
+		getBot()->placeNewArmies(territory);
+	}
 }
 
 // Switched Pay coin into a boolean type 
@@ -452,7 +489,7 @@ Player* Player::selectPlayer()
 		return nullptr;
 	}
 
-
+	bool hasBot = false;
 	int playerChoice = -1;
 
 	// Lists all players and allows user to select which one.
@@ -464,14 +501,22 @@ Player* Player::selectPlayer()
 		{
 			cout << "\t " << (i + 1) << ") " << *playerList[i] << endl;
 		}
+		if (bot != NULL)
+		{
+			cout << "\t " << playerNum + 1 << ") " << *bot << endl;
+			hasBot = true;
+		}
 
 		cout << "Select a player: ";
 		cin >> playerChoice;
 
-	} while (playerChoice < 1 || playerChoice > playerNum);
+	} while (playerChoice < 1 || playerChoice > (hasBot ? playerNum + 1 : playerNum));
 
 	// Returns pointer to player.
-	return playerList[playerChoice - 1];
+	if (playerChoice == playerNum + 1)
+		return bot;
+	else
+		return playerList[playerChoice - 1];
 }
 
 // Select one of the player's armies.

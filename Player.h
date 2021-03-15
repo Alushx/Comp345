@@ -44,12 +44,13 @@ private:
 	static vector<Player*> playerList;
 	static int playerNum;
 	static Territory* startingRegion;
+	static Player* bot;
 
 // Public methods
 public:
 	// Constructors and destructors.
 	Player();
-	Player(string name, int coinNum);
+	Player(string name, int coinNum, bool isBot = false);
 	Player(const Player&);
 	~Player();
 
@@ -73,11 +74,11 @@ public:
 	friend ostream& operator<<(ostream&, const Player&);
 
 	// Static operators.
+	static Player* getBot();
+	static void setBot(Player*);
+	static void placeBotArmies(int, Map*);
 	static int getPlayerNum();
 	static vector<Player*>& getPlayerList();
-
-
-
 	static Player* selectPlayer();
 	static void setStartingRegion(Territory*);
 	static Territory* getStartingRegion();

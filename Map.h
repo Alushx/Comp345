@@ -41,10 +41,12 @@ public:
 	void addEdge(Territory*, Territory*, int);
 	void printList();
 	Territory* getTerritory(std::string);
+	Territory* selectTerritory();
 	void addContinent(std::list<Territory*>&);
 	std::map<Territory*, int> getAdjacentTerritories(Territory*);
 	bool validate();
 	Map& operator=(const Map&);
+	
 private:
 	// Helper methods for validating.
 	bool isConnectedMap();
