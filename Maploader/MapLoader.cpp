@@ -52,6 +52,12 @@ void MapLoader::readMapFile(string fileName, int numOfPlayers){
     bool shouldContinue = true;
     bool shouldMakeL = false;
     std::map<int, std::map<std::string, Territory*>> boardConnections;
+    
+    if (!verifyFile(fileName))
+    {
+        cout << "File was invalid! Terminating program!" << endl;
+        exit(1);
+    }
 
     ifstream inFile;
     inFile.open(fileName);
@@ -260,6 +266,145 @@ bool MapLoader::shouldCreateBoard(int& numOfPlayers)
 Map* MapLoader::getMap()
 {
     return map;
+}
+
+// Reads through the file and ensures everything is in the correct format.
+// Note that this only checks the syntax and ensures each command is being used in the appropriate place 
+// and with the appropriate number of operands. It does not verify if the operands are semantically correct.
+bool MapLoader::verifyFile(std::string fileName)
+{
+    // Opening file.
+    ifstream input(fileName);
+    if (!input) {
+        cout << "Unable to open file...";
+        return false;
+    }
+
+    // Setting up local vars.
+    bool hasContinent = false; // This checks if a continent exists before each BOARD command.
+    bool isValid = true;
+    string command;
+    string line;
+    istringstream inputString;
+
+    while (!input.eof() && isValid)
+    {
+        // Retrieving each line.
+        getline(input, line);
+        inputString = istringstream(line);
+        inputString >> command;
+
+        // Running through each possible command.
+        if (command == "CONTINENT")
+        {
+            hasContinent = true;
+            isValid = isValid && verifyContinent(inputString);
+        }
+        else if (command == "JOIN")
+        {
+            isValid = isValid && verifyJoin(inputString);
+        }
+        else if (command == "BOARD")
+        {
+            if (hasContinent)
+            {
+                hasContinent = false;
+                isValid = isValid && verifyBoard(inputString);
+            }
+            else
+            {
+                isValid = false;
+            }
+        }
+        else if (command == "OPTIONAL")
+        {
+            // Do nothing.
+        }
+        else
+        {
+            // An invalid command.
+            isValid = false;
+        }
+    }
+
+    input.close();
+    return isValid;
+}
+
+// Ensures each continent contains at least 1 territory.
+bool MapLoader::verifyContinent(std::istringstream& inputString)
+{
+    int i = 0;
+    string output;
+
+    // Counting the number of territories per continent.
+    while (inputString >> output)
+    {
+        i++;
+    }
+
+    if (i == 0)
+    {
+        cout << "Invalid File: Continent has no territories inside!" << endl;
+        return false;
+    }
+    return true;
+    
+}
+
+// Ensures the JOIN command has 3 operands (2 territories and 1 number).
+bool MapLoader::verifyJoin(std::istringstream& inputString)
+{
+    int i = 0;
+    string output;
+    bool isValid = false;
+
+    while (inputString >> output)
+    {
+        i++;
+        // Check 3rd input to see if it's a valid number.
+        if (i == 3 && (output == "1" || output == "3"))
+        {
+            isValid = true;
+        }
+    }
+
+    if (i == 3 && isValid)
+    {
+        return true;
+    }
+    else if (i != 3)
+    {
+        cout << "Join did not have the right number of inputs." << endl;
+        return false;
+    }
+    else
+    {
+        cout << "Third input of JOIN was not a valid number." << endl;
+        return false;
+    }
+}
+
+// Ensures the BOARD operator has exactly 4 operands.
+bool MapLoader::verifyBoard(std::istringstream& inputString)
+{
+    string output;
+    int i = 0;
+    while (inputString >> output)
+    {
+        i++;
+    }
+
+    if (i == 4)
+    {
+        return true;
+    }
+    else
+    {
+        cout << "Board did not have the right number of inputs." << endl;
+        return false;
+    }
+    
 }
 
 // Stream insertion operator.

@@ -14,6 +14,7 @@
 #include "../Map.h"
 #include <string>
 #include <fstream>
+#include <sstream>
 
 class MapLoader {
     // Map being built.
@@ -29,6 +30,7 @@ public:
     
     // Public methods.
     void readMapFile(std::string fileName, int);
+    bool verifyFile(std::string fileName);
     Map* getMap();
 
     // Overloaded assignment operator.
@@ -40,6 +42,9 @@ private:
     void joinTerritories(std::ifstream&);
     void createBoard(std::ifstream&, std::map<int, std::map<std::string, Territory*>>&, int&, bool&, int&);
     bool shouldCreateBoard(int&);
+    bool verifyContinent(std::istringstream&);
+    bool verifyJoin(std::istringstream&);
+    bool verifyBoard(std::istringstream&);
     friend ostream& operator<<(ostream&, const MapLoader&);
 };
 
