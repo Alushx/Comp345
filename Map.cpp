@@ -290,6 +290,49 @@ using namespace std;
 		}
 	}
 
+	// Returns all continents.
+	std::list<std::list<Territory*>> Map::getContinents()
+	{
+		return continentList;
+	}
+
+	Player* Map::getContinentOwner(std::list<Territory*> continent)
+	{
+		std::map<Player*, std::list<Territory*>> territoryOwners = std::map<Player*, std::list<Territory*>>();
+		Player* owner = nullptr;
+		for (Territory* territory : continent)
+		{
+			// Adds the territories owned to the respective player.
+			owner = territory->getOwner();
+			if (owner != 0)
+				territoryOwners[owner].push_back(territory);
+		}
+
+		int max = 0;
+		owner = nullptr;
+		bool isEqual = true;
+		for (pair<Player*, std::list<Territory*>> pair : territoryOwners)
+		{
+			// Largest territories owned.
+			if (pair.second.size() > max)
+			{
+				max = pair.second.size();
+				owner = pair.first;
+				isEqual = false;
+			}
+			else if (pair.second.size() == max)
+			{
+				isEqual = true;
+			}
+		}
+
+		// Return nullptr if two players have the same number of territories owned.
+		if (isEqual)
+			return nullptr;
+		else
+			return owner;
+	}
+
 	std::map<Territory*, int> Map::getAdjacentTerritories(Territory* aTerritory)
 	{
 		if (aTerritory == NULL)
