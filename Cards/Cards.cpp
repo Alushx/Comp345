@@ -73,6 +73,27 @@ struct Good {
     string CASTLE_2 = "Castle 2";
 };
 
+struct Ability{
+    string PLUS_ONE_MOVE = "+1 Move";
+    string PLUS_ONE_ARMY = "+1 Army";
+    string FYLING = "Flying";
+    string ONE_ELIXER = "1 Elixer";
+    string TWO_ELIXER = "2 Elixer";
+    string THREE_ELIXER = "3 Elixer";
+    string ONE_ELIXER_AND_2_COINS = "1 Elixer and 2 coins";
+    string PLUS_1_VP_PER_ARCAINE_CARD = "+1 VP per Arcaine card";
+    string PLUS_1_VP_PER_ANCIENT_CARD = "+1 VP per Ancient card";
+    string PLUS_1_VP_PER_FYLING_CARD = "+1 VP per Fyling card";
+    string IMMUNE_TO_ATTACK = "Immune to attack";
+    string PLUS_1_VP_PER_3_COINS = "+1 VP per 3 coins";
+    string PLUS_1_VP_PER_FOREST_CARD = "+1 VP per Forest card";
+    string PLUS_1_VP_PER_CURSED_CARD = "+1 VP per Cursed card";
+    string PLUS_1_VP_PER_Night_CARD = "+1 VP per Night card";
+    string PLUS_5_VP_PER_3_NOBLE_CARD = "All three noble cards = 5 VP";
+    string PLUS_3_VP_PER_2_MOUNTAIN_CARD = "+3 If you have 2 Mountain cards";
+    string PLUS_1_VP_PER_DIRE_CARD = "+1 VP per Dire card";
+};
+
 struct CombinationType {
     string SINGLE = " ";
     string OR = "OR";
@@ -83,17 +104,19 @@ struct CombinationType {
 //Card
 
 //Constructor
-Card::Card(string gd,string ctype, string actn){
+Card::Card(string gd,string ctype, string actn,string abt){
     good = gd;
     combinationtype = ctype;
     action[0] = actn;
+    ability = abt;
 }
 
-Card::Card(string gd, string ctype, string firstAction, string secondAction) {
+Card::Card(string gd, string ctype, string firstAction, string secondAction, string abt) {
     good = gd;
     combinationtype = ctype;
     action[0] = firstAction;
     action[1] = secondAction;
+    ability = abt;
 }
 //Copy constructor
 Card :: Card(const Card &c){
@@ -101,6 +124,7 @@ Card :: Card(const Card &c){
     combinationtype = c.combinationtype;
     action[0] = c.action[0];
     action[1] = c.action[1];
+    ability = c.ability;
 }
 //Deconstructor
 Card :: ~Card(){}; // There are no pointers for this class
@@ -118,9 +142,13 @@ string Card ::getSecondAction(){
     return action[1];
 }
 
+string Card :: getAbility(){
+    return ability;
+}
 void Card::printCard() {
     CombinationType comp;
     cout << "\tGood: "<< good<< endl;
+    cout << "\tAbility: "<< ability<< endl;
     cout << "\tAction: " << action[0]<< endl;
     if (combinationtype != comp.SINGLE) {
         if (combinationtype == comp.AND) cout << "\tAND" << endl;
@@ -134,7 +162,7 @@ void Card::printCard() {
 ostream& operator<<(ostream& strm, const Card& card)
 {
 	return strm << "Good: " << card.good 
-    << "\nAction(s): " << card.action[0] << "\n" << card.combinationtype << "\n"
+    <<"Ability: "<<card.ability<< "\nAction(s): " << card.action[0] << "\n" << card.combinationtype << "\n"
     << card.action[1] << endl;
 }
 
@@ -147,7 +175,7 @@ Card& Card::operator=(const Card& anotherCard)
     combinationtype = anotherCard.combinationtype;
     action[0] = anotherCard.action[0];
     action[1] = anotherCard.action[1];
-
+    ability = anotherCard.ability;
     return *this;
 }
 
@@ -208,47 +236,48 @@ void Deck ::generateDeck() {
     Good gd;
     Action act;
     CombinationType ctype;
+    Ability abt;
     
-    cards[0] = Card(gd.FOREST_PIXIE, ctype.SINGLE, act.MOVE_4_ARMY);
-    cards[1] = Card(gd.STRONGHOLD, ctype.SINGLE, act.BUILD_CITY);
-    cards[2] = Card(gd.ANCIENT_PHOENIX, ctype.SINGLE, act.MOVE_5_ARMY);
-    cards[3] = Card(gd.ANCIENT_TREE_SPIRIT, ctype.SINGLE, act.ADD_4_ARMY);
-    cards[4] = Card(gd.ANCIENT_WOODS, ctype.AND, act.BUILD_CITY, act.ADD_1_ARMY);
-    cards[5] = Card(gd.ANCIENT_SAGE , ctype.SINGLE, act.MOVE_3_ARMY);
-    cards[6] = Card(gd.CURSED_BANSHEE, ctype.SINGLE, act.MOVE_6_ARMY);
-    cards[7] = Card(gd.CURSED_GARGOYLES, ctype.SINGLE, act.MOVE_5_ARMY);
-    cards[8] = Card(gd.CURSED_KING , ctype.OR, act.ADD_3_ARMY,act.MOVE_4_ARMY);
-    cards[9] = Card(gd.CURSED_MAUSOLEUM, ctype.SINGLE, act.BUILD_CITY);
-    cards[10] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY);
-    cards[11] = Card(gd.DIRE_DRAGON, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
-    cards[12] = Card(gd.DIRE_GIANT, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY);
-    cards[13] = Card(gd.DIRE_EYE, ctype.SINGLE, act.ADD_4_ARMY);
-    cards[14] = Card(gd.DIRE_GOBLIN, ctype.SINGLE, act.MOVE_4_ARMY);
-    cards[15] = Card(gd.DIRE_OGRE, ctype.SINGLE, act.MOVE_2_ARMY);
-    cards[16] = Card(gd.LAKE, ctype.OR, act.ADD_2_ARMY,act.MOVE_3_ARMY);
-    cards[17] = Card(gd.FOREST_ELF, ctype.OR,  act.ADD_3_ARMY,act.MOVE_2_ARMY);
-    cards[18] = Card(gd.FOREST_GNOME, ctype.SINGLE,act.MOVE_2_ARMY);
-    cards[19] = Card(gd.FOREST_TREE_TOWN , ctype.SINGLE, act.BUILD_CITY);
-    cards[20] = Card(gd.GRAVEYARD, ctype.SINGLE, act.ADD_2_ARMY);
-    cards[21] = Card(gd.NOBLE_HILLS, ctype.SINGLE, act.ADD_3_ARMY);
-    cards[22] = Card(gd.NOBLE_KNIGHT, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
-    cards[23] = Card(gd.NOBLE_UNICORN, ctype.AND, act.MOVE_4_ARMY, act.ADD_1_ARMY);
-    cards[24] = Card(gd.NIGHT_HYDRA, ctype.AND, act.MOVE_4_ARMY,act.DESTROY_1_ARMY);
-    cards[25] = Card(gd.NIGHT_VILLAGE, ctype.SINGLE, act.BUILD_CITY);
-    cards[26] = Card(gd.NIGHT_WIZARD, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);
+    cards[0] = Card(gd.FOREST_PIXIE, ctype.SINGLE, act.MOVE_4_ARMY, abt.PLUS_ONE_ARMY);
+    cards[1] = Card(gd.STRONGHOLD, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_1_VP_PER_DIRE_CARD);
+    cards[2] = Card(gd.ANCIENT_PHOENIX, ctype.SINGLE, act.MOVE_5_ARMY, abt.FYLING);
+    cards[3] = Card(gd.ANCIENT_TREE_SPIRIT, ctype.SINGLE, act.ADD_4_ARMY, abt.THREE_ELIXER);
+    cards[4] = Card(gd.ANCIENT_WOODS, ctype.AND, act.BUILD_CITY, act.ADD_1_ARMY, abt.PLUS_ONE_ARMY);
+    cards[5] = Card(gd.ANCIENT_SAGE , ctype.SINGLE, act.MOVE_3_ARMY, abt.PLUS_1_VP_PER_ANCIENT_CARD);
+    cards[6] = Card(gd.CURSED_BANSHEE, ctype.SINGLE, act.MOVE_6_ARMY, abt.TWO_ELIXER);
+    cards[7] = Card(gd.CURSED_GARGOYLES, ctype.SINGLE, act.MOVE_5_ARMY, abt.FYLING);
+    cards[8] = Card(gd.CURSED_KING , ctype.OR, act.ADD_3_ARMY,act.MOVE_4_ARMY, abt.ONE_ELIXER);
+    cards[9] = Card(gd.CURSED_MAUSOLEUM, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_ONE_MOVE);
+    cards[10] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_1_VP_PER_FYLING_CARD);
+    cards[11] = Card(gd.DIRE_DRAGON, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY, abt.FYLING);
+    cards[12] = Card(gd.DIRE_GIANT, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY, abt.IMMUNE_TO_ATTACK);
+    cards[13] = Card(gd.DIRE_EYE, ctype.SINGLE, act.ADD_4_ARMY, abt.FYLING);
+    cards[14] = Card(gd.DIRE_GOBLIN, ctype.SINGLE, act.MOVE_4_ARMY, abt.ONE_ELIXER);
+    cards[15] = Card(gd.DIRE_OGRE, ctype.SINGLE, act.MOVE_2_ARMY, abt.PLUS_1_VP_PER_3_COINS);
+    cards[16] = Card(gd.LAKE, ctype.OR, act.ADD_2_ARMY,act.MOVE_3_ARMY, abt.PLUS_1_VP_PER_FOREST_CARD);
+    cards[17] = Card(gd.FOREST_ELF, ctype.OR,  act.ADD_3_ARMY,act.MOVE_2_ARMY, abt.PLUS_ONE_ARMY);
+    cards[18] = Card(gd.FOREST_GNOME, ctype.SINGLE,act.MOVE_2_ARMY, abt.THREE_ELIXER);
+    cards[19] = Card(gd.FOREST_TREE_TOWN , ctype.SINGLE, act.BUILD_CITY, abt.PLUS_ONE_MOVE);
+    cards[20] = Card(gd.GRAVEYARD, ctype.SINGLE, act.ADD_2_ARMY, abt.PLUS_1_VP_PER_CURSED_CARD);
+    cards[21] = Card(gd.NOBLE_HILLS, ctype.SINGLE, act.ADD_3_ARMY, abt.PLUS_5_VP_PER_3_NOBLE_CARD);
+    cards[22] = Card(gd.NOBLE_KNIGHT, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY, abt.PLUS_ONE_MOVE);
+    cards[23] = Card(gd.NOBLE_UNICORN, ctype.AND, act.MOVE_4_ARMY, act.ADD_1_ARMY, abt.PLUS_ONE_MOVE);
+    cards[24] = Card(gd.NIGHT_HYDRA, ctype.AND, act.MOVE_4_ARMY,act.DESTROY_1_ARMY, abt.PLUS_ONE_ARMY);
+    cards[25] = Card(gd.NIGHT_VILLAGE, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_ONE_ARMY);
+    cards[26] = Card(gd.NIGHT_WIZARD, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY, abt.PLUS_1_VP_PER_Night_CARD);
 
     //3 Player cards
     if(numPlayer >= 3){
-    cards[27] = Card(gd.ARCANE_SPHINX, ctype.OR, act.ADD_3_ARMY, act.MOVE_4_ARMY);// 3 Player
-    cards[28] = Card(gd.ARCANE_MANTICORE, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY);//3 Player
-    cards[29] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY);// 3Player
-    cards[30] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY);//3 Player
-    cards[31] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY);// 3 Player
+    cards[27] = Card(gd.ARCANE_SPHINX, ctype.OR, act.ADD_3_ARMY, act.MOVE_4_ARMY, abt.FYLING);// 3 Player
+    cards[28] = Card(gd.ARCANE_MANTICORE, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY, abt.PLUS_ONE_MOVE);//3 Player
+    cards[29] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY, abt.PLUS_1_VP_PER_ARCAINE_CARD);// 3Player
+    cards[30] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY, abt.PLUS_3_VP_PER_2_MOUNTAIN_CARD);//3 Player
+    cards[31] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY, abt.ONE_ELIXER_AND_2_COINS);// 3 Player
     }
     //4 Player cards
     if(numPlayer >= 4){
-    cards[32] = Card(gd.CASTLE, ctype.OR, act.ADD_4_ARMY,act. BUILD_CITY);//4 player 
-    cards[33] = Card(gd.CASTLE_2, ctype.AND, act.MOVE_3_ARMY,act.BUILD_CITY);//4 Player
+    cards[32] = Card(gd.CASTLE, ctype.OR, act.ADD_4_ARMY,act. BUILD_CITY, abt.ONE_ELIXER);//4 player 
+    cards[33] = Card(gd.CASTLE_2, ctype.AND, act.MOVE_3_ARMY,act.BUILD_CITY, abt.ONE_ELIXER);//4 Player
    }
 
 }
@@ -340,20 +369,26 @@ void Hand::printHand() {
     string ctypeCard[6];
     string firstAction[6];
     string secondAction[6];
+    string cardAbility[6];
+
     for(int i=0;i<6;i++){
         goodCard[i] = cards[i]->getGood();
     }
-    //get the combinationtype for each card in the card space
+    //get the combinationtype for each card in the hand
     for(int i=0;i<6;i++){
         ctypeCard[i] = cards[i]->getCombinationType();
     }
-    //get First Action for each card in the card space
+    //get First Action for each card in the hand
     for(int i=0;i<6;i++){
         firstAction[i] = cards[i]->getFirstAction();
     }
-    //get Second Action for each card in the card space
+    //get Second Action for each card in the hand
     for(int i=0;i<6;i++){
         secondAction[i] = cards[i]->getSecondAction();
+    }
+    //get the ability of each card in the hand
+    for(int i=0;i<6;i++){
+        cardAbility[i] = cards[i]->getAbility();
     }
     string spaces[6] = { "|","|" ,"|" ,"|" ,"|" ,"|" };
 
@@ -363,6 +398,12 @@ void Hand::printHand() {
      //c_str() converts cpp string to c string.
     printf("\n|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|Good: %-28s|\n", goodCard[0].c_str(), goodCard[1].c_str(), goodCard[2].c_str(),
         goodCard[3].c_str(), goodCard[4].c_str(), goodCard[5].c_str());
+
+    printf("|Ability: %26sAbility: %26sAbility: %26sAbility: %26sAbility: %26sAbility: %26s\n", 
+        spaces[0].c_str(), spaces[1].c_str(), spaces[2].c_str(), spaces[3].c_str(), spaces[4].c_str(), spaces[5].c_str());
+
+    printf("|%-34s|%-34s|%-34s|%-34s|%-34s|%-34s|\n", cardAbility[0].c_str(), cardAbility[1].c_str(), cardAbility[2].c_str(),
+        cardAbility[3].c_str(), cardAbility[4].c_str(), cardAbility[5].c_str()); 
 
     printf("|Action(s): %24sAction(s): %24sAction(s): %24sAction(s): %24sAction(s): %24sAction(s): %24s\n", 
         spaces[0].c_str(), spaces[1].c_str(), spaces[2].c_str(), spaces[3].c_str(), spaces[4].c_str(), spaces[5].c_str());

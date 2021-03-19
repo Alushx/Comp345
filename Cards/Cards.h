@@ -22,14 +22,15 @@ using namespace std;
 class Card {
 private:
 	string good;
+	string ability;
 	string combinationtype;
 	string action[2];
 
 public:
 	//Constructor
 	Card()=default;
-	Card(string good, string combinationtype, string action);
-	Card(string good, string combinationType, string firstAction, string secondAction);
+	Card(string good, string combinationtype, string action, string ability);
+	Card(string good, string combinationType, string firstAction, string secondAction, string ability);
 	~Card();//There are no pointers for this class
 	//Copy constructor
 	Card(const Card &c);
@@ -37,7 +38,7 @@ public:
 	string getCombinationType();
 	string getFirstAction();
 	string getSecondAction();
-
+	string getAbility();
 	//display card
 	void printCard();
 	
