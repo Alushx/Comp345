@@ -20,6 +20,8 @@ using namespace std;
 
 // Forward declaration to make compiler happy.
 class Territory;
+class Army;
+class Player;
 
 struct Map {
 
@@ -42,6 +44,8 @@ public:
 	void printList();
 	Territory* getTerritory(std::string);
 	Territory* selectTerritory();
+	std::list<std::list<Territory*>> getContinents();
+	Player* getContinentOwner(std::list<Territory*>);
 	void addContinent(std::list<Territory*>&);
 	std::map<Territory*, int> getAdjacentTerritories(Territory*);
 	bool validate();
@@ -58,8 +62,6 @@ private:
 	
 };
 
-class Army; // Forward declaration to make compiler happy.
-class Player;
 
 class Territory
 {
