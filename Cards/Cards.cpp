@@ -81,9 +81,9 @@ struct Ability{
     string TWO_ELIXER = "2 Elixer";
     string THREE_ELIXER = "3 Elixer";
     string ONE_ELIXER_AND_2_COINS = "1 Elixer and 2 coins";
-    string PLUS_1_VP_PER_ARCAINE_CARD = "+1 VP per Arcaine card";
+    string PLUS_1_VP_PER_ARCANE_CARD = "+1 VP per Arcane card";
     string PLUS_1_VP_PER_ANCIENT_CARD = "+1 VP per Ancient card";
-    string PLUS_1_VP_PER_FYLING_CARD = "+1 VP per Fyling card";
+    string PLUS_1_VP_PER_FYLING = "+1 VP per Fyling";
     string IMMUNE_TO_ATTACK = "Immune to attack";
     string PLUS_1_VP_PER_3_COINS = "+1 VP per 3 coins";
     string PLUS_1_VP_PER_FOREST_CARD = "+1 VP per Forest card";
@@ -158,6 +158,7 @@ void Card::printCard() {
    
     
 }
+
 // toString Cards
 ostream& operator<<(ostream& strm, const Card& card)
 {
@@ -248,7 +249,7 @@ void Deck ::generateDeck() {
     cards[7] = Card(gd.CURSED_GARGOYLES, ctype.SINGLE, act.MOVE_5_ARMY, abt.FYLING);
     cards[8] = Card(gd.CURSED_KING , ctype.OR, act.ADD_3_ARMY,act.MOVE_4_ARMY, abt.ONE_ELIXER);
     cards[9] = Card(gd.CURSED_MAUSOLEUM, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_ONE_MOVE);
-    cards[10] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_1_VP_PER_FYLING_CARD);
+    cards[10] = Card(gd.CURSED_TOWER, ctype.SINGLE, act.BUILD_CITY, abt.PLUS_1_VP_PER_FYLING);
     cards[11] = Card(gd.DIRE_DRAGON, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY, abt.FYLING);
     cards[12] = Card(gd.DIRE_GIANT, ctype.AND, act.ADD_3_ARMY,act.DESTROY_1_ARMY, abt.IMMUNE_TO_ATTACK);
     cards[13] = Card(gd.DIRE_EYE, ctype.SINGLE, act.ADD_4_ARMY, abt.FYLING);
@@ -270,7 +271,7 @@ void Deck ::generateDeck() {
     if(numPlayer >= 3){
     cards[27] = Card(gd.ARCANE_SPHINX, ctype.OR, act.ADD_3_ARMY, act.MOVE_4_ARMY, abt.FYLING);// 3 Player
     cards[28] = Card(gd.ARCANE_MANTICORE, ctype.AND, act.ADD_4_ARMY, act.DESTROY_1_ARMY, abt.PLUS_ONE_MOVE);//3 Player
-    cards[29] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY, abt.PLUS_1_VP_PER_ARCAINE_CARD);// 3Player
+    cards[29] = Card(gd.ARCANE_TEMPLE, ctype.SINGLE, act.MOVE_3_ARMY, abt.PLUS_1_VP_PER_ARCANE_CARD);// 3Player
     cards[30] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY, abt.PLUS_3_VP_PER_2_MOUNTAIN_CARD);//3 Player
     cards[31] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY, abt.ONE_ELIXER_AND_2_COINS);// 3 Player
     }
@@ -362,7 +363,7 @@ Card* Hand::exchange(int cardIndex, Player* player) {
 }
 
 
-//To be implemented
+//Prints the Hand which consist of the 6 cards can choose from
 void Hand::printHand() {
     //get the goods for each card
     string goodCard[6];
