@@ -775,10 +775,12 @@ Player* Player::computeScore( Map* map) {
 
 	for (Card* card : this->playerHand)
 	{
-		card->getCardscore();
+		score = score + card->getCardScore(playerHand, this);
 	}
 
 	cout << this->name << "The score of this player is" << this->score;
+
+	return this;
 }
 
 
