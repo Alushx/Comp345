@@ -14,6 +14,7 @@
 #include <iostream>
 #include "Cards/Cards.h"
 #include "BiddingFacility.h"
+#include "Map.h"
 #include <sstream>
 using namespace std;
 
@@ -51,6 +52,7 @@ Player::Player(string aName, int coinNum, bool isBot)
 	armies = list<Army*>();
 	numOfCubes = 18;
 	numOfDisks = 3;
+	score = 0; 
 
 	// Handling static variables.
 	if (isBot)
@@ -206,6 +208,13 @@ bool Player::payCoin(int& cost)
 		return false;
 	}
 }
+
+// Territory getter
+list<Territory*>* Player::getPlayerTerritories()
+{
+	return &playerTerritory;
+}
+
 
 // Creates new army.
 void Player::placeNewArmies(Territory* territory)
@@ -751,6 +760,27 @@ Player& Player::operator= (const Player& anotherPlayer)
 
 	return *this;
 }
+
+Player* Player::computeScore( Map* map) {
+
+	list<list<Territory*>> continents = map->getContinents();
+	
+	score = score + this->playerTerritory.size();
+
+	for (list<Territory*> continent : continents) 
+	{
+		if ( map->getContinentOwner(continent) == this)
+			score = score + 1;
+	}
+
+	for (Card* card : this->playerHand)
+	{
+		card->getCardscore();
+	}
+
+	cout << this->name << "The score of this player is" << this->score;
+}
+
 
 // ============================================
 // Army Implementation
