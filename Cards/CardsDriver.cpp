@@ -12,6 +12,7 @@
 
 #include <string>
 #include "Cards.h"
+#include <list>
 #include <iostream>
 using namespace std;
 
@@ -20,7 +21,7 @@ int main() {
     Player* player = new Player("Anakin", 14);
 
     // create a deck
-    Deck* deck = new Deck(3);
+    Deck* deck = new Deck(4);
 
     // generate the cards
     deck->generateDeck();
@@ -42,13 +43,20 @@ int main() {
     //Testing exchange method
     int coins = 8;
     int index = 0;
+    list<Card*> listOwnedPcard;//Contains cards a player own.
     while (index >= 0) {
         hand->printHand();
         cout << "Please enter the index of the card you want tp pick or a negative number to exit: ";
         cin >> index;
-        hand->exchange(index, player);
+        //hand->exchange(index, player);
+        if(index >=0){
+            Card *ownCard = hand->exchange(index, player);
+            if(ownCard) listOwnedPcard.push_front(ownCard);
+            cout << listOwnedPcard.size() << endl;
+        }
     }
-
+    Card :: getCardScore(listOwnedPcard, player);
+    
     // Deallocating heap.
     if (hand)
         delete hand;
