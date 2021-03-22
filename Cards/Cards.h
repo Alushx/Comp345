@@ -39,6 +39,7 @@ public:
 	string getFirstAction();
 	string getSecondAction();
 	string getAbility();
+	static int getCardScore(list<Card*> &crds, Player *player);
 	//display card
 	void printCard();
 	
@@ -46,7 +47,7 @@ public:
 	Card& operator=(const Card&);
 private:
 	friend ostream& operator<<(ostream&, const Card&);
-	
+	static int getnumXcard(list<Card*> &crds, string type);
 };
 
 class Deck {
