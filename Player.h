@@ -73,6 +73,7 @@ public:
 	Player& operator= (const Player&);
 
 	Player* computeScore( Map* map);
+	Player* annocement(vector<Player*> player);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
