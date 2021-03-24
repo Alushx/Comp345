@@ -159,7 +159,7 @@ using namespace std;
 	{
 		map<Territory*, bool> visitedList;
 
-		// Setting all nodes to unvisited — AKA false.
+		// Setting all nodes to unvisited ï¿½ AKA false.
 		for (auto i : countriesList)
 		{
 			visitedList[i.first] = false;
