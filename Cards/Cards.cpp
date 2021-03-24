@@ -194,7 +194,7 @@ int Card :: getnumXcard(list<Card*> &crds, string type){
 //A list of Cards owned by a player is pass by reference
 //The method goes through the cards to check the ability of each card
 //VP are calculated depending on the Ability and Good that a player have
-    int Card :: getCardScore(list<Card*> &crds, Player *player){
+int Card :: getCardScore(list<Card*> &crds, Player *player){
     Ability cardAbt;
     int VP =0;
     int numElixer=0;
@@ -229,16 +229,12 @@ int Card :: getnumXcard(list<Card*> &crds, string type){
         //Checks if the ability is "+1 VP per Arcane card"
         //If yes then goes through the list of cards again to count how many Arcaine cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_ARCANE_CARD){
-            cout << "In Arcaine " << endl;
             VP += Card :: getnumXcard(crds,"Arcane");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Ancient card"
         //If yes then goes through the list of cards again to count how many Ancient cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_ANCIENT_CARD){
-            cout << "In Ancient " << endl;
             VP += Card :: getnumXcard(crds,"Ancient");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Fyling card"
         //If yes then go through the list of cards again to count how many Fyling are there
@@ -247,64 +243,47 @@ int Card :: getnumXcard(list<Card*> &crds, string type){
                 string abt1 = card->getAbility();
                 if(abt1 == cardAbt.FYLING) VP += 1;
             }
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Forest card"
         //If yes then go through the list of cards again to count how many Forest cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_FOREST_CARD){
-            cout << "In Forest " << endl;
             VP += Card :: getnumXcard(crds,"Forest");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Cursed card"
         //If yes then go through the list of cards again to count how many Cursed cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_CURSED_CARD){
-            cout << "In Cursed " << endl;
             VP += Card :: getnumXcard(crds,"Cursed");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Night card"
         //If yes then go through the list of cards again to count how many Night cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_Night_CARD){
-            cout << "In Night " << endl;
             VP += Card :: getnumXcard(crds,"Night");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+1 VP per Dire card"
         //If yes then go through the list of cards again to count how many Dire cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_DIRE_CARD){
-            cout << "In Dire " << endl;
             VP += Card :: getnumXcard(crds,"Dire");
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "All three noble cards = 5 VP"
         //If yes then go through the list of cards again to check if the player has All three noble cards
         if(ab == cardAbt.PLUS_5_VP_PER_3_NOBLE_CARD){
-            cout << "In Noble " << endl;
             int numNoble = Card :: getnumXcard(crds,"Noble");
             if(numNoble == 3) VP += 5;// If Player have all 3 Noble card then add 5 VP
-            cout << "Current VP: "<<VP<<endl;
         }
         //Checks if the ability is "+3 If you have 2 Mountain cards"
         //If yes then go through the list of cards again to check if the player has 2 Mountain cards
         if(ab == cardAbt.PLUS_3_VP_PER_2_MOUNTAIN_CARD){
-            cout << "In Mountain " << endl;
             int numMountain = Card :: getnumXcard(crds,"Mountain");
             if(numMountain == 2)VP += 3;
         }
 
         //Checks if the ability is "+1 VP per 3 coins"
         if (ab == cardAbt.PLUS_1_VP_PER_3_COINS) {
-            cout << "In +1 VP per 3 coins " << endl;
             int cnt = player->getCoins() / 3;// since the variable cnt is int it discard everthing aft the decimal point
             cout << cnt << endl;
             VP += cnt;
             
         }
-        //Problem:
-        //Find a way to return the number of Elixer to compare with other players
-        //Add 2 VP to the player with the most Elixer
-
 
     }
     return VP;
