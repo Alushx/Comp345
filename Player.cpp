@@ -215,6 +215,12 @@ list<Territory*>* Player::getPlayerTerritories()
 	return &playerTerritory;
 }
 
+// Adds a card to the player's personal hand.
+void Player::addCard(Card* card)
+{
+	playerHand.push_back(card);
+}
+
 
 // Creates new army.
 void Player::placeNewArmies(Territory* territory)

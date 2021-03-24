@@ -74,9 +74,9 @@ struct Good {
 };
 
 struct Ability{
-    string PLUS_ONE_MOVE = "+1 Move";
-    string PLUS_ONE_ARMY = "+1 Army";
-    string FYLING = "Flying";
+    string PLUS_ONE_MOVE = "+1 Move"; // affects create army
+    string PLUS_ONE_ARMY = "+1 Army"; // affects move
+    string FYLING = "Flying"; // affects movement;
     string ONE_ELIXER = "1 Elixer";
     string TWO_ELIXER = "2 Elixer";
     string THREE_ELIXER = "3 Elixer";
@@ -84,7 +84,7 @@ struct Ability{
     string PLUS_1_VP_PER_ARCANE_CARD = "+1 VP per Arcane card";
     string PLUS_1_VP_PER_ANCIENT_CARD = "+1 VP per Ancient card";
     string PLUS_1_VP_PER_FYLING = "+1 VP per Fyling";
-    string IMMUNE_TO_ATTACK = "Immune to attack";
+    string IMMUNE_TO_ATTACK = "Immune to attack"; // Affects destroyArmy()
     string PLUS_1_VP_PER_3_COINS = "+1 VP per 3 coins";
     string PLUS_1_VP_PER_FOREST_CARD = "+1 VP per Forest card";
     string PLUS_1_VP_PER_CURSED_CARD = "+1 VP per Cursed card";
@@ -157,6 +157,26 @@ void Card::printCard() {
     }
    
     
+}
+
+int Card::getElixerCount()
+{
+    Ability cardAbt;
+    int numElixer = 0;
+
+    // Getting card ability.
+    string ab = this->getAbility();
+
+    // Adding num of elixers.
+    if (ab == cardAbt.ONE_ELIXER) numElixer += 1;
+    else if (ab == cardAbt.TWO_ELIXER) numElixer += 2;
+    else if (ab == cardAbt.THREE_ELIXER) numElixer += 3;
+    else if (ab == cardAbt.ONE_ELIXER_AND_2_COINS) 
+    {
+        numElixer += 1;
+    }
+
+    return numElixer;
 }
 
 //Goes through the list of cards and count the amount of X type of cards in the list.
@@ -490,6 +510,14 @@ Card* Hand::exchange(int cardIndex, Player* player) {
 
     cards[5] = deck->draw(); // draw a new card from the deck
 
+    // Adds coins if needed.
+    Ability ability;
+    if (pickedCard->getAbility() == ability.ONE_ELIXER_AND_2_COINS)
+    {
+        player->setCoins(player->getCoins() + 2);
+    }
+
+    player->addCard(pickedCard);
     return pickedCard;
 }
 

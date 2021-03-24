@@ -62,6 +62,7 @@ int main()
 	// Doing card stuff.
 	vector<Player*> player;
 	player = Player::getPlayerList();
+	int playerNum = Player::getPlayerNum();
 
 	int index = 0;
 	for (int i = 0; i < player.size(); i++)
@@ -71,15 +72,26 @@ int main()
 			hand->printHand();
 			cout << "Please enter the index of the card you want to pick or a negative number to exit: ";
 			cin >> index;
-			Card* card = hand->exchange(index, player[i]);
+			Card* card = hand->exchange(index, player[(bidWinner + i) % playerNum]);
 			if (card == NULL)
 				break;
 			else
 			{
-				player[i]->playCard(card, mapLoader->getMap());
+				player[(bidWinner + i) % playerNum]->playCard(card, mapLoader->getMap());
 			}
 		}
 	}
+
+	for (Player* playerChar : Player::getPlayerList())
+	{
+		playerChar->computeScore(mapLoader->getMap());
+	}
+
+	Player* winner = nullptr;
+	winner = Player::annocement(Player::getPlayerList());
+
+	cout << "The winner is: " << *winner << endl;
+
 
 	// Deallocating stuff.
 	delete mapLoader;

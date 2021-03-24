@@ -68,12 +68,13 @@ public:
 	void setName(string n);
 	int getCoins();
 	void setCoins(int c);
+	void addCard(Card*);
 	BiddingFacility* getBidFaci() const;
 	list<Army*>* getArmies();
 	Player& operator= (const Player&);
 
 	Player* computeScore( Map* map);
-	Player* annocement(vector<Player*> player);
+	static Player* annocement(vector<Player*> player);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
