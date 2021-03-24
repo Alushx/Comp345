@@ -14,6 +14,7 @@
 #include <iostream>
 #include "Cards/Cards.h"
 #include "BiddingFacility.h"
+#include "Map.h"
 #include <sstream>
 using namespace std;
 
@@ -51,6 +52,7 @@ Player::Player(string aName, int coinNum, bool isBot)
 	armies = list<Army*>();
 	numOfCubes = 18;
 	numOfDisks = 3;
+	score = 0; 
 
 	// Handling static variables.
 	if (isBot)
@@ -206,6 +208,13 @@ bool Player::payCoin(int& cost)
 		return false;
 	}
 }
+
+// Territory getter
+list<Territory*>* Player::getPlayerTerritories()
+{
+	return &playerTerritory;
+}
+
 
 // Creates new army.
 void Player::placeNewArmies(Territory* territory)
@@ -751,6 +760,82 @@ Player& Player::operator= (const Player& anotherPlayer)
 
 	return *this;
 }
+
+Player* Player::computeScore( Map* map) {
+
+	list<list<Territory*>> continents = map->getContinents();
+	
+	score = score + this->playerTerritory.size();
+
+	for (list<Territory*> continent : continents) 
+	{
+		if ( map->getContinentOwner(continent) == this)
+			score = score + 1;
+	}
+
+	for (Card* card : this->playerHand)
+	{
+		score = score + card->getCardScore(playerHand, this);
+	}
+
+	cout << this->name << "The score of this player is" << this->score;
+
+	return this;
+}
+
+// Winner Annocement 
+Player* Player::annocement(vector<Player*> player) 
+{
+	Player* winner = nullptr;
+	int conqueredTerritoriesW = NULL;
+	int conqueredTerritoriesP = NULL;
+	for (Player* player : player)
+	{
+		if (winner == nullptr)
+			winner = player;
+		else if (winner->score > player->score)
+			continue;
+		else if (winner->score < player->score)
+			winner = player;
+		else
+		{
+			cout << winner->name << " and " << player->name << " have the same score" << endl;
+			
+			if (winner->numOfCoins > player->numOfCoins)
+				continue;
+			else if (winner->numOfCoins < player->numOfCoins)
+				winner = player;
+			else 
+			{
+				cout << winner->name << " and " << player->name << " have the same score even with the coin count" << endl;
+				if (winner->numOfCubes < player->numOfCubes)
+					continue;
+				else if (winner->numOfCubes > player->numOfCubes)
+					winner = player;
+				else 
+				{
+					cout << winner->name << " and " << player->name << " have the same score, number of coin " 
+						<< "and same number of armies" << endl;
+
+					// Calculate the number of the conquered terrotories
+					conqueredTerritoriesW = winner->getPlayerTerritories()->size();
+					conqueredTerritoriesP = player->getPlayerTerritories()->size();
+					if (conqueredTerritoriesW > conqueredTerritoriesP)
+						continue;
+					else if (conqueredTerritoriesW < conqueredTerritoriesP)
+						winner = player;
+					else
+					{
+						cout << "This match is an absolute tie" << endl;
+						return winner->name > player->name ? winner : player;
+					}
+				}
+			}
+		}		
+	}
+	return winner;
+}
+
 
 // ============================================
 // Army Implementation

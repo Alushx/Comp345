@@ -39,6 +39,7 @@ private:
 	list<Card*> playerHand;
 	list<City*> cities;
 	list<Army*> armies;
+	int score;
 
 	// Static variables.
 	static vector<Player*> playerList;
@@ -56,6 +57,7 @@ public:
 
 	// Methods.
 	bool payCoin(int& cost);
+	list<Territory*>* Player::getPlayerTerritories();
 	void placeNewArmies(Territory* territory);
 	void moveArmies(Army*, Territory*);
 	void moveOverLand(Army*, Territory*);
@@ -69,6 +71,9 @@ public:
 	BiddingFacility* getBidFaci() const;
 	list<Army*>* getArmies();
 	Player& operator= (const Player&);
+
+	Player* computeScore( Map* map);
+	Player* annocement(vector<Player*> player);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
