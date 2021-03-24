@@ -467,7 +467,12 @@ MapLoader* startGame()
     } while (numOfPlayers <= 1 || numOfPlayers > 4);
 
     // Creating map.
-    // ? Maybe check for validity here?
+    if (!mapLoader->verifyFile(fileName))
+    {
+        std::cout << "ERROR! INVALID FILE!" << std::endl;
+        exit(1);
+    }
+
     mapLoader->readMapFile(fileName, numOfPlayers);
 
     int coins = 0;
@@ -484,6 +489,9 @@ MapLoader* startGame()
         cin >> lName;
         new Player(lName, coins);
     }
+
+    if (numOfPlayers == 2)
+        new Player("BOT", 999, true);
 
     // Armies, tokens, cities, and bidding facility is all created within each instance of Player.
     return mapLoader;

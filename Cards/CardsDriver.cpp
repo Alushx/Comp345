@@ -55,8 +55,8 @@ int main() {
             cout << listOwnedPcard.size() << endl;
         }
     }
-    Card :: getCardScore(listOwnedPcard, player);
-    
+    int VP = Card :: getCardScore(listOwnedPcard, player);
+    cout << "The Victory points of the player is: "<<VP<<endl;
     // Deallocating heap.
     if (hand)
         delete hand;
