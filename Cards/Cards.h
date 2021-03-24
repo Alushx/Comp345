@@ -39,7 +39,7 @@ public:
 	string getFirstAction();
 	string getSecondAction();
 	string getAbility();
-	int getElixerCount();
+	static int getElixerCount(list<Card*>& crds, Player* player);
 	static int getCardScore(list<Card*> &crds, Player *player);
 	//display card
 	void printCard();
