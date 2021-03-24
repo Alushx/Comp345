@@ -159,23 +159,22 @@ void Card::printCard() {
     
 }
 
-int Card::getElixerCount()
-{
+int Card::getElixerCount(list<Card*>& crds, Player* player){
     Ability cardAbt;
     int numElixer = 0;
-
-    // Getting card ability.
-    string ab = this->getAbility();
-
-    // Adding num of elixers.
-    if (ab == cardAbt.ONE_ELIXER) numElixer += 1;
-    else if (ab == cardAbt.TWO_ELIXER) numElixer += 2;
-    else if (ab == cardAbt.THREE_ELIXER) numElixer += 3;
-    else if (ab == cardAbt.ONE_ELIXER_AND_2_COINS) 
-    {
-        numElixer += 1;
+    //count the number of Elixer
+    //The number of Elixer should be return to compare with other players
+    //player with the most elixers gains 2 extra victory points.
+    for (Card* card : crds) {
+        string ab = card->getAbility();
+        if (ab.find("Elixer") != std::string::npos) {
+            if (ab == cardAbt.ONE_ELIXER) numElixer += 1;
+            else if (ab == cardAbt.TWO_ELIXER) numElixer += 2;
+            else if (ab == cardAbt.THREE_ELIXER) numElixer += 3;
+            else if (ab == cardAbt.ONE_ELIXER_AND_2_COINS) numElixer += 1;
+          
+        }
     }
-
     return numElixer;
 }
 
@@ -197,34 +196,10 @@ int Card :: getnumXcard(list<Card*> &crds, string type){
 int Card :: getCardScore(list<Card*> &crds, Player *player){
     Ability cardAbt;
     int VP =0;
-    int numElixer=0;
-    //count the number of Elixer
-    //This is done first to make sure that if both "1 Elixer and 2 coins" and "+1 VP per 3 coins"
-    //are present in the list, "1 Elixer and 2 coins" is executed first before "+1 VP per 3 coins"
-    //The number of Elixer should be return to compare with other players
-    //player with the most elixers gains 2 extra victory points.
-    for (Card* card : crds) {
-        string ab = card->getAbility();
-        cout << ab << endl;
-        if (ab.find("Elixer") != std::string::npos) {
-            if (ab == cardAbt.ONE_ELIXER) numElixer += 1;
-            else if (ab == cardAbt.TWO_ELIXER) numElixer += 2;
-            else if (ab == cardAbt.THREE_ELIXER) numElixer += 3;
-            else if (ab == cardAbt.ONE_ELIXER_AND_2_COINS) {
-                cout << "Player coins before adding: " << player->getCoins() << endl;
-                player->setCoins(player->getCoins() + 2);
-                cout << "Player coins after adding: " << player->getCoins() << endl;
-                numElixer += 1;
-            }
-            cout << "Number of Elixer: " << numElixer << endl;
-        }
-    }
-
-
+    
     //Go through the list of Cards
     for (Card *card : crds) {
         string ab = card->getAbility();
-        cout << ab << endl;
 
         //Checks if the ability is "+1 VP per Arcane card"
         //If yes then goes through the list of cards again to count how many Arcaine cards are there
