@@ -159,21 +159,18 @@ void Card::printCard() {
     
 }
 
+//Count the number of Elixer and returns it
 int Card::getElixerCount(list<Card*>& crds, Player* player){
     Ability cardAbt;
     int numElixer = 0;
-    //count the number of Elixer
-    //The number of Elixer should be return to compare with other players
-    //player with the most elixers gains 2 extra victory points.
     for (Card* card : crds) {
         string ab = card->getAbility();
-        if (ab.find("Elixer") != std::string::npos) {
+
             if (ab == cardAbt.ONE_ELIXER) numElixer += 1;
             else if (ab == cardAbt.TWO_ELIXER) numElixer += 2;
             else if (ab == cardAbt.THREE_ELIXER) numElixer += 3;
             else if (ab == cardAbt.ONE_ELIXER_AND_2_COINS) numElixer += 1;
-          
-        }
+        
     }
     return numElixer;
 }
@@ -197,17 +194,20 @@ int Card :: getCardScore(list<Card*> &crds, Player *player){
     Ability cardAbt;
     int VP =0;
     
+    //Go through the list of cards to get the number of Elixer for a player
+    player->setOwnNumElixer(getElixerCount(crds, player));
+
     //Go through the list of Cards
     for (Card *card : crds) {
         string ab = card->getAbility();
 
         //Checks if the ability is "+1 VP per Arcane card"
-        //If yes then goes through the list of cards again to count how many Arcaine cards are there
+        //If yes then go through the list of cards again to count how many Arcaine cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_ARCANE_CARD){
             VP += Card :: getnumXcard(crds,"Arcane");
         }
         //Checks if the ability is "+1 VP per Ancient card"
-        //If yes then goes through the list of cards again to count how many Ancient cards are there
+        //If yes then go through the list of cards again to count how many Ancient cards are there
         if(ab == cardAbt.PLUS_1_VP_PER_ANCIENT_CARD){
             VP += Card :: getnumXcard(crds,"Ancient");
         }
