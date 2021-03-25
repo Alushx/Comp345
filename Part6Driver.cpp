@@ -87,6 +87,9 @@ int main()
 		playerChar->computeScore(mapLoader->getMap());
 	}
 
+	//
+	Player::computeElixerScore();
+
 	Player* winner = nullptr;
 	winner = Player::annocement(Player::getPlayerList());
 
