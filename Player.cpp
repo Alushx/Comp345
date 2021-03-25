@@ -185,7 +185,9 @@ void Player :: setOwnNumElixer(int numElixer) {
 int Player :: getOwnNumElixer() {
 	return ownNumElixer;
 }
-
+int Player :: getScore() {
+	return score;
+}
 
 void Player::placeBotArmies(int n, Map* map)
 {
@@ -791,6 +793,7 @@ Player* Player::computeElixerScore() {
 			winner = playerChar;
 	}
 	winner->score += 2;
+	return winner;
 }
 
 Player* Player::computeScore( Map* map) {
