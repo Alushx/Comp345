@@ -40,6 +40,7 @@ private:
 	list<City*> cities;
 	list<Army*> armies;
 	int score;
+	int ownNumElixer;
 
 	// Static variables.
 	static vector<Player*> playerList;
@@ -75,7 +76,9 @@ public:
 
 	Player* computeScore( Map* map);
 	static Player* annocement(vector<Player*> player);
-
+	static Player* computeElixerScore();
+	void setOwnNumElixer(int numElixer);
+	int getOwnNumElixer();
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
 
