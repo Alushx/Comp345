@@ -176,6 +176,17 @@ void Player::setBot(Player* aBot)
 	bot = aBot;
 }
 
+//Set the number of Elixer a player own 
+void Player :: setOwnNumElixer(int numElixer) {
+	ownNumElixer = numElixer;
+}
+
+//Returns the number of Elixer that a player own
+int Player :: getOwnNumElixer() {
+	return ownNumElixer;
+}
+
+
 void Player::placeBotArmies(int n, Map* map)
 {
 	if (map == NULL || getBot() == NULL)
@@ -765,6 +776,21 @@ Player& Player::operator= (const Player& anotherPlayer)
 	numOfDisks = anotherPlayer.numOfDisks;
 
 	return *this;
+}
+
+//player with the most elixers gains 2 extra victory points.
+Player* Player::computeElixerScore() {
+	Player* winner = nullptr;
+	for (Player* playerChar : Player::getPlayerList())
+	{
+		if (winner == nullptr)
+			winner = playerChar;
+		else if (winner->getOwnNumElixer() > playerChar->getOwnNumElixer())
+			continue;
+		else if (winner->getOwnNumElixer() < playerChar->getOwnNumElixer())
+			winner = playerChar;
+	}
+	winner->score += 2;
 }
 
 Player* Player::computeScore( Map* map) {
