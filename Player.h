@@ -58,7 +58,7 @@ public:
 
 	// Methods.
 	bool payCoin(int& cost);
-	list<Territory*>* Player::getPlayerTerritories();
+	list<Territory*>* getPlayerTerritories();
 	void placeNewArmies(Territory* territory);
 	void moveArmies(Army*, Territory*);
 	void moveOverLand(Army*, Territory*);
@@ -79,6 +79,7 @@ public:
 	static Player* computeElixerScore();
 	void setOwnNumElixer(int numElixer);
 	int getOwnNumElixer();
+	int getScore();
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
 
