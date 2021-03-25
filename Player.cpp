@@ -16,6 +16,7 @@
 #include "BiddingFacility.h"
 #include "Map.h"
 #include <sstream>
+#include <algorithm>
 using namespace std;
 
 // ============================================
@@ -497,7 +498,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 	Army* army = nullptr;
 	pair<Territory*, int> endLocation;
 
-	// ? I should check for land/sky here, shouldn't I? And deduct the appropriate number of moves.
+	numOfArmiesToMove += calculateMoveBonus();
 
 	// Moves an army for each number of moves a player has.
 	while (numOfArmiesToMove > 0)
@@ -507,10 +508,11 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 		army = selectArmy();
 		endLocation = selectNeighbouringTerritory(army->getPosition(), map);
 
-		// TODO check for the number of flight bonus the player has. Wait, do we even have the flight bonus system anymore?
-		
+		int flightBonus = calculateFlightBonus();
+		int moveCost = max(endLocation.second - flightBonus, 1);
+
 		// Check if player has the needed number of moves.
-		if (endLocation.second > numOfArmiesToMove)
+		if (moveCost > numOfArmiesToMove)
 		{
 			cout << "Invalid move. You do not have enough moves for that. Please pick again." << endl;
 		}
@@ -518,7 +520,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 		{
 			// Move army and deduct cost.
 			moveArmies(army, endLocation.first);
-			numOfArmiesToMove -= endLocation.second;
+			numOfArmiesToMove -= moveCost;
 		}
 		
 	}
@@ -536,6 +538,8 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 {
 	// Adds an army according to the number of armies in the argument.
 	Territory* position = nullptr;
+	numOfArmiesToAdd += calculateArmyBonus();
+
 	for (int i = 0; i < numOfArmiesToAdd; i++)
 	{
 		cout << endl;
@@ -548,7 +552,15 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 // Allows the player to select an enemy and one of its armies to destroy.
 void Player::destroyArmyAction()
 {
-	Player* player = Player::selectPlayer();
+	bool isImmune = false;
+	Player* player = nullptr;
+
+	do
+	{
+		player = Player::selectPlayer();
+		isImmune = player->calculateImmunityBonus();
+	} while (isImmune);
+	
 	Army* army = player->selectArmy();
 
 	destroyArmy(army);
@@ -791,6 +803,8 @@ int Player::calculateMoveBonus()
 			moveBonus++;
 	}
 
+	cout << "\n Player has " << moveBonus << " bonus moves... \n" << endl;
+
 	return moveBonus;
 }
 
@@ -805,6 +819,8 @@ int Player::calculateArmyBonus()
 		if (card->getAbility() == "+1 Army")
 			armyBonus++;
 	}
+
+	cout << "\n Player has " << armyBonus << " bonus armies... \n" << endl;
 
 	return armyBonus;
 }
@@ -821,6 +837,8 @@ int Player::calculateFlightBonus()
 			flightBonus++;
 	}
 
+	cout << "\n Player has " << flightBonus << " bonus flight... \n" << endl;
+
 	return flightBonus;
 }
 
@@ -834,6 +852,7 @@ bool Player::calculateImmunityBonus()
 		// Immediately exit and return true.
 		if (card->getAbility() == "Immune to attack")
 		{
+			cout << "\n Cannot attack this player! They are immune...\n" << endl;
 			isImmune = true;
 			return isImmune;
 		}
