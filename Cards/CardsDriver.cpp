@@ -14,6 +14,7 @@
 #include "Cards.h"
 #include <list>
 #include <iostream>
+#include "../Player.h"
 using namespace std;
 
 int main() {
@@ -49,14 +50,17 @@ int main() {
         cout << "Please enter the index of the card you want tp pick or a negative number to exit: ";
         cin >> index;
         //hand->exchange(index, player);
-        if(index >=0){
+        if(index >=0 && index <=5){
             Card *ownCard = hand->exchange(index, player);
             if(ownCard) listOwnedPcard.push_front(ownCard);
             cout << listOwnedPcard.size() << endl;
         }
     }
     int VP = Card :: getCardScore(listOwnedPcard, player);
-    cout << "The Victory points of the player is: "<<VP<<endl;
+    cout << "The Victory points of the player is: "<< VP <<endl;
+    Player::computeElixerScore();
+    cout << "Elixer number of player is: " << player->getOwnNumElixer()<<endl;
+    cout << "The Victory points after computeElixerScore() is: "<<(VP + player->getScore())<<endl;
     // Deallocating heap.
     if (hand)
         delete hand;
