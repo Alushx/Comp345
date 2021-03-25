@@ -28,8 +28,9 @@ class BiddingFacility;
 // Player class.
 class Player
 {
-// Local variables.
+
 private:
+	// Member variables.
 	string name;
 	int numOfCoins;
 	int numOfCubes;
@@ -48,42 +49,52 @@ private:
 	static Territory* startingRegion;
 	static Player* bot;
 
-// Public methods
 public:
+
 	// Constructors and destructors.
 	Player();
 	Player(string name, int coinNum, bool isBot = false);
 	Player(const Player&);
 	~Player();
 
-	// Methods.
+	// Service methods.
 	bool payCoin(int& cost);
-	list<Territory*>* getPlayerTerritories();
 	void placeNewArmies(Territory* territory);
 	void moveArmies(Army*, Territory*);
 	void moveOverLand(Army*, Territory*);
 	void moveOverWater(Army*, Territory*);
 	void buildCity(Territory* territory);
 	void destroyArmy(Army*);
-	string getName();
-	void setName(string n);
-	int getCoins();
-	void setCoins(int c);
 	void addCard(Card*);
-	BiddingFacility* getBidFaci() const;
-	list<Army*>* getArmies();
-	Player& operator= (const Player&);
+	Player* computeScore(Map* map);
+	void playCard(Card*, Map*);
 
-	Player* computeScore( Map* map);
-	static Player* annocement(vector<Player*> player);
-	static Player* computeElixerScore();
-	void setOwnNumElixer(int numElixer);
-	int getOwnNumElixer();
+	// Accessors.
+	string getName();
+	int getCoins();
+	int getNumOfCubes();
+	int getNumOfDisks();
+	BiddingFacility* getBidFaci() const;
+	list<Territory*>* getPlayerTerritories();
+	list<Card*>* getPlayerHand();
+	list<City*>* getCities();
+	list<Army*>* getArmies();
 	int getScore();
+	int getOwnNumElixer();
+
+	// Mutators.
+	void setName(string n);
+	void setCoins(int c);
+	void setNumOfCubes(int);
+	void setNumOfDisks(int);
+	void setBidFaci(BiddingFacility*);
+	void setOwnNumElixer(int numElixer);
+
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
+	Player& operator= (const Player&);
 
-	// Static operators.
+	// Static methods.
 	static Player* getBot();
 	static void setBot(Player*);
 	static void placeBotArmies(int, Map*);
@@ -92,14 +103,12 @@ public:
 	static Player* selectPlayer();
 	static void setStartingRegion(Territory*);
 	static Territory* getStartingRegion();
-	
+	static Player* announcement(vector<Player*> player);
+	static Player* computeElixerScore();
+
 private:
+	// Helping methods.
 	Army* selectArmy();
-	
-	// Card Operations
-public:
-	void playCard(Card*, Map*);
-private:
 	void andOrAction(Card*, string&, Map*);
 	void playCardAction(string, Map*);
 	void moveArmiesAction(int, Map*);
