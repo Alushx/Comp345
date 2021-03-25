@@ -118,6 +118,10 @@ private:
 	Territory* selectTerritoryCurrentlyOn();
 	Territory* selectTerritoryWithCity();
 	pair<Territory*,int> selectNeighbouringTerritory(Territory*, Map*);
+	int calculateMoveBonus();
+	int calculateArmyBonus();
+	int calculateFlightBonus();
+	bool calculateImmunityBonus();
 };
 
 class Army

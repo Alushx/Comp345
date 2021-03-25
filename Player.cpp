@@ -336,6 +336,52 @@ list<Army*>* Player::getArmies()
 	return &armies;
 }
 
+// Accessor for the number of cubes (army tokens) a player has.
+int Player::getNumOfCubes()
+{
+	return numOfCubes;
+}
+
+// Accessor for the number of disks (city tokens) a player has.
+int Player::getNumOfDisks()
+{
+	return numOfDisks;
+}
+
+// Returns a pointer to the player's hand (list of cards).
+list<Card*>* Player::getPlayerHand()
+{
+	return &playerHand;
+}
+
+// Returns a pointer to the list of cities owned by the player.
+// Not to be confused with the territories.
+list<City*>* Player::getCities()
+{
+	return &cities;
+}
+
+// Mutator to change the number of cubes (army tokens) a player has.
+void Player::setNumOfCubes(int newNumOfCubes)
+{
+	numOfCubes = newNumOfCubes;
+}
+
+// Mutator to change the number of disks (city tokens) a player has.
+void Player::setNumOfDisks(int newNumOfDisks)
+{
+	numOfDisks = newNumOfDisks;
+}
+
+// Assigns a new bidding facility to the player.
+// Note that the user of this method is responsible for 
+// deallocating the memory of the old bidding facility.
+void Player::setBidFaci(BiddingFacility* newBiddingFacility)
+{
+	bidFaci = newBiddingFacility;
+}
+
+
 // Plays the card and executes all its actions.
 void Player::playCard(Card* aCard, Map* map)
 {
@@ -732,7 +778,70 @@ pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerri
 	}
 }
 
+// Iterates over all cards in the player hand and counts the 
+// total move bonus the player gets from all cards.
+// This is the extra moves a player gets whenever they play a "Move Army" card.
+int Player::calculateMoveBonus()
+{
+	int moveBonus = 0; 
 
+	for (Card* card : playerHand)
+	{
+		if (card->getAbility() == "+1 Move")
+			moveBonus++;
+	}
+
+	return moveBonus;
+}
+
+// Iterates over all cards in the player hand and counts the number of 
+// extra armies a player can create whenever they play a "Create Army" card.
+int Player::calculateArmyBonus()
+{
+	int armyBonus = 0;
+
+	for (Card* card : playerHand)
+	{
+		if (card->getAbility() == "+1 Army")
+			armyBonus++;
+	}
+
+	return armyBonus;
+}
+
+// Iterates over all cards in the player hand and counts the total flight 
+// bonus a player has. Each one reduces an overseas move cost down to a minimum of 1.
+int Player::calculateFlightBonus()
+{
+	int flightBonus = 0;
+
+	for (Card* card : playerHand)
+	{
+		if (card->getAbility() == "Flying")
+			flightBonus++;
+	}
+
+	return flightBonus;
+}
+
+// Returns true if the player has a card that grants them 
+// immunity to attacks. Returns false otherwise.
+bool Player::calculateImmunityBonus()
+{
+	bool isImmune = false;
+	for (Card* card : playerHand)
+	{
+		// Immediately exit and return true.
+		if (card->getAbility() == "Immune to attack")
+		{
+			isImmune = true;
+			return isImmune;
+		}
+	}
+
+	// Return false otherwise.
+	return false;
+}
 
 // toString
 ostream& operator<<(ostream& strm, const Player& player)
@@ -819,7 +928,7 @@ Player* Player::computeScore( Map* map) {
 }
 
 // Winner Annocement 
-Player* Player::annocement(vector<Player*> player) 
+Player* Player::announcement(vector<Player*> player) 
 {
 	Player* winner = nullptr;
 	int conqueredTerritoriesW = NULL;

@@ -91,7 +91,7 @@ int main()
 	Player::computeElixerScore();
 
 	Player* winner = nullptr;
-	winner = Player::annocement(Player::getPlayerList());
+	winner = Player::announcement(Player::getPlayerList());
 
 	cout << "The winner is: " << *winner << endl;
 
