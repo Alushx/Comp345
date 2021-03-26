@@ -64,7 +64,7 @@ int main()
 				cin >> index;
 
 				// Checking valid input.
-				if (index >= 0 && index < 5)
+				if (index >= 0 && index <= 5)
 				{
 					Card* card = hand->exchange(index, player[(bidWinner + i) % playerNum]);
 					if (card == NULL)
