@@ -65,3 +65,21 @@ void placeBotArmies(MapLoader* mapLoader) {
 		bot->placeBotArmies(10, mapLoader->getMap());
 	}
 }
+
+//Compute the Score
+void calculateScore(MapLoader* mapLoader) {
+	for (Player* playerChar : Player::getPlayerList())
+	{
+		playerChar->computeScore(mapLoader->getMap());
+	}
+
+	Player::computeElixerScore();
+}
+
+//Determine the Winner
+void determineWinner() {
+	Player* winner = nullptr;
+	winner = Player::announcement(Player::getPlayerList());
+
+	cout << "The winner is: " << *winner << endl;
+}
