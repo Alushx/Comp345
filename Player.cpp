@@ -190,6 +190,7 @@ int Player :: getScore() {
 	return score;
 }
 
+// Places n bot armies at the start of the game.
 void Player::placeBotArmies(int n, Map* map)
 {
 	if (map == NULL || getBot() == NULL)
