@@ -13,6 +13,7 @@
 #include "MapLoader/MapLoader.h"
 #include "Cards/Cards.h"
 #include "Player.h"
+#include "Game.h"
 
 int main()
 {
@@ -23,19 +24,10 @@ int main()
 	// Creating deck.
 	Deck* deck = new Deck(Player::getPlayerNum());
 	deck->generateDeck();
-
 	deck->printDeck();
 
-	// Deallocating stuff.
-	delete mapLoader;
-	delete deck;
+	// Deallocating Players and Bot armies.
+	deallocateResources(mapLoader, deck);
 
-	vector<Player*> players = Player::getPlayerList();
-	for (int i = 0; i < Player::getPlayerNum(); i++)
-	{
-		delete players[i];
-	}
-	if (Player::getBot() != NULL)
-		delete Player::getBot();
 	return 0;
 }

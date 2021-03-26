@@ -190,6 +190,7 @@ int Player :: getScore() {
 	return score;
 }
 
+//Placing bot armies.
 void Player::placeBotArmies(int n, Map* map)
 {
 	if (map == NULL || getBot() == NULL)
@@ -924,6 +925,8 @@ Player* Player::computeElixerScore() {
 	return winner;
 }
 
+
+//Returns the scrore of each player
 Player* Player::computeScore( Map* map) {
 
 	list<list<Territory*>> continents = map->getContinents();
@@ -1111,20 +1114,21 @@ Army& Army::operator=(Army& anotherArmy)
 // City Implementation
 // ============================================
 
-// Default constructor.
+// City Default constructor.
 City::City()
 {
 	owner = nullptr;
 	position = nullptr;
 }
 
-// City constructor.
+// City value constructor.
 City::City(Player* anOwner, Territory* aPosition)
 {
 	owner = anOwner;
 	position = aPosition;
 }
 
+// City copy constructor.
 City::City(const City& anotherCity)
 {
 	// Shallow copies because the owner and position will the same.

@@ -100,10 +100,11 @@ struct CombinationType {
     string AND = "AND";
 };
 
+// ============================================
+// Card Implementation
+// ============================================
 
-//Card
-
-//Constructor
+//Card value constructor
 Card::Card(string gd,string ctype, string actn,string abt){
     good = gd;
     combinationtype = ctype;
@@ -118,7 +119,7 @@ Card::Card(string gd, string ctype, string firstAction, string secondAction, str
     action[1] = secondAction;
     ability = abt;
 }
-//Copy constructor
+//Card copy constructor
 Card :: Card(const Card &c){
     good = c.good;
     combinationtype = c.combinationtype;
@@ -128,23 +129,33 @@ Card :: Card(const Card &c){
 }
 //Deconstructor
 Card :: ~Card(){}; // There are no pointers for this class
-//Getters
+
+//Get good card.
 string Card ::getGood(){
     return good;
 }
+
+//Get card combination type.
 string Card ::getCombinationType(){
     return combinationtype;
 }
+
+//Get first action card.
 string Card ::getFirstAction(){
     return action[0];
 }
+
+//Get second action card.
 string Card ::getSecondAction(){
     return action[1];
 }
 
+//Get ability card.
 string Card :: getAbility(){
     return ability;
 }
+
+// Function to print the cards
 void Card::printCard() {
     CombinationType comp;
     cout << "\tGood: "<< good<< endl;
@@ -285,33 +296,43 @@ Card& Card::operator=(const Card& anotherCard)
     return *this;
 }
 
-//Deck
+// ============================================
+// Deck Implementation
+// ============================================
+
+// Deck default constructor.
 Deck::Deck() {
     topCardptr = &cards[0];//Points to the top of the deck.
     numPlayer = 2;
 }
+
+// Deck value constructor.
 Deck::Deck(int nPlayer){
     topCardptr = &cards[0];
     numPlayer = nPlayer;
 } 
-//CopyConstructor
+
+// Deck copy constructor.
 Deck::Deck(const Deck &d){
     topCardptr = d.topCardptr;
     for(int i=0;i<getNumCards();i++){
         cards[i] = d.cards[i];
     }
 }
+
 //Deconstructor
 Deck :: ~Deck(){
     // topCardptr is not dynamically allocated therefore, no need to delete it.
     topCardptr = nullptr;
 }
+
 //Return the number of cards that will be used
 int Deck :: getNumCards(){
     if(numPlayer == 2) return 27;
     if(numPlayer == 3) return 32;
     if(numPlayer == 4) return 34;
 }  
+
 //Displays the whole deck
 void Deck::printDeck() {
     for (int i = 0; i < getNumCards(); i++) {
@@ -320,14 +341,18 @@ void Deck::printDeck() {
         cout << endl;
     }
 }
+
+//Deck random generator.
 int Deck :: myRandomGenerator(int j) {
    return rand() % j;
 }
+
 //Shuffle the content of the whole array.
 void Deck::shuffleDeck() {
     srand(time(0)); 
     random_shuffle(&cards[0], &cards[getNumCards()], myRandomGenerator);
 }
+
 // topCardptr points to the top of the deck
 //When a card is drawn the pointer topCard move to the next card.
 //return the drawn card
@@ -380,6 +405,7 @@ void Deck ::generateDeck() {
     cards[30] = Card(gd.MOUNTAIN_DWARF, ctype.AND, act.ADD_2_ARMY, act.DESTROY_1_ARMY, abt.PLUS_3_VP_PER_2_MOUNTAIN_CARD);//3 Player
     cards[31] = Card(gd.MOUNTAIN_TREASURY, ctype.SINGLE, act.MOVE_3_ARMY, abt.ONE_ELIXER_AND_2_COINS);// 3 Player
     }
+
     //4 Player cards
     if(numPlayer >= 4){
     cards[32] = Card(gd.CASTLE, ctype.OR, act.ADD_4_ARMY,act. BUILD_CITY, abt.ONE_ELIXER);//4 player 
@@ -408,9 +434,12 @@ Deck& Deck::operator=(const Deck& anotherDeck)
     topCardptr = &cards[0];
 }   
 
-//Hand
 
-//Constructor
+// ============================================
+// Hand Implementation
+// ============================================
+
+//Hand constructor
 Hand::Hand(Deck* dk) {
     deck = dk;
  //Initializing the cards for the face-up cards by drawing from the deck
@@ -418,7 +447,7 @@ Hand::Hand(Deck* dk) {
         cards[i] = deck->draw();
     }
 }
-//CopyConstructor
+//Hand copy constructor
 Hand::Hand(const Hand &h){
     deck = new Deck(*(h.deck));
     for (int i = 0; i < 6; i++)
@@ -427,11 +456,13 @@ Hand::Hand(const Hand &h){
     }
     
 }
-//Destructor
+
+//Hand Destructor
 Hand::~Hand(){
     //deck is not dynamically allocated pointer therefore, no need to delete it
     deck = nullptr;
 }
+
 //Returns the cost of a card depending on where the card is placed in the cards space
 int Hand::getCardCost(int indexOfcard) {
     if (indexOfcard == 0) return 0;
@@ -449,7 +480,6 @@ void Hand::shiftCards(int index) {
         cards[i] = cards[i + 1];//cards are shift to the left
     }
 }
-
 
 //Allows player to select the card from its position in the row
 //Then Pay the coin cost
@@ -474,7 +504,6 @@ Card* Hand::exchange(int cardIndex, Player* player) {
     player->addCard(pickedCard);
     return pickedCard;
 }
-
 
 //Prints the Hand which consist of the 6 cards can choose from
 void Hand::printHand() {

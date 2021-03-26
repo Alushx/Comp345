@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Cards/Cards.h"
 #include "Maploader/MapLoader.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -26,48 +27,23 @@ int main()
 
 	// Creating deck.
 	Deck* deck = new Deck(Player::getPlayerNum());
-	deck->generateDeck();
-	deck->shuffleDeck();
-	deck->printDeck();
+	createDeck(deck);
 
 	// Selecting first player.
-	int bidWinner = -1;
-	bidWinner = BiddingFacility::biddingPhase(Player::getPlayerList());
-	Player::getPlayerList()[bidWinner];
+	selectBidWinner();
 
 	// Display 6 cards.
 	Hand* hand = new Hand(deck);
 	hand->printHand();
 
 	// Placing each player's 4 armies.
-	Territory* startingTerritory = mapLoader->getMap()->getTerritory("territory1");
-	Player::setStartingRegion(startingTerritory);
-
-	for (Player* player : Player::getPlayerList())
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			player->placeNewArmies(startingTerritory);
-		}
-	}
+	placeArmies(mapLoader);
 
 	// Places bot armies.
-	if (Player::getPlayerNum() == 2)
-	{
-		Player* bot = Player::getBot();
-		bot->placeBotArmies(10, mapLoader->getMap());
-	}
+	placeBotArmies(mapLoader);
 
-	// Deallocating stuff.
-	delete mapLoader;
-	delete deck;
+	// Deallocating Players and Bot armies.
+	deallocateResources(mapLoader, deck);
 
-	vector<Player*> players = Player::getPlayerList();
-	for (int i = 0; i < Player::getPlayerNum(); i++)
-	{
-		delete players[i];
-	}
-	if (Player::getBot() != NULL)
-		delete Player::getBot();
 	return 0;
 }
