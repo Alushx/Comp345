@@ -80,18 +80,12 @@ int main()
 	}
 
 	// Compute score
-	for (Player* playerChar : Player::getPlayerList())
-	{
-		playerChar->computeScore(mapLoader->getMap());
-	}
+	calculateScore(mapLoader);
 
-	Player::computeElixerScore();
 
 	// Determine winner
-	Player* winner = nullptr;
-	winner = Player::announcement(Player::getPlayerList());
+	determineWinner();
 
-	cout << "The winner is: " << *winner << endl;
 
 
 	// Deallocating Players and Bot armies.
