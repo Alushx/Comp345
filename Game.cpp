@@ -33,6 +33,7 @@ void selectBidWinner() {
 	int bidWinner = -1;
 	bidWinner = BiddingFacility::biddingPhase(Player::getPlayerList());
 	Player::getPlayerList()[bidWinner];
+	// return player.
 }
 
 //Create the deck: generate it, shuffle it and print it.
