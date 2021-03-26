@@ -15,6 +15,7 @@
 
 int main()
 {
+	//Setting territory and players.
 	Territory* territory1 = new Territory();
 	Territory* territory2 = new Territory("Troy");
 	Player* player1 = new Player("Achilles", 12);
