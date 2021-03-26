@@ -21,5 +21,7 @@ void selectBidWinner();
 void createDeck(Deck* deck);
 void placeArmies(MapLoader* mapLoader);
 void placeBotArmies(MapLoader* mapLoader);
+void calculateScore(MapLoader* mapLoader);
+void determineWinner();
 
 
