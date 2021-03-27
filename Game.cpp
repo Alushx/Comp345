@@ -14,10 +14,12 @@
 #include "Cards/Cards.h"
 #include "Player.h"
 
-//Deallocate maploader, deck and Player
-void deallocateResources(MapLoader* mapLoader, Deck* deck) {
+//Deallocate MapLoader, Deck, Hand, and Players.
+// Armies, Cities, Cards, and Maps are deleted by the former 4.
+void deallocateResources(MapLoader* mapLoader, Deck* deck, Hand* hand) {
 	delete mapLoader;
 	delete deck;
+    delete hand;
 
 	vector<Player*> players = Player::getPlayerList();
 	for (int i = 0; i < Player::getPlayerNum(); i++)

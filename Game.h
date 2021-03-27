@@ -16,7 +16,7 @@
 #include "Cards/Cards.h"
 #include "Player.h"
 
-void deallocateResources(MapLoader* mapLoader, Deck* deck);
+void deallocateResources(MapLoader* mapLoader, Deck* deck, Hand* hand);
 int selectBidWinner();
 void createDeck(Deck* deck);
 void placeArmies(MapLoader* mapLoader);

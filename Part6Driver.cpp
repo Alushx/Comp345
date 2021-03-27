@@ -31,8 +31,7 @@ int main()
 	createDeck(deck);
 
 	// Selecting first player.
-	int bidWinner = -1;
-	bidWinner = selectBidWinner();
+	int bidWinner = selectBidWinner();
 
 	// Display 6 cards.
 	Hand* hand = new Hand(deck);
@@ -89,7 +88,7 @@ int main()
 
 
 	// Deallocating Players and Bot armies.
-	deallocateResources(mapLoader, deck);
+	deallocateResources(mapLoader, deck, hand);
 
 	return 0;
 }

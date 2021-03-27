@@ -54,6 +54,7 @@ Player::Player(string aName, int coinNum, bool isBot)
 	numOfCubes = 18;
 	numOfDisks = 3;
 	score = 0; 
+	ownNumElixer = 0;
 
 	// Handling static variables.
 	if (isBot)
@@ -70,15 +71,20 @@ Player::Player(string aName, int coinNum, bool isBot)
 // Player copy constructor.
 Player::Player(const Player& anotherPlayer)
 {
+	// Copying member variables.
 	name = anotherPlayer.name;
 	numOfCoins = anotherPlayer.numOfCoins;
+	numOfCubes = anotherPlayer.numOfCubes;
+	numOfDisks = anotherPlayer.numOfDisks;
+	score = anotherPlayer.score;
+	ownNumElixer = anotherPlayer.ownNumElixer;
 
-	if (anotherPlayer.bidFaci)
+	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
 	else
 		bidFaci = nullptr;
 
-	// Shallow copy because the map is the same.
+	// Shallow copy because the map/cards are the same.
 	for (Territory* territory : anotherPlayer.playerTerritory)
 	{
 		playerTerritory.push_back(territory);
@@ -86,21 +92,18 @@ Player::Player(const Player& anotherPlayer)
 
 	for (Card* card : anotherPlayer.playerHand)
 	{
-		playerHand.push_back(new Card(*card));
+		playerHand.push_back(card);
 	}
 
 	for (City* city : anotherPlayer.cities)
 	{
-		cities.push_back(new City(*city));
+		cities.push_back(new City(this, city->getPosition()));
 	}
 
 	for (Army* army : anotherPlayer.armies)
 	{
-		armies.push_back(new Army(*army));
+		armies.push_back(new Army(this, army->getPosition()));
 	}
-
-	numOfCubes = anotherPlayer.numOfCubes;
-	numOfDisks = anotherPlayer.numOfDisks;
 
 	// Handling static variables.
 	playerNum++;
@@ -751,8 +754,6 @@ Territory* Player::selectTerritoryWithCity()
 // Helps player choose a territory to move an army to.
 pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerritory, Map* map)
 {
-	// TODO implement this.
-
 	std::map<Territory*, int> adjacentTerritories = map->getAdjacentTerritories(currentTerritory);
 
 	int i = 0;
@@ -788,6 +789,10 @@ pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerri
 
 		j++;
 	}
+
+	// This should never happen.
+	cout << "Error! Neighbouring territory not found!" << endl;
+	return pair<Territory*, int>(nullptr, -1);
 }
 
 // Iterates over all cards in the player hand and counts the 
@@ -868,20 +873,26 @@ ostream& operator<<(ostream& strm, const Player& player)
 	return strm << player.name << ": " << player.numOfCoins << " coins" << " : " << player.armies.size() << " armies";
 }
 
+// Overloaded assignment operator.
 Player& Player::operator= (const Player& anotherPlayer)
 {
+	// Self check.
 	if (&anotherPlayer == this)
 		return *this;
 
 	name = anotherPlayer.name;
 	numOfCoins = anotherPlayer.numOfCoins;
+	score = anotherPlayer.score;
+	ownNumElixer = anotherPlayer.score;
+	numOfCubes = anotherPlayer.numOfCubes;
+	numOfDisks = anotherPlayer.numOfDisks;
 
-	if (anotherPlayer.bidFaci)
+	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
 	else
 		bidFaci = nullptr;
 
-	// Shallow copy because the map is the same.
+	// Shallow copy because the map/deck is the same.
 	for (Territory* territory : anotherPlayer.playerTerritory)
 	{
 		playerTerritory.push_back(territory);
@@ -889,21 +900,18 @@ Player& Player::operator= (const Player& anotherPlayer)
 
 	for (Card* card : anotherPlayer.playerHand)
 	{
-		playerHand.push_back(new Card(*card));
+		playerHand.push_back(card);
 	}
 
 	for (City* city : anotherPlayer.cities)
 	{
-		cities.push_back(new City(*city));
+		cities.push_back(new City(this, city->getPosition()));
 	}
 
 	for (Army* army : anotherPlayer.armies)
 	{
-		armies.push_back(new Army(*army));
+		armies.push_back(new Army(this, army->getPosition()));
 	}
-
-	numOfCubes = anotherPlayer.numOfCubes;
-	numOfDisks = anotherPlayer.numOfDisks;
 
 	return *this;
 }
