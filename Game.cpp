@@ -167,7 +167,19 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader)
 	int playerNum = Player::getPlayerNum();
 
 	int index = 0;
-	int numOfTurns = 2; // Figure out numOfTurns based on players.
+	int numOfTurns = 0;
+	switch (playerNum)
+	{
+		case 2: 
+			numOfTurns = 13;
+			break;
+		case 3:
+			numOfTurns = 10;
+			break;
+		case 4:
+			numOfTurns = 8;
+			break;
+	}
 
 	for (int turn = 0; turn < numOfTurns; turn++)
 	{
