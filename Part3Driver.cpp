@@ -17,6 +17,7 @@
 #include "Maploader/MapLoader.h"
 #include <vector>
 #include "Game.h"
+#include "Part3Driver.h"
 
 using namespace std;
 
@@ -42,38 +43,13 @@ int main()
 
 	// Places bot armies.
 	placeBotArmies(mapLoader);
-
-	// Getting the list of players.
-	vector<Player*> player;
-	player = Player::getPlayerList();
-
-	int index = 0;
-
-	int numOfTurns = 0;
-
-	// Based on the number of players we decide numOfTurns
-	for (int j = 0 ; j < numOfTurns ; j++ )
-	{ 
-		for (int i = 0; i < player.size(); i++)
-		{
-			index = 0;
-			while (index >= 0) {
-				hand->printHand();
-				cout << "Please enter the index of the card you want to pick or a negative number to exit: ";
-				cin >> index;
-				Card* card = hand->exchange(index, player[i]);
-				if (card == NULL)
-					break;
-				else
-				{
-					player[i]->playCard(card, mapLoader->getMap());
-				}
-			}
-		}
-	}
+	
+	// Main Game loop
+	playGame(hand, bidwinner, mapLoader);
 
 	// Deallocating Players and Bot armies.
 	deallocateResources(mapLoader, deck, hand);
 
 	return 0;
 }
+

@@ -43,49 +43,14 @@ int main()
 	// Places bot armies.
 	placeBotArmies(mapLoader);
 
-	// Cad related task.
-	vector<Player*> player;
-	player = Player::getPlayerList();
-	int playerNum = Player::getPlayerNum();
-
-	int index = 0;
-	int numOfTurns = 2; // Figure out numOfTurns based on players.
-
-	for (int turn = 0; turn < numOfTurns; turn++)
-	{
-		for (int i = 0; i < player.size(); i++)
-		{
-			index = 0;
-			while (index >= 0) {
-				hand->printHand();
-				cout << "Please enter the index of the card you want to pick or a negative number to exit: ";
-				cin >> index;
-
-				// Checking valid input.
-				if (index >= 0 && index <= 5)
-				{
-					Card* card = hand->exchange(index, player[(bidWinner + i) % playerNum]);
-					if (card == NULL)
-					{
-						continue;
-					}
-					player[(bidWinner + i) % playerNum]->playCard(card, mapLoader->getMap());
-					break; // Passes turn to next player.
-				}
-				else
-					continue;
-			}
-		}
-	}
+	// Main game loop
+	playGame(hand, bidWinner, mapLoader);
 
 	// Compute score
 	calculateScore(mapLoader);
 
-
 	// Determine winner
 	determineWinner();
-
-
 
 	// Deallocating Players and Bot armies.
 	deallocateResources(mapLoader, deck, hand);
