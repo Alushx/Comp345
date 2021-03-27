@@ -25,9 +25,10 @@ int main()
 	Deck* deck = new Deck(Player::getPlayerNum());
 	deck->generateDeck();
 	deck->printDeck();
+	Hand* hand = new Hand(deck);
 
 	// Deallocating Players and Bot armies.
-	deallocateResources(mapLoader, deck);
+	deallocateResources(mapLoader, deck, hand);
 
 	return 0;
 }

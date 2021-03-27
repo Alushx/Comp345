@@ -73,7 +73,7 @@ int main()
 	}
 
 	// Deallocating Players and Bot armies.
-	deallocateResources(mapLoader, deck);
+	deallocateResources(mapLoader, deck, hand);
 
 	return 0;
 }
