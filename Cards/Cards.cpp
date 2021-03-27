@@ -266,7 +266,6 @@ int Card :: getCardScore(list<Card*> &crds, Player *player){
         //Checks if the ability is "+1 VP per 3 coins"
         if (ab == cardAbt.PLUS_1_VP_PER_3_COINS) {
             int cnt = player->getCoins() / 3;// since the variable cnt is int it discard everthing aft the decimal point
-            cout << cnt << endl;
             VP += cnt;
             
         }
