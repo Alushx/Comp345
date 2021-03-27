@@ -24,5 +24,6 @@ void placeBotArmies(MapLoader* mapLoader);
 void calculateScore(MapLoader* mapLoader);
 void determineWinner();
 MapLoader* startGame();
+void playGame(Hand* hand, int, MapLoader* mapLoader);
 
 
