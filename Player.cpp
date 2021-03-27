@@ -825,7 +825,7 @@ int Player::calculateArmyBonus()
 			armyBonus++;
 	}
 
-	cout << "\n Player has " << armyBonus << " bonus armies... \n" << endl;
+	cout << "Player has " << armyBonus << " bonus armies... \n" << endl;
 
 	return armyBonus;
 }
@@ -842,7 +842,7 @@ int Player::calculateFlightBonus()
 			flightBonus++;
 	}
 
-	cout << "\n Player has " << flightBonus << " bonus flight... \n" << endl;
+	cout << "Player has " << flightBonus << " bonus flight... \n" << endl;
 
 	return flightBonus;
 }
@@ -857,7 +857,7 @@ bool Player::calculateImmunityBonus()
 		// Immediately exit and return true.
 		if (card->getAbility() == "Immune to attack")
 		{
-			cout << "\n Cannot attack this player! They are immune...\n" << endl;
+			cout << "Cannot attack this player! They are immune...\n" << endl;
 			isImmune = true;
 			return isImmune;
 		}
@@ -951,7 +951,7 @@ Player* Player::computeScore( Map* map) {
 		score = score + card->getCardScore(playerHand, this);
 	}
 
-	cout << this->name << "The score of this player is" << this->score;
+	cout << this->name << " has a score of " << this->score << endl;
 
 	return this;
 }
