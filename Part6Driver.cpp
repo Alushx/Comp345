@@ -51,7 +51,7 @@ int main()
 	int playerNum = Player::getPlayerNum();
 
 	int index = 0;
-	int numOfTurns = 0; // Figure out numOfTurns based on players.
+	int numOfTurns = 2; // Figure out numOfTurns based on players.
 
 	for (int turn = 0; turn < numOfTurns; turn++)
 	{
@@ -72,6 +72,7 @@ int main()
 						continue;
 					}
 					player[(bidWinner + i) % playerNum]->playCard(card, mapLoader->getMap());
+					break; // Passes turn to next player.
 				}
 				else
 					continue;

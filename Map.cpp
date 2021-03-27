@@ -149,7 +149,7 @@ using namespace std;
 		int j = 1;
 		for (pair<string, Territory*> territory : territories)
 		{
-			if (j = playerChoice)
+			if (j == playerChoice)
 				return territory.second;
 			j++;
 		}
