@@ -17,7 +17,7 @@
 #include "Player.h"
 
 void deallocateResources(MapLoader* mapLoader, Deck* deck);
-void selectBidWinner();
+int selectBidWinner();
 void createDeck(Deck* deck);
 void placeArmies(MapLoader* mapLoader);
 void placeBotArmies(MapLoader* mapLoader);

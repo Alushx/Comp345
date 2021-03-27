@@ -29,11 +29,11 @@ void deallocateResources(MapLoader* mapLoader, Deck* deck) {
 }
 
 //Determine the bid winner
-void selectBidWinner() {
+int selectBidWinner() {
 	int bidWinner = -1;
 	bidWinner = BiddingFacility::biddingPhase(Player::getPlayerList());
 	Player::getPlayerList()[bidWinner];
-	// return player.
+    return bidWinner;
 }
 
 //Create the deck: generate it, shuffle it and print it.

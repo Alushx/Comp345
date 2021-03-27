@@ -32,8 +32,7 @@ int main()
 
 	// Selecting first player.
 	int bidWinner = -1;
-	bidWinner = BiddingFacility::biddingPhase(Player::getPlayerList());
-	Player::getPlayerList()[bidWinner];
+	bidWinner = selectBidWinner();
 
 	// Display 6 cards.
 	Hand* hand = new Hand(deck);

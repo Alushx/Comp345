@@ -31,7 +31,7 @@ int main()
 	createDeck(deck);
 
 	// Selecting first player.
-	selectBidWinner();
+	int bidwinner = selectBidWinner();
 
 	// Display 6 cards.
 	Hand* hand = new Hand(deck);
