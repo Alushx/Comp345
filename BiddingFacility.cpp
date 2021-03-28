@@ -109,6 +109,7 @@ int BiddingFacility::biddingPhase(vector<Player*>& player) {
     }
     //Display the bid winner
     cout << "The bid winner is: " << bidWinner << " with a bid value of " << highBid << std::endl;
+    player[index]->payCoin(highBid);
     return index;
 }  
 

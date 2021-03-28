@@ -58,7 +58,8 @@ int main()
         hand->printHand();
         cout << "Please enter the index of the card you want tp pick or a negative number to exit: ";
         cin >> index;
-        player1->playCard(hand->exchange(index, player1), mapLoader->getMap());
+        if (index >= 0 && index <= 5)
+            player1->playCard(hand->exchange(index, player1), mapLoader->getMap());
     }
 
     // Deallocating heap.
