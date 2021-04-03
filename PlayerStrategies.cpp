@@ -25,7 +25,7 @@ int GreedyComputer::pickCard(Hand *hand){
     for (int i = 0; i < 6; i++)
     {
         if(handcards[i].getFirstAction() == act.DESTROY_1_ARMY || handcards[i].getFirstAction() == act.BUILD_CITY ||
-        handcards->getSecondAction() == act.DESTROY_1_ARMY || handcards->getSecondAction() == act.BUILD_CITY){
+        handcards[i]->getSecondAction() == act.DESTROY_1_ARMY || handcards[i]->getSecondAction() == act.BUILD_CITY){
            return i;
         }
     }
