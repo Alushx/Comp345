@@ -88,6 +88,7 @@ public:
 	Hand(const Hand &h);
 	//Deconstructor
 	~Hand();
+	Card* getHandCards();
 	int getCardCost(int indexOfcard);
 	Card* exchange(int cardIndex, Player* player);
 	void printHand();
