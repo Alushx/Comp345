@@ -462,6 +462,10 @@ Hand::~Hand(){
     deck = nullptr;
 }
 
+Card* Hand:: getHandCards(){
+    return *cards;
+}
+
 //Returns the cost of a card depending on where the card is placed in the cards space
 int Hand::getCardCost(int indexOfcard) {
     if (indexOfcard == 0) return 0;
