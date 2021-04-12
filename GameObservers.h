@@ -45,7 +45,7 @@ class Map;
 
 // A class that encapsulates each turn.
 // Provides methods that allow the player to pick their card and play it.
-class Turn
+class Turn : public Subject
 {
 private:
 	Player* playerTurn;
@@ -76,4 +76,16 @@ public:
 	// Operators.
 	friend ostream& operator <<(ostream& output, const Turn& turn);
 	const Turn& operator =(const Turn&);
+};
+
+class Game : public Observer
+{
+public :
+	Game();
+	Game(Turn* t);
+	~Game();
+	void Update();
+	void display();
+private:
+	Turn* _subject;
 };

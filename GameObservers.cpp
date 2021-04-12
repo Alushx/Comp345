@@ -124,6 +124,7 @@ Card* Turn::getSelectedCard()
 void Turn::setSelectedCard(Card* card)
 {
 	selectedCard = card;
+	Notify();
 }
 
 // Accessor for gameHand.
@@ -136,6 +137,7 @@ Hand* Turn::getGameHand()
 void Turn::setGameHand(Hand* hand)
 {
 	gameHand = hand;
+	Notify();
 }
 
 // Accessor for gameMap.
@@ -148,6 +150,7 @@ Map* Turn::getGameMap()
 void Turn::setGameMap(Map* map)
 {
 	gameMap = map;
+	Notify();
 }
 
 // Method that selects a card based on the player strategy, pays the cost of the card, and plays the card.
@@ -179,3 +182,37 @@ const Turn& Turn::operator =(const Turn& anotherTurn)
 	selectedCard = anotherTurn.selectedCard;
 	return *this;
 }
+
+// ============================================
+// Game Implementation
+// ============================================
+
+Game::Game() 
+{
+	_subject = nullptr;
+};
+
+Game::Game(Turn* t) 
+{
+	_subject = t;
+	_subject->Attach(this);
+};
+
+Game::~Game()
+{
+	_subject->Detach(this);
+};
+
+void Game::Update()
+{
+	display();
+};
+
+void Game::display() 
+{
+
+	cout << "Player: " <<_subject->getPlayerTurn() << ", selected : " << _subject->getSelectedCard()
+		<< ", the card that he owes are :"<< _subject->getGameHand()<< ", the territories he owes are: " <<
+		_subject->getGameMap() <<endl;
+}
+
