@@ -99,7 +99,6 @@ private:
 	int victoryPoints;
 	int regions;
 	int elixirAmount;
-	int score;
 
 public:
 	// Constructors & destructor
@@ -113,13 +112,11 @@ public:
 	int getVictoryPoints();
 	int getRegions();
 	int getElixirAmount();
-	int getScore();
 	void setCoins(int);
 	void setContinents(int);
 	void setVictoryPoints(int);
 	void setRegions(int);
 	void setElixirAmount(int);
-	void setScore(int);
 
 	// Functions
 	void displayStats(Map*);
