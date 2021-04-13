@@ -124,3 +124,21 @@ public:
 	// Functions
 	void displayStats(Map*);
 };
+
+class View: public Observer{
+	// Member variable.
+private:
+	GameState *gmstate;
+
+public:
+	// Constructors & destructor
+	View();
+	View(GameState*);
+	~View();
+
+	// Function
+	void display();	
+
+private:
+	void printbar(int);
+};
