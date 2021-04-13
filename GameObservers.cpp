@@ -229,7 +229,6 @@ GameState::GameState() {
 	victoryPoints = 0;
 	regions = 0;
 	elixirAmount = 0;
-	score = 0;
 }
 
 GameState::GameState(const GameState& other) {
@@ -238,7 +237,6 @@ GameState::GameState(const GameState& other) {
 	this->victoryPoints = other.victoryPoints;
 	this->regions = other.regions;
 	this->elixirAmount = other.elixirAmount;
-	this->score = other.score;
 }
 
 GameState::~GameState()
@@ -249,7 +247,6 @@ GameState::~GameState()
 	victoryPoints = 0;
 	regions = 0;
 	elixirAmount = 0;
-	score = 0;//Score and VictoryPoints are the same****
 }
 
 // Accessors & Mutators
@@ -273,10 +270,6 @@ int GameState::getElixirAmount() {
 	return elixirAmount;
 }
 
-int GameState::getScore() {
-	return score;
-}
-
 void GameState::setCoins(int x) {
 	this->coins = x;
 }
@@ -295,10 +288,6 @@ void GameState::setRegions(int x) {
 
 void GameState::setElixirAmount(int x) {
 	this->elixirAmount = x;
-}
-
-void GameState::setScore(int x) {
-	this->score = x;
 }
 
 // Functions
