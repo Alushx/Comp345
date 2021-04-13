@@ -89,3 +89,38 @@ public :
 private:
 	Turn* _subject;
 };
+
+
+class GameState {
+private:
+	Map* map;
+	int coins;
+	int continents;
+	int victoryPoints;
+	int regions;
+	int elixirAmount;
+	int score;
+
+public:
+	// Constructors & destructor
+	GameState();
+	GameState(const GameState&);
+	~GameState();
+
+	// Accessors & Mutators
+	int getCoins();
+	int getContinents();
+	int getVictoryPoints();
+	int getRegions();
+	int getElixirAmount();
+	int getScore();
+	void setCoins(int);
+	void setContinents(int);
+	void setVictoryPoints(int);
+	void setRegions(int);
+	void setElixirAmount(int);
+	void setScore(int);
+
+	// Functions
+	void displayStats(Map*);
+};

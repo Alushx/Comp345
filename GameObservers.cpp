@@ -216,3 +216,92 @@ void Game::display()
 		_subject->getGameMap() <<endl;
 }
 
+// ============================================
+// GameState Implementation
+// ============================================
+
+
+// Constructors & destructor
+GameState::GameState() {
+	Map* map = nullptr;
+	coins = 0;
+	continents = 0;
+	victoryPoints = 0;
+	regions = 0;
+	elixirAmount = 0;
+	score = 0;
+}
+
+GameState::GameState(const GameState& other) {
+	this->coins = other.coins;
+	this->continents = other.continents;
+	this->victoryPoints = other.victoryPoints;
+	this->regions = other.regions;
+	this->elixirAmount = other.elixirAmount;
+	this->score = other.score;
+}
+
+GameState::~GameState()
+{
+	Map* map = nullptr;
+	coins = 0;
+	continents = 0;
+	victoryPoints = 0;
+	regions = 0;
+	elixirAmount = 0;
+	score = 0;
+}
+
+// Accessors & Mutators
+int GameState::getCoins() {
+	return coins;
+}
+
+int GameState::getContinents() {
+	return continents;
+}
+
+int GameState::getVictoryPoints() {
+	return victoryPoints;
+}
+
+int GameState::getRegions() {
+	return regions;
+}
+
+int GameState::getElixirAmount() {
+	return elixirAmount;
+}
+
+int GameState::getScore() {
+	return score;
+}
+
+void GameState::setCoins(int x) {
+	this->coins = x;
+}
+
+void GameState::setContinents(int x) {
+	this->continents = x;
+}
+
+void GameState::setVictoryPoints(int x) {
+	this->victoryPoints = x;
+}
+
+void GameState::setRegions(int x) {
+	this->regions = x;
+}
+
+void GameState::setElixirAmount(int x) {
+	this->elixirAmount = x;
+}
+
+void GameState::setScore(int x) {
+	this->score = x;
+}
+
+// Functions
+void displayStats(Map* map) {
+	// Displays stats
+}
