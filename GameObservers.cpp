@@ -249,7 +249,7 @@ GameState::~GameState()
 	victoryPoints = 0;
 	regions = 0;
 	elixirAmount = 0;
-	score = 0;
+	score = 0;//Score and VictoryPoints are the same****
 }
 
 // Accessors & Mutators
@@ -304,4 +304,52 @@ void GameState::setScore(int x) {
 // Functions
 void displayStats(Map* map) {
 	// Displays stats
+}
+
+
+
+// ============================================
+// View Implementation
+// ============================================
+
+// Default Constructors  
+View :: View(){
+	gmstate = nullptr;
+}
+// Parameterized constructor
+View :: View(GameState * gt){
+	gmstate = gt;
+}
+//Destructor
+View :: ~View(){
+	delete gmstate;
+	gmstate=NULL;
+}
+
+//Display bar graph of a player
+void View :: display(){
+
+//Victory Points
+cout <<gmstate->getVictoryPoints()<<" Victory Points:";
+printbar(gmstate->getVictoryPoints());
+//Continents
+cout <<gmstate->getContinents()<<" Continents:";
+printbar(gmstate->getContinents());
+//Region
+cout <<gmstate->getRegions()<<" Region:";
+printbar(gmstate->getRegions());
+//Elixer
+cout <<gmstate->getElixirAmount()<<" Elixer:";
+printbar(gmstate->getElixirAmount());
+//Coins
+cout <<gmstate->getCoins()<<" Coins:";
+printbar(gmstate->getCoins());
+}
+
+//Print bar for each
+void View :: printbar(int length){
+	for(int i=0;i<length;i++){
+		cout << "|";
+	}
+	cout << endl;
 }
