@@ -279,6 +279,11 @@ using namespace std;
 		return territories[name];
 	}
 
+	map<string, Territory*> Map::getTerritories()
+	{
+		return territories;
+	}
+
 	// Adds a new continent.
 	void Map::addContinent(std::list<Territory*>& aContinent)
 	{
@@ -468,11 +473,6 @@ using namespace std;
 				owner = nullptr;
 			}
 		}
-
-		if (owner)
-			std::cout << owner->getName() << " is the owner of " << name << endl;
-		else
-			std::cout << name << " has no owner" << endl;
 
 		return owner;
 	}

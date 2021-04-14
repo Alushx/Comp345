@@ -68,6 +68,7 @@ public:
 	void addCard(Card*);
 	Player* computeScore(Map* map);
 	void playCard(Card*, Map*);
+	int computeContinentsOwned(Map*);
 
 	// Accessors.
 	string getName();

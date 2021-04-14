@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "Cards/Cards.h"
 #include "Map.h"
+#include "Game.h"
 using namespace std;
 
 // ============================================
@@ -224,75 +225,97 @@ void Game::display()
 // Constructors & destructor
 GameState::GameState() {
 	Map* map = nullptr;
-	coins = 0;
-	continents = 0;
-	victoryPoints = 0;
-	regions = 0;
-	elixirAmount = 0;
+	coins = vector<int>(Player::getPlayerNum());
+	continents = vector<int>(Player::getPlayerNum());
+	victoryPoints = vector<int>(Player::getPlayerNum());
+	territories = vector<int>(Player::getPlayerNum());
+	elixirAmount = vector<int>(Player::getPlayerNum());
+}
+
+GameState::GameState(Map* map)
+{
+	Map* map = map;
+	coins = vector<int>(Player::getPlayerNum());
+	continents = vector<int>(Player::getPlayerNum());
+	victoryPoints = vector<int>(Player::getPlayerNum());
+	territories = vector<int>(Player::getPlayerNum());
+	elixirAmount = vector<int>(Player::getPlayerNum());
 }
 
 GameState::GameState(const GameState& other) {
+	
+	// Intentionally makes shallow copy.
+	this->map = other.map;
 	this->coins = other.coins;
 	this->continents = other.continents;
 	this->victoryPoints = other.victoryPoints;
-	this->regions = other.regions;
+	this->territories = other.territories;
 	this->elixirAmount = other.elixirAmount;
 }
 
 GameState::~GameState()
 {
+	// Map is deleted outside of this class.
 	Map* map = nullptr;
-	coins = 0;
-	continents = 0;
-	victoryPoints = 0;
-	regions = 0;
-	elixirAmount = 0;
 }
 
 // Accessors & Mutators
-int GameState::getCoins() {
+vector<int> GameState::getCoins() {
 	return coins;
 }
 
-int GameState::getContinents() {
+vector<int> GameState::getContinents() {
 	return continents;
 }
 
-int GameState::getVictoryPoints() {
+vector<int> GameState::getVictoryPoints() {
 	return victoryPoints;
 }
 
-int GameState::getRegions() {
-	return regions;
+vector<int> GameState::getTerritories() {
+	return territories;
 }
 
-int GameState::getElixirAmount() {
+vector<int> GameState::getElixirAmount() {
 	return elixirAmount;
 }
 
-void GameState::setCoins(int x) {
+void GameState::setCoins(vector<int> x) {
 	this->coins = x;
 }
 
-void GameState::setContinents(int x) {
+void GameState::setContinents(vector<int> x) {
 	this->continents = x;
 }
 
-void GameState::setVictoryPoints(int x) {
+void GameState::setVictoryPoints(vector<int> x) {
 	this->victoryPoints = x;
 }
 
-void GameState::setRegions(int x) {
-	this->regions = x;
+void GameState::setTerritories(vector<int> x) {
+	this->territories = x;
 }
 
-void GameState::setElixirAmount(int x) {
+void GameState::setElixirAmount(vector<int> x){
 	this->elixirAmount = x;
 }
 
 // Functions
-void displayStats(Map* map) {
-	// Displays stats
+void GameState::computeGameState() {
+	calculateScore(map);
+
+	vector<Player*> players = Player::getPlayerList();
+	for (int i = 0; i < Player::getPlayerNum(); i++)
+	{
+		coins[i] = players[i]->getCoins();
+		continents[i] = players[i]->computeContinentsOwned(map);
+		victoryPoints[i] = players[i]->getScore();
+		territories[i] = players[i]->getPlayerTerritories()->size();
+		elixirAmount[i] = players[i]->getOwnNumElixer();
+	}
+
+
+	Notify();
 }
 
 
@@ -316,23 +339,24 @@ View :: ~View(){
 }
 
 //Display bar graph of a player
-void View :: display(){
-
-//Victory Points
-cout <<gmstate->getVictoryPoints()<<" Victory Points:";
-printbar(gmstate->getVictoryPoints());
-//Continents
-cout <<gmstate->getContinents()<<" Continents:";
-printbar(gmstate->getContinents());
-//Region
-cout <<gmstate->getRegions()<<" Region:";
-printbar(gmstate->getRegions());
-//Elixer
-cout <<gmstate->getElixirAmount()<<" Elixer:";
-printbar(gmstate->getElixirAmount());
-//Coins
-cout <<gmstate->getCoins()<<" Coins:";
-printbar(gmstate->getCoins());
+void View :: display(int i){
+	// Player
+	cout << Player::getPlayerList()[i]->getName() << ":" << endl;
+	// Victory Points
+	cout << "\t" << gmstate->getVictoryPoints()[i]<<" Victory Points:";
+	printbar(gmstate->getVictoryPoints()[i]);
+	// Continents
+	cout << "\t" << gmstate->getContinents()[i]<<" Continents:";
+	printbar(gmstate->getContinents()[i]);
+	// Region
+	cout << "\t" << gmstate->getTerritories()[i]<<" Region:";
+	printbar(gmstate->getTerritories()[i]);
+	// Elixer
+	cout << "\t" << gmstate->getElixirAmount()[i] <<" Elixer:";
+	printbar(gmstate->getElixirAmount()[i]);
+	// Coins
+	cout << "\t" << gmstate->getCoins()[i] <<" Coins:";
+	printbar(gmstate->getCoins()[i]);
 }
 
 //Print bar for each
@@ -341,4 +365,12 @@ void View :: printbar(int length){
 		cout << "|";
 	}
 	cout << endl;
+}
+
+void View::Update()
+{
+	for (int i = 0; i < Player::getPlayerNum(); i++)
+	{
+		display(i);
+	}
 }

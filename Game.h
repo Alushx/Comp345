@@ -22,6 +22,7 @@ void createDeck(Deck* deck);
 void placeArmies(MapLoader* mapLoader);
 void placeBotArmies(MapLoader* mapLoader);
 void calculateScore(MapLoader* mapLoader);
+void calculateScore(Map* map);
 void determineWinner();
 MapLoader* startGame();
 void playGame(Hand* hand, int, MapLoader* mapLoader);

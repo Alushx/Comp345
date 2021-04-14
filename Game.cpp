@@ -70,9 +70,15 @@ void placeBotArmies(MapLoader* mapLoader) {
 
 //Compute the Score
 void calculateScore(MapLoader* mapLoader) {
+	calculateScore(mapLoader->getMap());
+}
+
+// Calculates the score.
+void calculateScore(Map* map)
+{
 	for (Player* playerChar : Player::getPlayerList())
 	{
-		playerChar->computeScore(mapLoader->getMap());
+		playerChar->computeScore(map);
 	}
 
 	Player::computeElixerScore();

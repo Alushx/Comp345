@@ -935,23 +935,27 @@ Player* Player::computeElixerScore() {
 
 //Returns the scrore of each player
 Player* Player::computeScore( Map* map) {
-
-	list<list<Territory*>> continents = map->getContinents();
 	
+	// Resetting values for computation.
+	score = 0;
+	playerTerritory.clear();
+
+	// Assigning owned territories.
+	for (pair<string, Territory*> territoryPair : map->getTerritories())
+	{
+		if (this == territoryPair.second->getOwner())
+			playerTerritory.push_back(territoryPair.second);
+	}
 	score = score + this->playerTerritory.size();
 
-	for (list<Territory*> continent : continents) 
-	{
-		if ( map->getContinentOwner(continent) == this)
-			score = score + 1;
-	}
+	// Computing the score for continents.
+	score += computeContinentsOwned(map);
 
+	// Computing the score for cards.
 	for (Card* card : this->playerHand)
 	{
 		score = score + card->getCardScore(playerHand, this);
 	}
-
-	cout << this->name << " has a score of " << this->score << endl;
 
 	return this;
 }
@@ -1007,6 +1011,20 @@ Player* Player::announcement(vector<Player*> player)
 		}		
 	}
 	return winner;
+}
+
+// Counts the number of continents owned by this player.
+int Player::computeContinentsOwned(Map* map)
+{
+	int numOfContinents = 0;
+	list<list<Territory*>> continents = map->getContinents();
+	for (list<Territory*> continent : continents)
+	{
+		if (map->getContinentOwner(continent) == this)
+			numOfContinents++;
+	}
+
+	return numOfContinents;
 }
 
 

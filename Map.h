@@ -43,6 +43,7 @@ public:
 	void addEdge(Territory*, Territory*, int);
 	void printList();
 	Territory* getTerritory(std::string);
+	map<string, Territory*> getTerritories();
 	Territory* selectTerritory();
 	std::list<std::list<Territory*>> getContinents();
 	Player* getContinentOwner(std::list<Territory*>);

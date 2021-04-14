@@ -13,6 +13,7 @@
 #pragma once
 #include <list>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Observer
@@ -91,35 +92,36 @@ private:
 };
 
 
-class GameState {
+class GameState : public Subject {
 private:
 	Map* map;
-	int coins;
-	int continents;
-	int victoryPoints;
-	int regions;
-	int elixirAmount;
+	vector<int> coins;
+	vector<int> continents;
+	vector<int> victoryPoints;
+	vector<int> territories;
+	vector<int> elixirAmount;
 
 public:
 	// Constructors & destructor
 	GameState();
+	GameState(Map* map);
 	GameState(const GameState&);
 	~GameState();
 
 	// Accessors & Mutators
-	int getCoins();
-	int getContinents();
-	int getVictoryPoints();
-	int getRegions();
-	int getElixirAmount();
-	void setCoins(int);
-	void setContinents(int);
-	void setVictoryPoints(int);
-	void setRegions(int);
-	void setElixirAmount(int);
+	vector<int> getCoins();
+	vector<int> getContinents();
+	vector<int> getVictoryPoints();
+	vector<int> getTerritories();
+	vector<int> getElixirAmount();
+	void setCoins(vector<int>);
+	void setContinents(vector<int>);
+	void setVictoryPoints(vector<int>);
+	void setTerritories(vector<int>);
+	void setElixirAmount(vector<int>);
 
 	// Functions
-	void displayStats(Map*);
+	void computeGameState();
 };
 
 class View: public Observer{
@@ -134,7 +136,8 @@ public:
 	~View();
 
 	// Function
-	void display();	
+	void display(int i);
+	virtual void Update();
 
 private:
 	void printbar(int);
