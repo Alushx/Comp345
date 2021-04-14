@@ -10,8 +10,8 @@
 //      Vithura Muthiah - 40062305
 //===================================================================
 
-#include "MapLoader/MapLoader.h"
-#include "Cards/Cards.h"
+#include "MapLoader.h"
+#include "Cards.h"
 #include "Player.h"
 
 //Deallocate MapLoader, Deck, Hand, and Players.

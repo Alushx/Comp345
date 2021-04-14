@@ -12,7 +12,7 @@
 
 #include "GameObservers.h"
 #include "Player.h"
-#include "Cards/Cards.h"
+#include "Cards.h"
 #include "Map.h"
 #include "Game.h"
 using namespace std;

@@ -16,7 +16,7 @@
 #include <string>
 #include <sstream>
 #include "MapLoader.h"
-#include "../Player.h""
+#include "Player.h""
 using namespace std;
 
 // Default constructor.

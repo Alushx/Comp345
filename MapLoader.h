@@ -11,7 +11,7 @@
 //===================================================================
 
 #pragma once
-#include "../Map.h"
+#include "Map.h"
 #include <string>
 #include <fstream>
 #include <sstream>

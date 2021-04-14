@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "MapLoader/MapLoader.h"
-#include "Cards/Cards.h"
+#include "MapLoader.h"
+#include "Cards.h"
 #include "Player.h"
 
 void deallocateResources(MapLoader* mapLoader, Deck* deck, Hand* hand);

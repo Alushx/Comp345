@@ -1,5 +1,5 @@
 #include "PlayerStrategies.h"
-#include "Cards/Cards.cpp"
+#include "Cards.cpp"
 using namespace std;
 
 //HumanPlayer: requires user interaction to make decisions

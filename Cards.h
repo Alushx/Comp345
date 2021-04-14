@@ -14,7 +14,7 @@
 
 #include <string>
 #include <array>
-#include "../Player.h"
+#include "Player.h"
 using namespace std;
 
 

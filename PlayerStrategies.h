@@ -1,6 +1,6 @@
 #pragma once
 #include <string.h>
-#include "Cards/Cards.h"
+#include "Cards.h"
 using namespace std;
 //Abstract Class
 class PlayerStrategies{

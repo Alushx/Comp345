@@ -12,7 +12,7 @@
 
 #include "Player.h"
 #include <iostream>
-#include "Cards/Cards.h"
+#include "Cards.h"
 #include "BiddingFacility.h"
 #include "Map.h"
 #include <sstream>

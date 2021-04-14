@@ -16,7 +16,7 @@
 #include <random>
 #include <algorithm>
 #include <stdio.h>
-#include "../Player.h"
+#include "Player.h"
 using namespace std;
 
 const struct Action {
