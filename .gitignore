@@ -1,3 +1,5 @@
 COMP345-A1.*
+COMP345.*
 Debug/
 *vcxproj*
+.vs
