@@ -60,3 +60,28 @@ int ModerateComputer::pickCard(Hand *hand){
 string ModerateComputer::displayCurrentStrategy() {
     return "Moderate Computer";
 }
+
+// ============================================
+// Strategy Implementation
+// ============================================
+
+Strategy::Strategy(PlayerStrategies* otherStrategy = nullptr) : playerStrategy(otherStrategy) {}
+
+Strategy::~Strategy() {
+    delete this->playerStrategy;
+}
+
+
+void Strategy::set_strategy(PlayerStrategies* otherStrategy) {
+    delete this->playerStrategy;
+    this->playerStrategy = otherStrategy;
+}
+
+// Not sure if these two functions belong in here
+int Strategy::pickCard(Hand* hand) {
+
+}
+
+string Strategy::displayCurrentStrategy() {
+
+}

@@ -9,6 +9,21 @@ public:
     virtual string displayCurrentStrategy() = 0;
 };
 
+
+// Strategy class
+class Strategy {
+private:
+    PlayerStrategies* playerStrategy;
+
+public:
+    Strategy(PlayerStrategies*);
+    ~Strategy();
+    void set_strategy(PlayerStrategies*);
+    int pickCard(Hand* hand);
+    string displayCurrentStrategy();
+};
+
+
 //Human player: requires user interaction to make decisions
 class HumanPlayer : public PlayerStrategies{
     public:
