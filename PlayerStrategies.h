@@ -18,7 +18,7 @@ public:
     virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
     virtual Territory* selectTerritoryWithCity(list<City*> cities);
     virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
-
+    virtual int selectOrAction(Card* card) = 0;
 };
 
 
@@ -48,6 +48,7 @@ class HumanPlayer : public PlayerStrategies{
     virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
     virtual Territory* selectTerritoryWithCity(list<City*> cities);
     virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
+    virtual int selectOrAction(Card* card);
 };
 
 //Greedy Computer: player that focuses on building cities or destroying opponents
@@ -55,6 +56,7 @@ class GreedyComputer : public PlayerStrategies{
  public:
     virtual int pickCard(Hand *hand);
     virtual string displayCurrentStrategy();
+    virtual int selectOrAction(Card* card);
 };
 
 //Moderate computer: control a region in which it just needs to occupy it with more armies than the opponents
@@ -62,4 +64,5 @@ class ModerateComputer : public PlayerStrategies{
  public:
     virtual int pickCard(Hand *hand);
     virtual string displayCurrentStrategy();
+    virtual int selectOrAction(Card* card);
 }; 

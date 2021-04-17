@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <map>
+#include <sstream>
 using namespace std;
 
 //===================================
@@ -316,6 +317,62 @@ pair<Territory*, int> HumanPlayer::selectNeighbouringTerritory(Territory* curren
     cout << "Error! Neighbouring territory not found!" << endl;
     return pair<Territory*, int>(nullptr, -1);
 }
+
+// Allows the player to select an action.
+int HumanPlayer::selectOrAction(Card* aCard)
+{
+    int choiceNum = 0;
+    do
+    {
+        cout << "Which of the following actions would you like to take?" << endl;
+        cout << "\t 1) " << aCard->getFirstAction() << endl;
+        cout << "\t 2) " << aCard->getSecondAction() << endl;
+
+        cin >> choiceNum;
+
+    } while (!(choiceNum == 1 || choiceNum == 2));
+
+    return choiceNum;
+}
+
+// Bot selects destroy armies or build city cards. Or it selects one at random if neither are present.
+int GreedyComputer::selectOrAction(Card* aCard)
+{
+    int choiceNum = 0;
+    string keyWord1 = "";
+    string keyWord2 = "";
+    istringstream action1Stream(aCard->getFirstAction());
+    istringstream action2Stream(aCard->getFirstAction());
+    action1Stream >> keyWord1;
+    action2Stream >> keyWord2;
+    
+    if (keyWord1 == "Build" || keyWord1 == "Destroy")
+        return 1;
+    else if (keyWord2 == "Build" || keyWord2 == "Destroy")
+        return 2;
+    else
+        return (rand() % 2) + 1;
+}
+
+// Selects the action with move or add armies. If neither are present, it goes with a random option.
+int ModerateComputer::selectOrAction(Card* aCard)
+{
+    int choiceNum = 0;
+    string keyWord1 = "";
+    string keyWord2 = "";
+    istringstream action1Stream(aCard->getFirstAction());
+    istringstream action2Stream(aCard->getFirstAction());
+    action1Stream >> keyWord1;
+    action2Stream >> keyWord2;
+
+    if (keyWord1 == "Move" || keyWord1 == "Add")
+        return 1;
+    else if (keyWord2 == "Move" || keyWord2 == "Add")
+        return 2;
+    else
+        return (rand() % 2) + 1;
+}
+
 
 //HumanPlayer: requires user interaction to make decisions
 int HumanPlayer::pickCard(Hand *hand){

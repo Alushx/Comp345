@@ -438,21 +438,9 @@ void Player::andOrAction(Card* aCard, string& combinationType, Map* map)
 	// Or case.
 	if (combinationType == "OR")
 	{
-		int choiceNum = 0;
-
-		// Player makes a decision.
-		do
-		{
-			cout << "Which of the following actions would you like to take?" << endl;
-			cout << "\t 1) " << aCard->getFirstAction() << endl;
-			cout << "\t 2) " << aCard->getSecondAction() << endl;
-
-			cin >> choiceNum;
-
-		} while (!(choiceNum == 1 || choiceNum == 2));
+		int choiceNum = strategy->selectOrAction(aCard);
 		
 		// Appropriate action is played.
-
 		if (choiceNum == 1)
 		{
 			playCardAction(aCard->getFirstAction(), map);
