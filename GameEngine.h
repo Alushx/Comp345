@@ -1,11 +1,14 @@
 #pragma once
 
 
+#include "GameObservers.h"
+#include "Game.h"
+
 class GameEngine{
 
 public:
     int selectGameMode();
-    void singleGame();
-    void tournamentGame();
+    void singleGame(int selectedMode);
+    void tournamentGame(int selectedMode) : subject(s);
 
 };

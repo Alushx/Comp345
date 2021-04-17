@@ -25,6 +25,6 @@ void calculateScore(MapLoader* mapLoader);
 void calculateScore(Map* map);
 void determineWinner();
 MapLoader* startGame();
-void playGame(Hand* hand, int, MapLoader* mapLoader);
+void playGame(Hand* hand, int, MapLoader* mapLoader, int selectedMode);
 
 

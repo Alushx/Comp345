@@ -165,7 +165,7 @@ MapLoader* startGame()
     return mapLoader;
 }
 
-void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader)
+void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 {
 	// Cad related task.
 	vector<Player*> player;
@@ -174,9 +174,10 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader)
 
 	int index = 0;
 	int numOfTurns = 0;
-	switch (playerNum)
-	{
-		case 2: 
+	if (selectedMode == 1) {
+		switch (playerNum)
+		{
+		case 2:
 			numOfTurns = 13;
 			break;
 		case 3:
@@ -185,6 +186,10 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader)
 		case 4:
 			numOfTurns = 8;
 			break;
+		}
+	}
+	else {
+		numOfTurns = 20;
 	}
 
 	for (int turn = 0; turn < numOfTurns; turn++)
