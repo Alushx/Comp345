@@ -11,6 +11,7 @@
 //===================================================================
 
 #include "Player.h"
+#include "PlayerStrategies.h"
 #include <iostream>
 #include "Cards.h"
 #include "BiddingFacility.h"
@@ -35,6 +36,7 @@ Player::Player()
 	armies = list<Army*>();
 	numOfCubes = 18;
 	numOfDisks = 3;
+	strategy = nullptr;
 
 	// Handling static variables.
 	playerNum++;
@@ -55,6 +57,7 @@ Player::Player(string aName, int coinNum, bool isBot)
 	numOfDisks = 3;
 	score = 0; 
 	ownNumElixer = 0;
+	strategy = nullptr;
 
 	// Handling static variables.
 	if (isBot)
@@ -78,6 +81,7 @@ Player::Player(const Player& anotherPlayer)
 	numOfDisks = anotherPlayer.numOfDisks;
 	score = anotherPlayer.score;
 	ownNumElixer = anotherPlayer.ownNumElixer;
+	strategy = anotherPlayer.strategy;
 
 	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
@@ -114,6 +118,7 @@ Player::Player(const Player& anotherPlayer)
 Player::~Player()
 {
 	// Cards and territories must be deallocated independently since they belong to all players.
+	delete strategy;
 
 	if (bidFaci)
 	{
@@ -191,6 +196,19 @@ int Player :: getOwnNumElixer() {
 }
 int Player :: getScore() {
 	return score;
+}
+
+PlayerStrategies* Player::getStrategy()
+{
+	return strategy;
+}
+
+// Sets a strategy. Automatically deallocates memory of the previous one.
+void Player::setStrategy(PlayerStrategies* aStrategy)
+{
+	if (strategy != nullptr)
+		delete strategy;
+	strategy = aStrategy;
 }
 
 void Player::placeBotArmies(int n, Map* map)
@@ -912,6 +930,7 @@ Player& Player::operator= (const Player& anotherPlayer)
 	{
 		armies.push_back(new Army(this, army->getPosition()));
 	}
+	strategy = anotherPlayer.strategy;
 
 	return *this;
 }

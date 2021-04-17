@@ -24,6 +24,7 @@ class Army;
 class City;
 class Card;
 class BiddingFacility;
+class PlayerStrategies;
 
 // Player class.
 class Player
@@ -42,6 +43,7 @@ private:
 	list<Army*> armies;
 	int score;
 	int ownNumElixer;
+	PlayerStrategies* strategy;
 
 	// Static variables.
 	static vector<Player*> playerList;
@@ -82,6 +84,7 @@ public:
 	list<Army*>* getArmies();
 	int getScore();
 	int getOwnNumElixer();
+	PlayerStrategies* getStrategy();
 
 	// Mutators.
 	void setName(string n);
@@ -90,6 +93,7 @@ public:
 	void setNumOfDisks(int);
 	void setBidFaci(BiddingFacility*);
 	void setOwnNumElixer(int numElixer);
+	void setStrategy(PlayerStrategies*);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);
