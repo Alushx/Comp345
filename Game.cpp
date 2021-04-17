@@ -10,9 +10,8 @@
 //      Vithura Muthiah - 40062305
 //===================================================================
 
-#include "MapLoader.h"
-#include "Cards.h"
-#include "Player.h"
+#include "Game.h"
+
 
 //Deallocate MapLoader, Deck, Hand, and Players.
 // Armies, Cities, Cards, and Maps are deleted by the former 4.
