@@ -55,7 +55,7 @@ public:
 
 	// Constructors and destructors.
 	Player();
-	Player(string name, int coinNum, bool isBot = false);
+	Player(string name, int coinNum, PlayerStrategies* aStrategy = nullptr, bool isBot = false);
 	Player(const Player&);
 	~Player();
 
@@ -105,7 +105,6 @@ public:
 	static void placeBotArmies(int, Map*);
 	static int getPlayerNum();
 	static vector<Player*>& getPlayerList();
-	static Player* selectPlayer();
 	static void setStartingRegion(Territory*);
 	static Territory* getStartingRegion();
 	static Player* announcement(vector<Player*> player);
@@ -113,16 +112,12 @@ public:
 
 private:
 	// Helping methods.
-	Army* selectArmy();
 	void andOrAction(Card*, string&, Map*);
 	void playCardAction(string, Map*);
 	void moveArmiesAction(int, Map*);
 	void buildCityAction();
 	void addArmiesAction(int);
 	void destroyArmyAction();
-	Territory* selectTerritoryCurrentlyOn();
-	Territory* selectTerritoryWithCity();
-	pair<Territory*,int> selectNeighbouringTerritory(Territory*, Map*);
 	int calculateMoveBonus();
 	int calculateArmyBonus();
 	int calculateFlightBonus();

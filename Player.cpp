@@ -44,7 +44,7 @@ Player::Player()
 }
 
 // Player value constructor.
-Player::Player(string aName, int coinNum, bool isBot)
+Player::Player(string aName, int coinNum, PlayerStrategies* aStrategy, bool isBot)
 {
 	name = aName;
 	numOfCoins = coinNum;
@@ -57,7 +57,7 @@ Player::Player(string aName, int coinNum, bool isBot)
 	numOfDisks = 3;
 	score = 0; 
 	ownNumElixer = 0;
-	strategy = nullptr;
+	strategy = aStrategy;
 
 	// Handling static variables.
 	if (isBot)
@@ -526,8 +526,8 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 	{
 		cout << endl;
 		cout << name << " has " << numOfArmiesToMove << " moves left..." << endl;
-		army = selectArmy();
-		endLocation = selectNeighbouringTerritory(army->getPosition(), map);
+		army = strategy->selectArmy(armies);
+		endLocation = strategy->selectNeighbouringTerritory(army->getPosition(), map);
 
 		int flightBonus = calculateFlightBonus();
 		int moveCost = max(endLocation.second - flightBonus, 1);
@@ -550,7 +550,7 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 // Builds a city.
 void Player::buildCityAction()
 {
-	Territory* position = selectTerritoryCurrentlyOn();
+	Territory* position = strategy->selectTerritoryCurrentlyOn(armies);
 	buildCity(position);
 }
 
@@ -565,7 +565,7 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 	{
 		cout << endl;
 		cout << name << " has " << numOfArmiesToAdd - i<< " armies left to add..." << endl;
-		position = selectTerritoryWithCity();
+		position = strategy->selectTerritoryWithCity(cities);
 		placeNewArmies(position);
 	}
 }
@@ -578,239 +578,13 @@ void Player::destroyArmyAction()
 
 	do
 	{
-		player = Player::selectPlayer();
+		player = strategy->selectPlayer();
 		isImmune = player->calculateImmunityBonus();
 	} while (isImmune);
 	
-	Army* army = player->selectArmy();
+	Army* army = player->getStrategy()->selectArmy(*(player->getArmies()));
 
 	destroyArmy(army);
-}
-
-// Returns a pointer to one of the players in the game.
-Player* Player::selectPlayer()
-{
-	if (playerNum == 0)
-	{
-		cout << "There are no players to choose from." << endl;
-		return nullptr;
-	}
-
-	bool hasBot = false;
-	int playerChoice = -1;
-
-	// Lists all players and allows user to select which one.
-	do
-	{
-		cout << "There are " << playerNum << " players." << endl;
-
-		for (int i = 0; i < playerNum; i++)
-		{
-			cout << "\t " << (i + 1) << ") " << *playerList[i] << endl;
-		}
-		if (bot != NULL)
-		{
-			cout << "\t " << playerNum + 1 << ") " << *bot << endl;
-			hasBot = true;
-		}
-
-		cout << "Select a player: ";
-		cin >> playerChoice;
-
-	} while (playerChoice < 1 || playerChoice > (hasBot ? playerNum + 1 : playerNum));
-
-	// Returns pointer to player.
-	if (playerChoice == playerNum + 1)
-		return bot;
-	else
-		return playerList[playerChoice - 1];
-}
-
-// Select one of the player's armies.
-Army* Player::selectArmy()
-{
-	if (armies.size() == 0)
-	{
-		cout << "There are no armies to choose from." << endl;
-		return nullptr;
-	}
-
-	int playerChoice = -1;
-	int i = 0;
-
-	// Prints all armies and allows player to select one.
-	do
-	{
-		cout << name << " has " << armies.size() << " armies." << endl;
-
-		i = 0;
-		for (Army* army : armies)
-		{
-			cout << "\t " << (i + 1) << ") " << *army << " in " << army->getPosition()->getName() << endl;
-			i++;
-		}
-
-		cout << "Choose an army: ";
-		cin >> playerChoice;
-	} while (playerChoice > armies.size() || playerChoice <= 0);
-
-	// Iterates over the list of armies to return the army.
-	int j = 0;
-	for (list<Army*>::iterator armyIterator = armies.begin(); armyIterator != armies.end(); armyIterator++)
-	{
-		j++;
-		if (j == playerChoice)
-		{
-			return *armyIterator;
-		}
-	}
-
-	return nullptr;
-}
-
-// Helps player choose a territory to build a city on.
-Territory* Player::selectTerritoryCurrentlyOn()
-{
-	if (armies.size() == 0)
-	{
-		cout << "There are no territories to choose from." << endl;
-		return nullptr;
-	}
-
-	map<Territory*, Territory*> territoriesCurrentlyOn = map<Territory*, Territory*>();
-	
-	// Make a set of all territories currently on.
-	for (Army* army : armies)
-	{
-		territoriesCurrentlyOn[army->getPosition()] = army->getPosition();
-	}
-
-	int playerChoice = -1;
-	int i = 0;
-	Territory* territory = nullptr;
-
-	// Prints all territories and allows player to select one.
-	do
-	{
-		i = 0;
-
-		for (pair<Territory*, Territory*> territoryPair : territoriesCurrentlyOn)
-		{
-			territory = territoryPair.first;
-			cout << "\t " << (i + 1) << ") " << *territory << endl;
-			i++;
-		}
-
-		// Player makes a choice.
-		cout << "Choose a territory: ";
-		cin >> playerChoice;
-
-	} while (playerChoice > armies.size() || playerChoice <= 0);
-	
-	int j = 1;
-
-	// Looping through and finding the territory again.
-	for (pair<Territory*, Territory*> territoryPair : territoriesCurrentlyOn)
-	{
-		if (j == playerChoice)
-		{
-			return territoryPair.first;
-		}
-		j++;
-	}
-
-	// Returning null if nothing found.
-	return nullptr;
-}
-
-// Helps player choose a territory to build an army on.
-Territory* Player::selectTerritoryWithCity()
-{
-	int i = 0;
-	int playerChoice = -1;
-	
-	// Display options for player.
-	do
-	{
-		cout << "Choose one of the following territories with cities." << endl;
-
-		i = 1;
-
-		cout << "\t 1) Starting Region" << endl;
-
-		for (City* city : cities)
-		{
-			cout << "\t " << (++i) << ") " << *(city->getPosition()) << endl;
-		} 
-
-		cout << "Select a territory: ";
-		cin >> playerChoice;
-
-	} while (playerChoice <= 0 || playerChoice > (cities.size() + 1));
-
-	// Special case when starting region is selected.
-	if (playerChoice == 1)
-	{
-		return getStartingRegion();
-	}
-	
-	int j = 2; // Other cities start from 2 in the player's eyes.
-
-	// Loops through list and returns the appropriate position.
-	for (City* city : cities)
-	{
-		if (playerChoice == j++)
-		{
-			return city->getPosition();
-		}
-	}
-
-	cout << "\n DEBUG Player::selectTerritoryWithCity() - city not found. j = " << j << endl;
-	return nullptr;
-}
-
-// Helps player choose a territory to move an army to.
-pair<Territory*,int> Player::selectNeighbouringTerritory(Territory* currentTerritory, Map* map)
-{
-	std::map<Territory*, int> adjacentTerritories = map->getAdjacentTerritories(currentTerritory);
-
-	int i = 0;
-	int playerChoice = -1;
-
-	do
-	{
-		i = 1;
-		playerChoice = -1;
-
-		cout << "Select the neighbouring territory: " << endl;
-
-		// Display all options.
-		for (pair<Territory*, int> neighbour : adjacentTerritories)
-		{
-			cout << "\t " << i++ << ") " << neighbour.first->getName() << ". Move cost: " << neighbour.second << endl;
-		}
-
-		cout << "Select the neighbouring territory you want: ";
-		cin >> playerChoice;
-
-	} while (playerChoice <= 0 || playerChoice > adjacentTerritories.size());
-
-	int j = 1;
-	
-	// Find the option and return it.
-	for (pair<Territory*, int> neighbour : adjacentTerritories)
-	{
-		if (j == playerChoice)
-		{
-			return neighbour;
-		}
-
-		j++;
-	}
-
-	// This should never happen.
-	cout << "Error! Neighbouring territory not found!" << endl;
-	return pair<Territory*, int>(nullptr, -1);
 }
 
 // Iterates over all cards in the player hand and counts the 
