@@ -218,7 +218,7 @@ void createPlayers()
 	// Seeing how many players there are.
 	do
 	{
-		cout << "\n Please enter the number of players in the game: ";
+		cout << "Please enter the number of players in the game: ";
 		cin >> numOfPlayers;
 	} while (numOfPlayers <= 1 || numOfPlayers > 4);
 

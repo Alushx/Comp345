@@ -14,13 +14,13 @@
 // This is also the main driver for the entire assignment.
 //===================================================================
 
-#include "Map.h"
-#include "BiddingFacility.h"
-#include "Player.h"
-#include "Cards/Cards.h"
-#include "Maploader/MapLoader.h"
+#include "../Map.h"
+#include "../BiddingFacility.h"
+#include "../Player.h"
+#include "../Cards.h"
+#include "../MapLoader.h"
 #include <vector>
-#include "Game.h"
+#include "../Game.h"
 
 using namespace std;
 
@@ -48,7 +48,7 @@ int main()
 	placeBotArmies(mapLoader);
 
 	// Main game loop
-	playGame(hand, bidWinner, mapLoader);
+	playGame(hand, bidWinner, mapLoader, 1);
 
 	// Compute score
 	calculateScore(mapLoader);

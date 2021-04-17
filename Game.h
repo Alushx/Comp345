@@ -15,6 +15,7 @@
 #include "MapLoader.h"
 #include "Cards.h"
 #include "Player.h"
+#include "GameObservers.h"
 
 void deallocateResources(MapLoader* mapLoader, Deck* deck, Hand* hand);
 int selectBidWinner();

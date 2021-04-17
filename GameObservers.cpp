@@ -268,7 +268,7 @@ void TurnView::display()
 
 // Constructors & destructor
 GameState::GameState() {
-	Map* map = nullptr;
+	map = nullptr;
 	coins = vector<int>(Player::getPlayerNum());
 	continents = vector<int>(Player::getPlayerNum());
 	victoryPoints = vector<int>(Player::getPlayerNum());
@@ -276,9 +276,9 @@ GameState::GameState() {
 	elixirAmount = vector<int>(Player::getPlayerNum());
 }
 
-GameState::GameState(Map* map)
+GameState::GameState(Map* aMap)
 {
-	Map* map = map;
+	map = aMap;
 	coins = vector<int>(Player::getPlayerNum());
 	continents = vector<int>(Player::getPlayerNum());
 	victoryPoints = vector<int>(Player::getPlayerNum());
@@ -300,7 +300,7 @@ GameState::GameState(const GameState& other) {
 GameState::~GameState()
 {
 	// Map is deleted outside of this class.
-	Map* map = nullptr;
+	map = nullptr;
 }
 
 // Accessors & Mutators
