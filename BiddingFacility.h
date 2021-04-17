@@ -12,7 +12,6 @@
 
 #pragma once
 
-#include "BiddingFacility.h"
 #include <vector>
 #include "Player.h"
 
