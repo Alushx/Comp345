@@ -433,27 +433,30 @@ string ModerateComputer::displayCurrentStrategy() {
     return "Moderate Computer";
 }
 
-// ============================================
-// Strategy Implementation
-// ============================================
+// ===========================================================================
+// Constructors, destructors, and operations to meet assignment requirements.
+// ===========================================================================
 
-Strategy::Strategy(PlayerStrategies* otherStrategy = nullptr) : playerStrategy(otherStrategy) {}
+PlayerStrategies::PlayerStrategies() {}
+HumanPlayer::HumanPlayer() {}
+GreedyComputer::GreedyComputer() {}
+ModerateComputer::ModerateComputer() {}
 
-Strategy::~Strategy() {
-    delete this->playerStrategy;
-}
+PlayerStrategies::PlayerStrategies(const PlayerStrategies&) {}
+HumanPlayer::HumanPlayer(const HumanPlayer&) {}
+GreedyComputer::GreedyComputer(const GreedyComputer&) {}
+ModerateComputer::ModerateComputer(const ModerateComputer&) {}
 
+PlayerStrategies::~PlayerStrategies() {}
+HumanPlayer::~HumanPlayer() {}
+GreedyComputer::~GreedyComputer() {}
+ModerateComputer::~ModerateComputer() {}
 
-void Strategy::set_strategy(PlayerStrategies* otherStrategy) {
-    delete this->playerStrategy;
-    this->playerStrategy = otherStrategy;
-}
+ostream& operator <<(ostream& output, const PlayerStrategies& other) { return output << "Abstract PlayerStrategies"; }
+ostream& operator <<(ostream& output, const HumanPlayer& other) { return output << "HumanPlayer"; }
+ostream& operator <<(ostream& output, const GreedyComputer& other) { return output << "GreedyComputer"; }
+ostream& operator <<(ostream& output, const ModerateComputer& other) { return output << "ModerateComputer"; }
 
-// Not sure if these two functions belong in here
-int Strategy::pickCard(Hand* hand) {
-
-}
-
-string Strategy::displayCurrentStrategy() {
-
-}
+HumanPlayer HumanPlayer::operator =(const HumanPlayer& other) { return other; };
+GreedyComputer GreedyComputer::operator =(const GreedyComputer& other) { return other; };
+ModerateComputer ModerateComputer::operator =(const ModerateComputer& other) { return other; };
