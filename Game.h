@@ -32,3 +32,5 @@ Turn* createTurns(int selectedMode, Map* map, Hand* hand);
 string chooseFile();
 MapLoader* loadValidMap(string fileName);
 void createPlayers();
+void changePlayerStrategy(Player* player);
+bool shouldChangeStrategy(Player* player);

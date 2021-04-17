@@ -12,6 +12,7 @@
 
 #include "Game.h"
 #include "GameObservers.h"
+#include "PlayerStrategies.h"
 
 
 //Deallocate MapLoader, Deck, Hand, and Players.
@@ -239,4 +240,50 @@ void createPlayers()
 
 	if (numOfPlayers == 2)
 		new Player("BOT", 999, nullptr, true);
+}
+
+// Receives player input to change strategy.
+void changePlayerStrategy(Player* player)
+{
+	char response = 'a';
+
+	if (player->getStrategy() == nullptr || shouldChangeStrategy(player))
+	{
+		do
+		{
+			cout << "1) Human Player" << endl;
+			cout << "2) Greedy Bot" << endl;
+			cout << "3) Moderate Bot" << endl;
+			cout << "Select a strategy: ";
+			cin >> response;
+		} while (response != '1' && response != '2' && response != '3');
+
+		switch (response)
+		{
+		case '1':
+			player->setStrategy(new HumanPlayer);
+			break;
+		case '2':
+			player->setStrategy(new GreedyComputer);
+			break;
+		case '3':
+			player->setStrategy(new ModerateComputer);
+			break;
+		}
+	}
+}
+
+// Asks player if they should change strategy or not.
+bool shouldChangeStrategy(Player* player)
+{
+	char response = 'a';
+
+	do
+	{
+		cout << "Do you want to change " << player->getName() << "'s strategy? (y/n)";
+		cin >> response;
+	} while (response != 'y' && response != 'n');
+	
+	return response == 'y';
+
 }
