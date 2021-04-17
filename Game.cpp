@@ -159,7 +159,7 @@ MapLoader* startGame()
     }
 
     if (numOfPlayers == 2)
-        new Player("BOT", 999, true);
+        new Player("BOT", 999, nullptr, true);
 
     // Armies, tokens, cities, and bidding facility is all created within each instance of Player.
     return mapLoader;
