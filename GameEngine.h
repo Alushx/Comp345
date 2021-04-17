@@ -9,6 +9,6 @@ class GameEngine{
 public:
     int selectGameMode();
     void singleGame(int selectedMode);
-    void tournamentGame(int selectedMode) : subject(s);
+    void tournamentGame(int selectedMode);
 
 };
