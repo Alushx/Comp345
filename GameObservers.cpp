@@ -205,28 +205,28 @@ const Turn& Turn::operator =(const Turn& anotherTurn)
 // Game Implementation
 // ============================================
 
-Game::Game() 
+TurnView::TurnView() 
 {
 	_subject = nullptr;
 };
 
-Game::Game(Turn* t) 
+TurnView::TurnView(Turn* t) 
 {
 	_subject = t;
 	_subject->Attach(this);
 };
 
-Game::~Game()
+TurnView::~TurnView()
 {
 	_subject->Detach(this);
 };
 
-void Game::Update()
+void TurnView::Update()
 {
 	display();
 };
 
-void Game::display() 
+void TurnView::display() 
 {
 
 	cout << "Player: " <<_subject->getPlayerTurn() << ", selected : " << _subject->getSelectedCard()

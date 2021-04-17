@@ -79,12 +79,12 @@ public:
 	const Turn& operator =(const Turn&);
 };
 
-class Game : public Observer
+class TurnView : public Observer
 {
 public :
-	Game();
-	Game(Turn* t);
-	~Game();
+	TurnView();
+	TurnView(Turn* t);
+	~TurnView();
 	void Update();
 	void display();
 private:
