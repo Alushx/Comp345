@@ -16,6 +16,7 @@
 #include "Cards.h"
 #include "Map.h"
 #include "Game.h"
+
 using namespace std;
 
 // ============================================
@@ -85,6 +86,7 @@ Turn::Turn()
 	gameHand = nullptr;
 	gameMap = nullptr;
 	maxNumOfTurns = 0;
+	selectedIndex = -1;
 }
 
 // Parameterized constructor. Sets selectedCard to nullptr.
@@ -95,6 +97,7 @@ Turn::Turn(int maxTurn, Map* map, Hand* hand, Player* player)
 	playerTurn = player;
 	selectedCard = nullptr;
 	maxNumOfTurns = maxTurn;
+	selectedIndex = -1;
 }
 
 // Copy constructor. Creates a shallow copy of everything because the Turn shouldn't 
@@ -106,6 +109,7 @@ Turn::Turn(const Turn& anotherTurn)
 	playerTurn = anotherTurn.playerTurn;
 	selectedCard = anotherTurn.selectedCard;
 	maxNumOfTurns = anotherTurn.maxNumOfTurns;
+	selectedIndex = anotherTurn.selectedIndex;
 }
 
 // Deconstructor. Doesn't actually do anything, because the members are used elsewhere. 
@@ -178,7 +182,22 @@ int Turn::getMaxNumOfTurns()
 void Turn::setMaxNumOfTurns(int newMax)
 {
 	maxNumOfTurns = newMax;
+	Notify();
 }
+
+// Accessor for the index of the currently selected card.
+int Turn::getSelectedIndex()
+{
+	return selectedIndex;
+}
+
+// Mutator for the index of the currently selected card.
+void Turn::setSelectedIndex(int newIndex)
+{
+	selectedIndex = newIndex;
+}
+
+
 
 // Method that selects a card based on the player strategy, pays the cost of the card, and plays the card.
 void Turn::playTurn()
@@ -198,6 +217,7 @@ void Turn::playTurn()
 		card = gameHand->exchange(index, playerTurn);
 	} while (card == nullptr);
 
+	setSelectedIndex(index);
 	setSelectedCard(card);
 	playerTurn->playCard(card, gameMap);
 }
@@ -373,11 +393,12 @@ View :: View(){
 // Parameterized constructor
 View :: View(GameState * gt){
 	gmstate = gt;
+	gt->Attach(this);
 }
 //Destructor
 View :: ~View(){
-	delete gmstate;
-	gmstate=NULL;
+	// Game state deletes this. Not the other way around.
+	gmstate->Detach(this);
 }
 
 //Display bar graph of a player
@@ -416,3 +437,140 @@ void View::Update()
 		display(i);
 	}
 }
+
+//=========================================
+// CardPickViewer and PlayerTurnViewer
+//=========================================
+
+// Default constructor for PlayerTurnViewer.
+PlayerTurnViewer::PlayerTurnViewer()
+{
+	subject = nullptr;
+	playerTurn = nullptr;
+	turnCount = 0;
+}
+
+// Parameterized constructor. Takes care of attaching.
+PlayerTurnViewer::PlayerTurnViewer(Turn* turn)
+{
+	subject = turn;
+	playerTurn = turn->getPlayerTurn();
+	turnCount = 0;
+	turn->Attach(this);
+}
+
+// Copy constructor. Takes care of attaching to subject.
+PlayerTurnViewer::PlayerTurnViewer(const PlayerTurnViewer& other)
+{
+	subject = other.subject;
+	playerTurn = other.playerTurn;
+	turnCount = other.turnCount;
+	subject->Attach(this);
+}
+
+// Destructor. Holds no values itself, so only detaches.
+PlayerTurnViewer::~PlayerTurnViewer()
+{
+	// Nothing dynamically allocated in this class, so nothing to delete.
+	subject->Detach(this);
+}
+
+// Prints the turn # and the player whose turn it is.
+void PlayerTurnViewer::Update()
+{
+	if (subject->getPlayerTurn() != playerTurn)
+	{
+		playerTurn = subject->getPlayerTurn();
+		turnCount++;
+		cout << "Turn " << (turnCount / Player::getPlayerNum()) + 1 << ": " << playerTurn->getName() << " is now playing!" << endl;
+	}
+}
+
+// Outputs class name.
+ostream& operator <<(ostream& strm, const PlayerTurnViewer& obj)
+{
+	return strm << "PlayerTurnViewer";
+}
+
+// Assigns shallow copy of members. Automatically attaches and detaches as needed.
+PlayerTurnViewer PlayerTurnViewer::operator =(const PlayerTurnViewer& other)
+{
+	if (&other == this)
+		return *this;
+
+	// No need to delete any memory since everything is dynamic.
+	// As an observer, you should not have a deep copy. So things are shallow.
+	subject->Detach(this);
+	subject = other.subject;
+	playerTurn = other.playerTurn;
+	turnCount = other.turnCount;
+	subject->Attach(this);
+
+	return *this;
+}
+
+// Default constructor.
+CardPickViewer::CardPickViewer()
+{
+	subject = nullptr;
+	selectedCard = nullptr;
+}
+
+// Parameterized constructor. Attaches as needed.
+CardPickViewer::CardPickViewer(Turn* turn)
+{
+	subject = turn;
+	selectedCard = turn->getSelectedCard();
+	subject->Attach(this);
+}
+
+// Copy constructor. Attaches as needed.
+CardPickViewer::CardPickViewer(const CardPickViewer& other)
+{
+	subject = other.subject;
+	selectedCard = other.selectedCard;
+	subject->Attach(this);
+}
+
+// Deconstructor. Only detaches.
+CardPickViewer::~CardPickViewer()
+{
+	subject->Detach(this);
+}
+
+// Outputs the card name, index, and cost.
+void CardPickViewer::Update()
+{
+	int indexCosts[] = { 0,1,1,2,2,3 };
+	Card;
+	if (selectedCard != subject->getSelectedCard())
+	{
+		selectedCard = subject->getSelectedCard();
+
+		cout << subject->getPlayerTurn()->getName() << " has selected " << selectedCard->getGood() << " in index " << subject->getSelectedIndex()
+			<< " and has paid " << indexCosts[subject->getSelectedIndex()] << " for it." << endl;
+	}
+}
+
+// Outputs class name.
+ostream& operator <<(ostream& stream, const CardPickViewer& obj)
+{
+	return stream << "CardPickViewer";
+}
+
+// Assigns members. Attaches and detaches as required.
+CardPickViewer CardPickViewer::operator =(const CardPickViewer& other)
+{
+	if (&other == this)
+		return *this;
+
+	// No need to delete stuff.
+	subject->Detach(this);
+	subject = other.subject;
+	selectedCard = other.selectedCard;
+	subject->Attach(this);
+
+	return *this;
+}
+
+

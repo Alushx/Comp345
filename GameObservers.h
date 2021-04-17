@@ -54,6 +54,7 @@ private:
 	Hand* gameHand;
 	Map* gameMap;
 	int maxNumOfTurns;
+	int selectedIndex;
 
 public:
 	// Constructors and destructors.
@@ -73,6 +74,8 @@ public:
 	void setGameMap(Map*);
 	int getMaxNumOfTurns();
 	void setMaxNumOfTurns(int);
+	int getSelectedIndex();
+	void setSelectedIndex(int);
 
 	// Service methods.
 	void playTurn();
@@ -94,6 +97,50 @@ private:
 	Turn* _subject;
 };
 
+// An observer that updates whenever it's a new player's turn.
+class PlayerTurnViewer : public Observer
+{
+public:
+	// Constructors and destructors.
+	PlayerTurnViewer();
+	PlayerTurnViewer(Turn* turn);
+	PlayerTurnViewer(const PlayerTurnViewer& other);
+	~PlayerTurnViewer();
+
+	// Important method.
+	void Update();
+
+	// Operators.
+	friend ostream& operator <<(ostream& stream, const PlayerTurnViewer& obj);
+	PlayerTurnViewer operator =(const PlayerTurnViewer& other);
+
+private:
+	Turn* subject;
+	Player* playerTurn;
+	int turnCount;
+};
+
+// An observer that updates whenever it's a new player's turn.
+class CardPickViewer : public Observer
+{
+public:
+	// Constructors and destructors.
+	CardPickViewer();
+	CardPickViewer(Turn* turn);
+	CardPickViewer(const CardPickViewer& other);
+	~CardPickViewer();
+
+	// Important method.
+	void Update();
+
+	// Operators.
+	friend ostream& operator <<(ostream& stream, const CardPickViewer& obj);
+	CardPickViewer operator =(const CardPickViewer& other);
+
+private:
+	Turn* subject;
+	Card* selectedCard;
+};
 
 class GameState : public Subject {
 private:

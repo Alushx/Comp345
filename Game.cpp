@@ -110,7 +110,10 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	int playerNum = Player::getPlayerNum();
 	Turn* turn = createTurns(selectedMode, mapLoader->getMap(), hand);
 
-	turn->Attach(new TurnView(turn));
+	// Adding observers. Automatically deleted by subject.
+	new TurnView(turn);
+	new PlayerTurnViewer(turn);
+	new CardPickViewer(turn);
 
 	// Main game loop.
 	for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
