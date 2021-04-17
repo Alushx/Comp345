@@ -218,3 +218,20 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 		}
 	}
 }
+
+// Displays the tournament results as a table.
+void displayTournamentResults()
+{
+	cout << "=========================================================" << endl;
+	cout << "||   Player #   ||   Cards   ||   Score   ||   Coins   ||" << endl;
+
+	int i = 0;
+	for (Player* player : Player::getPlayerList())
+	{
+		cout << "=========================================================" << endl;
+		cout << "||       " << ++i << "      ||     " << player->getPlayerHand()->size() << "    ||     "
+			<< player->getScore() << "     ||     " << player->getCoins() << "     ||" << endl;
+	}
+
+	cout << "=========================================================" << endl;
+}
