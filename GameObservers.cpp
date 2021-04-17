@@ -398,7 +398,6 @@ View :: View(GameState * gt){
 //Destructor
 View :: ~View(){
 	// Game state deletes this. Not the other way around.
-	gmstate->Detach(this);
 }
 
 //Display bar graph of a player
@@ -472,7 +471,6 @@ PlayerTurnViewer::PlayerTurnViewer(const PlayerTurnViewer& other)
 PlayerTurnViewer::~PlayerTurnViewer()
 {
 	// Nothing dynamically allocated in this class, so nothing to delete.
-	subject->Detach(this);
 }
 
 // Prints the turn # and the player whose turn it is.
@@ -535,7 +533,7 @@ CardPickViewer::CardPickViewer(const CardPickViewer& other)
 // Deconstructor. Only detaches.
 CardPickViewer::~CardPickViewer()
 {
-	subject->Detach(this);
+
 }
 
 // Outputs the card name, index, and cost.

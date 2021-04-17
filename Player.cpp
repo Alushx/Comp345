@@ -570,7 +570,7 @@ void Player::destroyArmyAction()
 		isImmune = player->calculateImmunityBonus();
 	} while (isImmune);
 	
-	Army* army = player->getStrategy()->selectArmy(*(player->getArmies()));
+	Army* army = strategy->selectArmy(*(player->getArmies()));
 
 	destroyArmy(army);
 }

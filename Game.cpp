@@ -111,7 +111,6 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	Turn* turn = createTurns(selectedMode, mapLoader->getMap(), hand);
 
 	// Adding observers. Automatically deleted by subject.
-	new TurnView(turn);
 	new PlayerTurnViewer(turn);
 	new CardPickViewer(turn);
 
@@ -238,7 +237,7 @@ void createPlayers()
 	for (int i = 1; i <= numOfPlayers; i++) {
 		cout << "Player " << i << " last name: " << std::endl;
 		cin >> lName;
-		new Player(lName, coins);
+		new Player(lName, coins, new HumanPlayer);
 	}
 
 	if (numOfPlayers == 2)
