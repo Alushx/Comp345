@@ -45,7 +45,7 @@ private:
     bool verifyContinent(std::istringstream&);
     bool verifyJoin(std::istringstream&);
     bool verifyBoard(std::istringstream&);
-    friend ostream& operator<<(ostream&, const MapLoader&);
+    friend std::ostream& operator<<(std::ostream&, const MapLoader&);
 };
 
 // Forward declaration to make compiler happy.

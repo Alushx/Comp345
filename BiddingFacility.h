@@ -15,17 +15,13 @@
 #include <vector>
 #include "Player.h"
 
-using namespace std;
-
 // Forward Declaration
 class Player;
-
 
 class BiddingFacility {
 
 private:
     int *bid;
-
 
 public:
     // Constructor
@@ -41,12 +37,12 @@ public:
     BiddingFacility& operator= (const BiddingFacility&);
 private:
     //Stream insertion operator
-    friend ostream& operator << (ostream& out, const BiddingFacility &bf);
+    friend std::ostream& operator << (std::ostream& out, const BiddingFacility &bf);
     
 
 public:
     // Game Methods
-   static int biddingPhase(vector<Player*>& player);
+   static int biddingPhase(std::vector<Player*>& player);
    void setBid(int bid);
    int getBid() const;
 };

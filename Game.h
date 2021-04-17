@@ -29,6 +29,6 @@ MapLoader* startGame();
 void playGame(Hand* hand, int, MapLoader* mapLoader, int selectedMode);
 void displayTournamentResults();
 Turn* createTurns(int selectedMode, Map* map, Hand* hand);
-string chooseFile();
-MapLoader* loadValidMap(string fileName);
+std::string chooseFile();
+MapLoader* loadValidMap(std::string fileName);
 void createPlayers();

@@ -4,7 +4,6 @@
 #include "Cards.h"
 #include "Player.h"
 #include "Map.h"
-using namespace std;
 
 //Abstract Class
 class PlayerStrategies{
@@ -17,18 +16,18 @@ public:
 
     // Main operations.
     virtual int pickCard(Hand *hand) = 0;
-    virtual string displayCurrentStrategy() = 0;
+    virtual std::string displayCurrentStrategy() = 0;
     
     // Helpful methods for strategy.
     virtual Player* selectPlayer();
-    virtual Army* selectArmy(list<Army*> armies);
-    virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
-    virtual Territory* selectTerritoryWithCity(list<City*> cities);
-    virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
+    virtual Army* selectArmy(std::list<Army*> armies);
+    virtual Territory* selectTerritoryCurrentlyOn(std::list<Army*> armies);
+    virtual Territory* selectTerritoryWithCity(std::list<City*> cities);
+    virtual std::pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
     virtual int selectOrAction(Card* card) = 0;
 
     // Operators.
-    friend ostream& operator <<(ostream& output, const PlayerStrategies&);
+    friend std::ostream& operator <<(std::ostream& output, const PlayerStrategies&);
 };
 
 //Human player: requires user interaction to make decisions
@@ -41,18 +40,18 @@ public:
 
     // Main operations.
     virtual int pickCard(Hand *hand);
-    virtual string displayCurrentStrategy();
+    virtual std::string displayCurrentStrategy();
 
     // Overrided methods in human player.
     virtual Player* selectPlayer();
-    virtual Army* selectArmy(list<Army*> armies);
-    virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
-    virtual Territory* selectTerritoryWithCity(list<City*> cities);
-    virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
+    virtual Army* selectArmy(std::list<Army*> armies);
+    virtual Territory* selectTerritoryCurrentlyOn(std::list<Army*> armies);
+    virtual Territory* selectTerritoryWithCity(std::list<City*> cities);
+    virtual std::pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
     virtual int selectOrAction(Card* card);
 
     // Operators.
-    friend ostream& operator <<(ostream& output, const HumanPlayer&);
+    friend std::ostream& operator <<(std::ostream& output, const HumanPlayer&);
     HumanPlayer operator =(const HumanPlayer&);
 };
 
@@ -67,11 +66,11 @@ class GreedyComputer : public PlayerStrategies{
 
     // Helpful methods.
     virtual int pickCard(Hand *hand);
-    virtual string displayCurrentStrategy();
+    virtual std::string displayCurrentStrategy();
     virtual int selectOrAction(Card* card);
 
     // Operators.
-    friend ostream& operator <<(ostream& output, const GreedyComputer&);
+    friend std::ostream& operator <<(std::ostream& output, const GreedyComputer&);
     GreedyComputer operator =(const GreedyComputer&);
 };
 
@@ -85,10 +84,10 @@ class ModerateComputer : public PlayerStrategies{
 
     // Helpful methods.
     virtual int pickCard(Hand *hand);
-    virtual string displayCurrentStrategy();
+    virtual std::string displayCurrentStrategy();
     virtual int selectOrAction(Card* card);
 
     // Operators.
-    friend ostream& operator <<(ostream& output, const ModerateComputer&);
+    friend std::ostream& operator <<(std::ostream& output, const ModerateComputer&);
     ModerateComputer operator =(const ModerateComputer&);
 }; 
