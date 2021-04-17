@@ -1,12 +1,24 @@
 #pragma once
 #include <string.h>
+#include <list>
 #include "Cards.h"
+#include "Player.h"
+#include "Map.h"
 using namespace std;
+
 //Abstract Class
 class PlayerStrategies{
 public:
     virtual int pickCard(Hand *hand) = 0;
     virtual string displayCurrentStrategy() = 0;
+    
+    // Helpful methods for strategy.
+    virtual Player* selectPlayer();
+    virtual Army* selectArmy(list<Army*> armies);
+    virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
+    virtual Territory* selectTerritoryWithCity(list<City*> cities);
+    virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
+
 };
 
 
@@ -29,6 +41,13 @@ class HumanPlayer : public PlayerStrategies{
     public:
     virtual int pickCard(Hand *hand);
     virtual string displayCurrentStrategy();
+
+    // Overrided methods in human player.
+    virtual Player* selectPlayer();
+    virtual Army* selectArmy(list<Army*> armies);
+    virtual Territory* selectTerritoryCurrentlyOn(list<Army*> armies);
+    virtual Territory* selectTerritoryWithCity(list<City*> cities);
+    virtual pair<Territory*, int> selectNeighbouringTerritory(Territory*, Map*);
 };
 
 //Greedy Computer: player that focuses on building cities or destroying opponents
