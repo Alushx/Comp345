@@ -11,6 +11,7 @@
 //===================================================================
 
 #include "GameObservers.h"
+#include "PlayerStrategies.h"
 #include "Player.h"
 #include "Cards.h"
 #include "Map.h"
@@ -157,7 +158,23 @@ void Turn::setGameMap(Map* map)
 // Method that selects a card based on the player strategy, pays the cost of the card, and plays the card.
 void Turn::playTurn()
 {
-	// Depends on the implementation of PlayerStrategies and their selectCard().
+	gameHand->printHand();
+	int index = - 1;
+	Card* card = nullptr;
+	
+	do
+	{
+		index = playerTurn->getStrategy()->pickCard(gameHand);
+		
+		// Player skips their turn.
+		if (index < 0 || index > 5)
+			return;
+
+		card = gameHand->exchange(index, playerTurn);
+	} while (card == nullptr);
+
+	setSelectedCard(card);
+	playerTurn->playCard(card, gameMap);
 }
 
 // Overloaded stream insertion operator. Just displays the player whose turn it is.
