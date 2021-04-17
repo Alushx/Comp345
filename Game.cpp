@@ -96,72 +96,10 @@ void determineWinner() {
 // Note that the player have to be retrieved with the static Player method.
 MapLoader* startGame()
 {
-    MapLoader* mapLoader = new MapLoader();
-    int numOfPlayers;
-    int playerChoice;
-    string fileName;
-
-    // Hard coded.
-    const int NUMBER_OF_VALID_MAPS = 4;
-    string validMaps[NUMBER_OF_VALID_MAPS] = { "map1.txt", "map2.txt", "map3.txt","map4.txt" };
-
-    // Player chooses a file.
-    do
-    {
-        cout << "Please select a map: " << endl;
-
-        for (int i = 1; i <= NUMBER_OF_VALID_MAPS; i++)
-        {
-            cout << "\t" << i << ") " << validMaps[i - 1] << endl;
-        }
-
-        cin >> playerChoice;
-
-    } while (playerChoice < 1 || playerChoice > NUMBER_OF_VALID_MAPS);
-
-    fileName = validMaps[playerChoice - 1];
-    
-    // Seeing how many players there are.
-    do
-    {
-        cout << "\n Please enter the number of players in the game: ";
-        cin >> numOfPlayers;
-    } while (numOfPlayers <= 1 || numOfPlayers > 4);
-
-    // Creating map.
-    if (!mapLoader->verifyFile(fileName))
-    {
-        std::cout << "ERROR! INVALID FILE!" << std::endl;
-        exit(1);
-    }
-
-    mapLoader->readMapFile(fileName, numOfPlayers);
-
-    if (!mapLoader->getMap()->validate())
-    {
-        exit(1);
-    }
-
-    int coins = 0;
-    string lName;
-
-    //Determine number of coins allocated based on number of players
-    if (numOfPlayers == 4) coins = 9;
-    if (numOfPlayers == 3) coins = 11;
-    if (numOfPlayers == 2) coins = 14;
-
-    // Create all players. Can later be retrieved through the static method.
-    for (int i = 1; i <= numOfPlayers; i++) {
-        cout << "Player " << i << " last name: " << std::endl;
-        cin >> lName;
-        new Player(lName, coins);
-    }
-
-    if (numOfPlayers == 2)
-        new Player("BOT", 999, nullptr, true);
-
-    // Armies, tokens, cities, and bidding facility is all created within each instance of Player.
-    return mapLoader;
+	// Armies, tokens, cities, and bidding facility is all created within each instance of Player.
+	createPlayers();
+	string fileName = chooseFile();
+	return loadValidMap(fileName);
 }
 
 void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
@@ -219,4 +157,86 @@ Turn* createTurns(int selectedMode, Map* map, Hand* hand)
 	}
 	else 
 		return new Turn(20, map, hand);
+}
+
+// Allows the player to select a map file that's currently available, and returns the file's name.
+string chooseFile()
+{
+	int playerChoice;
+
+	// Hard coded files.
+	const int NUMBER_OF_VALID_MAPS = 4;
+	string validMaps[NUMBER_OF_VALID_MAPS] = { "map1.txt", "map2.txt", "map3.txt","map4.txt" };
+
+	// Player chooses a file.
+	do
+	{
+		cout << "Please select a map: " << endl;
+
+		for (int i = 1; i <= NUMBER_OF_VALID_MAPS; i++)
+		{
+			cout << "\t" << i << ") " << validMaps[i - 1] << endl;
+		}
+
+		cin >> playerChoice;
+
+	} while (playerChoice < 1 || playerChoice > NUMBER_OF_VALID_MAPS);
+
+	return validMaps[playerChoice - 1];
+}
+
+// Verifies file is in the correct format, creates a map based on file content, and then validates the map.
+// Finally returns the mapLoader for further usage.
+MapLoader* loadValidMap(string fileName)
+{
+	MapLoader* mapLoader = new MapLoader();
+
+	// Creating map.
+	if (!mapLoader->verifyFile(fileName))
+	{
+		std::cout << "ERROR! INVALID FILE!" << std::endl;
+		exit(1);
+	}
+
+	mapLoader->readMapFile(fileName, Player::getPlayerNum());
+
+	if (!mapLoader->getMap()->validate())
+	{
+		exit(1);
+	}
+
+	return mapLoader;
+}
+
+// Asks for the number of players.
+// Creates them with the right amount of coins.
+// And creates a bot if needed.
+void createPlayers()
+{
+	int numOfPlayers;
+
+	// Seeing how many players there are.
+	do
+	{
+		cout << "\n Please enter the number of players in the game: ";
+		cin >> numOfPlayers;
+	} while (numOfPlayers <= 1 || numOfPlayers > 4);
+
+	int coins = 0;
+	string lName;
+
+	//Determine number of coins allocated based on number of players
+	if (numOfPlayers == 4) coins = 9;
+	if (numOfPlayers == 3) coins = 11;
+	if (numOfPlayers == 2) coins = 14;
+
+	// Create all players. Can later be retrieved through the static method.
+	for (int i = 1; i <= numOfPlayers; i++) {
+		cout << "Player " << i << " last name: " << std::endl;
+		cin >> lName;
+		new Player(lName, coins);
+	}
+
+	if (numOfPlayers == 2)
+		new Player("BOT", 999, nullptr, true);
 }
