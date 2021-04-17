@@ -25,6 +25,7 @@ class City;
 class Card;
 class BiddingFacility;
 class PlayerStrategies;
+class Hand;
 
 // Player class.
 class Player
@@ -71,6 +72,7 @@ public:
 	Player* computeScore(Map* map);
 	void playCard(Card*, Map*);
 	int computeContinentsOwned(Map*);
+	int executeStrategy(Hand*);
 
 	// Accessors.
 	string getName();

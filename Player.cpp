@@ -794,6 +794,11 @@ Player* Player::announcement(vector<Player*> player)
 	return winner;
 }
 
+int Player::executeStrategy(Hand* hand)
+{
+	return this->strategy->pickCard(hand);
+}
+
 // Counts the number of continents owned by this player.
 int Player::computeContinentsOwned(Map* map)
 {

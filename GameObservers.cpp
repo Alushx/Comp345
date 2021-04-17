@@ -185,10 +185,34 @@ void Turn::playTurn()
 {
 	gameHand->printHand();
 	int index = - 1;
+	char changeStrategy;
 	Card* card = nullptr;
 	
 	do
 	{
+		cout << "Do you want to switch your Strategy [Y/N]:	" << endl;
+		cin >> changeStrategy;
+		if (changeStrategy == 'Y')
+		{
+
+			cout << "Which strategy do you want to use ?" << endl
+			<< "[H]uman Strategy" << endl
+			<< "[G]reedy Strategy" << endl
+				<< "[M]oderate Strategy" << endl ;
+			cin >> changeStrategy;
+		}
+		else
+			cout << "The player is keeping the same strategy";
+
+		if (changeStrategy == 'H')
+			playerTurn->setStrategy(new HumanPlayer);
+		else if (changeStrategy == 'G')
+			playerTurn->setStrategy(new GreedyComputer);
+		else if (changeStrategy == 'M')
+			playerTurn->setStrategy(new ModerateComputer);
+		else
+			cout << "invalid input, the player is going to keep the same strategy" << endl;
+
 		index = playerTurn->getStrategy()->pickCard(gameHand);
 		
 		// Player skips their turn.

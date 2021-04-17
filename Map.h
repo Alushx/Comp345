@@ -23,7 +23,7 @@ class Territory;
 class Army;
 class Player;
 
-struct Map {
+class Map {
 
 private:
 	// Data members.
