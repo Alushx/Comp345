@@ -1,5 +1,5 @@
 #include "PlayerStrategies.h"
-#include "Cards.cpp"
+#include "Cards.h"
 #include <stdlib.h>
 #include <vector>
 #include <map>

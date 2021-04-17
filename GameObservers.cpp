@@ -318,8 +318,6 @@ void GameState::computeGameState() {
 	Notify();
 }
 
-
-
 // ============================================
 // View Implementation
 // ============================================
