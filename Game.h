@@ -27,5 +27,6 @@ void determineWinner();
 MapLoader* startGame();
 void playGame(Hand* hand, int, MapLoader* mapLoader, int selectedMode);
 void displayTournamentResults();
+Turn* createTurns(int selectedMode, Map* map, Hand* hand);
 
 

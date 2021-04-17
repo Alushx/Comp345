@@ -11,6 +11,7 @@
 //===================================================================
 
 #include "Game.h"
+#include "GameObservers.h"
 
 
 //Deallocate MapLoader, Deck, Hand, and Players.
@@ -41,7 +42,6 @@ int selectBidWinner() {
 void createDeck(Deck *deck) {
 	deck->generateDeck();
 	deck->shuffleDeck();
-	deck->printDeck();
 }
 
 //Method to place the armies
@@ -166,57 +166,24 @@ MapLoader* startGame()
 
 void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 {
-	// Cad related task.
-	vector<Player*> player;
-	player = Player::getPlayerList();
+	// Setting up variables.
+	vector<Player*> player = Player::getPlayerList();
 	int playerNum = Player::getPlayerNum();
+	Turn* turn = createTurns(selectedMode, mapLoader->getMap(), hand);
 
-	int index = 0;
-	int numOfTurns = 0;
-	if (selectedMode == 1) {
-		switch (playerNum)
-		{
-		case 2:
-			numOfTurns = 13;
-			break;
-		case 3:
-			numOfTurns = 10;
-			break;
-		case 4:
-			numOfTurns = 8;
-			break;
-		}
-	}
-	else {
-		numOfTurns = 20;
-	}
+	turn->Attach(new TurnView(turn));
 
-	for (int turn = 0; turn < numOfTurns; turn++)
+	// Main game loop.
+	for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
 	{
-		for (int i = 0; i < player.size(); i++)
+		for (int j = 0; j < player.size(); j++)
 		{
-			index = 0;
-			while (index >= 0) {
-				hand->printHand();
-				cout << "Please enter the index of the card you want to pick or a negative number to exit: ";
-				cin >> index;
-
-				// Checking valid input.
-				if (index >= 0 && index <= 5)
-				{
-					Card* card = hand->exchange(index, player[(bidWinner + i) % playerNum]);
-					if (card == NULL)
-					{
-						continue;
-					}
-					player[(bidWinner + i) % playerNum]->playCard(card, mapLoader->getMap());
-					break; // Passes turn to next player.
-				}
-				else
-					continue;
-			}
+			turn->setPlayerTurn(player[(bidWinner + j) % playerNum]);
+			turn->playTurn();
 		}
 	}
+
+	delete turn;
 }
 
 // Displays the tournament results as a table.
@@ -234,4 +201,22 @@ void displayTournamentResults()
 	}
 
 	cout << "=========================================================" << endl;
+}
+
+// Takes in an int and creates a turn object with the appropriate number of turns.
+Turn* createTurns(int selectedMode, Map* map, Hand* hand)
+{
+	if (selectedMode == 1) {
+		switch (Player::getPlayerNum())
+		{
+		case 2:
+			return new Turn(13, map, hand);
+		case 3:
+			return new Turn(10, map, hand);
+		case 4:
+			return new Turn(8, map, hand);
+		}
+	}
+	else 
+		return new Turn(20, map, hand);
 }

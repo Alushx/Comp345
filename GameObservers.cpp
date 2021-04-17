@@ -24,10 +24,12 @@ using namespace std;
 
 Observer::~Observer()
 {
+
 }
 
 Observer::Observer()
 {
+
 }
 
 // ============================================
@@ -41,6 +43,14 @@ Subject::Subject()
 
 Subject::~Subject()
 {
+	for (Observer* observer : *_observers)
+	{
+		if (observer != nullptr)
+		{
+			delete observer;
+			observer = nullptr;
+		}
+	}
 	delete _observers;
 }
 
@@ -74,15 +84,17 @@ Turn::Turn()
 	selectedCard = nullptr;
 	gameHand = nullptr;
 	gameMap = nullptr;
+	maxNumOfTurns = 0;
 }
 
 // Parameterized constructor. Sets selectedCard to nullptr.
-Turn::Turn(Map* map, Hand* hand, Player* player)
+Turn::Turn(int maxTurn, Map* map, Hand* hand, Player* player)
 {
 	gameMap = map;
 	gameHand = hand;
 	playerTurn = player;
 	selectedCard = nullptr;
+	maxNumOfTurns = maxTurn;
 }
 
 // Copy constructor. Creates a shallow copy of everything because the Turn shouldn't 
@@ -93,6 +105,7 @@ Turn::Turn(const Turn& anotherTurn)
 	gameHand = anotherTurn.gameHand;
 	playerTurn = anotherTurn.playerTurn;
 	selectedCard = anotherTurn.selectedCard;
+	maxNumOfTurns = anotherTurn.maxNumOfTurns;
 }
 
 // Deconstructor. Doesn't actually do anything, because the members are used elsewhere. 
@@ -155,6 +168,18 @@ void Turn::setGameMap(Map* map)
 	Notify();
 }
 
+// Accessor for number of turns.
+int Turn::getMaxNumOfTurns()
+{
+	return maxNumOfTurns;
+}
+
+// Mutator for number of turns.
+void Turn::setMaxNumOfTurns(int newMax)
+{
+	maxNumOfTurns = newMax;
+}
+
 // Method that selects a card based on the player strategy, pays the cost of the card, and plays the card.
 void Turn::playTurn()
 {
@@ -198,6 +223,8 @@ const Turn& Turn::operator =(const Turn& anotherTurn)
 	gameHand = anotherTurn.gameHand;
 	playerTurn = anotherTurn.playerTurn;
 	selectedCard = anotherTurn.selectedCard;
+	maxNumOfTurns = anotherTurn.maxNumOfTurns;
+
 	return *this;
 }
 

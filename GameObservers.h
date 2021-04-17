@@ -19,7 +19,7 @@ using namespace std;
 class Observer
 {
 public:
-	~Observer();
+	virtual ~Observer();
 	virtual void Update() = 0;
 protected:
 	Observer();
@@ -32,7 +32,7 @@ public:
 	virtual void Detach(Observer* o);
 	virtual void Notify();
 	Subject();
-	~Subject();
+	virtual ~Subject();
 private:
 	list<Observer*>* _observers;
 
@@ -53,11 +53,12 @@ private:
 	Card* selectedCard;
 	Hand* gameHand;
 	Map* gameMap;
+	int maxNumOfTurns;
 
 public:
 	// Constructors and destructors.
 	Turn();
-	Turn(Map*, Hand*, Player* = nullptr);
+	Turn(int, Map*, Hand*, Player* = nullptr);
 	Turn(const Turn&);
 	~Turn();
 
@@ -70,6 +71,8 @@ public:
 	void setGameHand(Hand*);
 	Map* getGameMap();
 	void setGameMap(Map*);
+	int getMaxNumOfTurns();
+	void setMaxNumOfTurns(int);
 
 	// Service methods.
 	void playTurn();
