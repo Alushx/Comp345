@@ -65,6 +65,9 @@ Territory* PlayerStrategies::selectTerritoryCurrentlyOn(list<Army*> armies)
 // Select a territory with a city, at random.
 Territory* PlayerStrategies::selectTerritoryWithCity(list<City*> cities)
 {
+    if (cities.size() == 0)
+        return Player::getStartingRegion();
+
     int choice = (rand() % cities.size()) + 1;
 
     if (choice == cities.size())
