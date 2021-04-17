@@ -71,12 +71,7 @@ void GameEngine::singleGame(int selectedMode){
     deallocateResources(mapLoader, deck, hand);
 }
 
-void GameEngine::tournamentGame(int selectedMode) : subject(s){
-
-    // Setting up the observers
-   // Observer subject{};
-   // subject.Attach(*this);
-   // Subject.Attach(this);
+void GameEngine::tournamentGame(int selectedMode){
 
     // Setting up players, bidding facility, and map.
     MapLoader* mapLoader;
