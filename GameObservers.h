@@ -142,6 +142,28 @@ private:
 	Card* selectedCard;
 };
 
+//Prints messages dictating the current state of the player's action.
+class PlayerActionViewer : public Observer
+{
+public:
+	PlayerActionViewer();
+	PlayerActionViewer(Player* player);
+	PlayerActionViewer(const PlayerActionViewer& other);
+	~PlayerActionViewer();
+
+	// Important method.
+	void Update();
+
+	// Operators.
+	friend ostream& operator <<(ostream& stream, const PlayerActionViewer& obj);
+	PlayerActionViewer operator =(const PlayerActionViewer& other);
+
+private:
+	Player* subject;
+	string playerAction;
+
+};
+
 class GameState : public Subject {
 private:
 	Map* map;

@@ -113,6 +113,8 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	// Adding observers. Automatically deleted by subject.
 	new PlayerTurnViewer(turn);
 	new CardPickViewer(turn);
+	for (Player* subjectPlayer : player)
+		new PlayerActionViewer(subjectPlayer);
 
 	// Main game loop.
 	for (int i = 0; i < turn->getMaxNumOfTurns(); i++)

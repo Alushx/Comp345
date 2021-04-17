@@ -16,6 +16,7 @@
 #include <string>
 #include "Map.h"
 #include "BiddingFacility.h"
+#include "GameObservers.h"
 
 using std::string;
 
@@ -25,9 +26,10 @@ class City;
 class Card;
 class BiddingFacility;
 class PlayerStrategies;
+class Subject;
 
 // Player class.
-class Player
+class Player : public Subject
 {
 
 private:
@@ -44,6 +46,7 @@ private:
 	int score;
 	int ownNumElixer;
 	PlayerStrategies* strategy;
+	string currentAction;
 
 	// Static variables.
 	static vector<Player*> playerList;
@@ -85,6 +88,7 @@ public:
 	int getScore();
 	int getOwnNumElixer();
 	PlayerStrategies* getStrategy();
+	string getCurrentAction();
 
 	// Mutators.
 	void setName(string n);
@@ -94,6 +98,7 @@ public:
 	void setBidFaci(BiddingFacility*);
 	void setOwnNumElixer(int numElixer);
 	void setStrategy(PlayerStrategies*);
+	void setCurrentAction(string);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);

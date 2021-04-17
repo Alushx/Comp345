@@ -12,6 +12,7 @@
 
 #include "Player.h"
 #include "PlayerStrategies.h"
+#include "GameObservers.h"
 #include <iostream>
 #include "Cards.h"
 #include "BiddingFacility.h"
@@ -37,6 +38,7 @@ Player::Player()
 	numOfCubes = 18;
 	numOfDisks = 3;
 	strategy = nullptr;
+	currentAction = "";
 
 	// Handling static variables.
 	playerNum++;
@@ -58,6 +60,7 @@ Player::Player(string aName, int coinNum, PlayerStrategies* aStrategy, bool isBo
 	score = 0; 
 	ownNumElixer = 0;
 	strategy = aStrategy;
+	currentAction = "";
 
 	// Handling static variables.
 	if (isBot)
@@ -82,6 +85,7 @@ Player::Player(const Player& anotherPlayer)
 	score = anotherPlayer.score;
 	ownNumElixer = anotherPlayer.ownNumElixer;
 	strategy = anotherPlayer.strategy;
+	currentAction = anotherPlayer.currentAction;
 
 	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
@@ -470,8 +474,7 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles all "Move X Armies" actions.
 	if (keyWord == "Move")
 	{
-		cout << endl;
-		cout << name << " is moving armies..." << endl;
+		setCurrentAction(name + " is moving armies...\n");
 		int numOfArmiesToMove = 0;
 		actionStream >> numOfArmiesToMove;
 		moveArmiesAction(numOfArmiesToMove, map);
@@ -479,15 +482,13 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Build City" action.
 	else if (keyWord == "Build")
 	{
-		cout << endl;
-		cout << name << " is building a city..." << endl;
+		setCurrentAction(name + " is building a city...\n");
 		buildCityAction();
 	}
 	// Handles "Add X Armies" actions.
 	else if (keyWord == "Add")
 	{
-		cout << endl;
-		cout << name << " is adding armies..." << endl;
+		setCurrentAction(name + " is adding armies...\n");
 		int numOfArmiesToCreate = 0;
 		actionStream >> numOfArmiesToCreate;
 		addArmiesAction(numOfArmiesToCreate);
@@ -495,8 +496,7 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Destroy Army" action.
 	else if (keyWord == "Destroy")
 	{
-		cout << endl;
-		cout << name << " is destroying an army..." << endl;
+		setCurrentAction(name + " is destroying an army...\n");
 		destroyArmyAction();
 	}
 }
@@ -666,6 +666,7 @@ Player& Player::operator= (const Player& anotherPlayer)
 	ownNumElixer = anotherPlayer.score;
 	numOfCubes = anotherPlayer.numOfCubes;
 	numOfDisks = anotherPlayer.numOfDisks;
+	currentAction = anotherPlayer.currentAction;
 
 	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
@@ -806,6 +807,17 @@ int Player::computeContinentsOwned(Map* map)
 	}
 
 	return numOfContinents;
+}
+
+string Player::getCurrentAction()
+{
+	return currentAction;
+}
+
+void Player::setCurrentAction(string newAction)
+{
+	currentAction = newAction;
+	Notify();
 }
 
 

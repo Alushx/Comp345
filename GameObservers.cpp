@@ -571,4 +571,64 @@ CardPickViewer CardPickViewer::operator =(const CardPickViewer& other)
 	return *this;
 }
 
+// Default constructor.
+PlayerActionViewer::PlayerActionViewer()
+{
+	subject = nullptr;
+	playerAction = "";
+}
+
+// Parameterized constructor. Attaches self to player.
+PlayerActionViewer::PlayerActionViewer(Player* player)
+{
+	subject = player;
+	playerAction = player->getCurrentAction();
+	subject->Attach(this);
+}
+
+// Copy constructor.
+PlayerActionViewer::PlayerActionViewer(const PlayerActionViewer& other)
+{
+	subject = other.subject;
+	playerAction = other.playerAction;
+	subject->Attach(this);
+}
+
+// Destructor. Does nothing.
+PlayerActionViewer::~PlayerActionViewer()
+{
+
+}
+
+// Prints the player's current action.
+void PlayerActionViewer::Update()
+{
+	if (subject->getCurrentAction() != playerAction)
+	{
+		playerAction = subject->getCurrentAction();
+		cout << playerAction << endl;
+	}
+}
+
+// Returns class name.
+ostream& operator <<(ostream& strem, const PlayerActionViewer& obj)
+{
+	return strem << "PlayerActionViewer";
+}
+
+// Assignment operator. Attaches and detaches as needed.
+PlayerActionViewer PlayerActionViewer::operator =(const PlayerActionViewer& other)
+{
+	if (&other == this)
+		return *this;
+
+	subject->Detach(this);
+	subject = other.subject;
+	playerAction = other.playerAction;
+	subject->Attach(this);
+
+	return *this;
+}
+
+
 
