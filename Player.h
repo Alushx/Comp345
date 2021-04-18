@@ -74,6 +74,7 @@ public:
 	Player* computeScore(Map* map);
 	void playCard(Card*, Map*);
 	int computeContinentsOwned(Map*);
+	int executeStrategy(Hand*);
 
 	// Accessors.
 	string getName();
