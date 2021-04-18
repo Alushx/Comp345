@@ -14,6 +14,7 @@
 
 #include "GameObservers.h"
 #include "Game.h"
+#include "MapLoader.h"
 
 class GameEngine{
 
@@ -21,5 +22,6 @@ public:
     int selectGameMode();
     void singleGame(int selectedMode);
     void tournamentGame(int selectedMode);
-
+    MapLoader* startTournament();
+    void playTournamentGame(Hand* hand, MapLoader* mapLoader);
 };

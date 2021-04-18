@@ -85,28 +85,20 @@ void GameEngine::singleGame(int selectedMode){
 void GameEngine::tournamentGame(int selectedMode){
 
     // Setting up players, bidding facility, and map.
-    MapLoader* mapLoader;
-    mapLoader = startGame(selectedMode);
+    MapLoader* mapLoader = startTournament();
 
     // Creating deck.
-    Deck* deck = new Deck(Player::getPlayerNum());
+    Deck* deck = new Deck(4);
     createDeck(deck);
-
-    // Selecting first player.
-    int bidWinner = selectBidWinner();
 
     // Display 6 cards.
     Hand* hand = new Hand(deck);
-    hand->printHand();
 
     // Placing each player's 4 armies.
     placeArmies(mapLoader);
 
-    // Places bot armies.
-    placeBotArmies(mapLoader);
-
     // Main game loop
-    playGame(hand, bidWinner, mapLoader, selectedMode);
+    playTournamentGame(hand, mapLoader);
 
     // Compute score
     calculateScore(mapLoader);
@@ -118,5 +110,49 @@ void GameEngine::tournamentGame(int selectedMode){
 
     // Deallocating Players and Bot armies.
     deallocateResources(mapLoader, deck, hand);
+}
+
+MapLoader* GameEngine::startTournament()
+{
+    Player* player1 = new Player("Player 1", 14);
+    Player* player2 = new Player("Player 2", 13);
+
+    changePlayerStrategy(player1);
+    changePlayerStrategy(player2);
+
+    return loadValidMap("map1.txt");
+}
+
+void GameEngine::playTournamentGame(Hand* hand, MapLoader* mapLoader)
+{
+    // Setting up variables.
+    vector<Player*> player = Player::getPlayerList();
+    int playerNum = Player::getPlayerNum();
+    Turn* turn = createTurns(2, mapLoader->getMap(), hand);
+    GameState* state = new GameState(mapLoader->getMap());
+
+    // Adding observers. Automatically deleted by subject.
+    new View(state);
+    new PlayerTurnViewer(turn);
+    new CardPickViewer(turn);
+    for (Player* subjectPlayer : player)
+    {
+        new PlayerActionViewer(subjectPlayer);
+        new CardBonusViewer(subjectPlayer);
+    }
+
+    // Main game loop.
+    for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
+    {
+        for (int j = 0; j < player.size(); j++)
+        {
+            turn->setPlayerTurn(player[j]);
+            turn->playTurn();
+            state->computeGameState();
+        }
+    }
+
+    delete turn;
+    delete state;
 }
 
