@@ -1,3 +1,14 @@
+//===================================================================
+// Course: COMP 345
+// Professor: Nora Houari
+// Team: 14
+// Students:
+//      Adam Yafout - 40040306
+//      Bryan Lee - 40079332
+//      Carl Randyl Tuquero - 40067781
+//      Sobhan Mehrpour - 40122438
+//      Vithura Muthiah - 40062305
+//===================================================================
 #include "GameEngine.h"
 #include "GameObservers.h"
 #include "Cards.h"
@@ -39,7 +50,7 @@ int GameEngine :: selectGameMode(){
 void GameEngine::singleGame(int selectedMode){
     // Setting up players, bidding facility, and map.
     MapLoader* mapLoader;
-    mapLoader = startGame();
+    mapLoader = startGame(selectedMode);
 
     // Creating deck.
     Deck* deck = new Deck(Player::getPlayerNum());
@@ -75,7 +86,7 @@ void GameEngine::tournamentGame(int selectedMode){
 
     // Setting up players, bidding facility, and map.
     MapLoader* mapLoader;
-    mapLoader = startGame();
+    mapLoader = startGame(selectedMode);
 
     // Creating deck.
     Deck* deck = new Deck(Player::getPlayerNum());

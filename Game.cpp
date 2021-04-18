@@ -97,10 +97,10 @@ void determineWinner() {
 // Function that starts creates loads a map, builds it, creates players, and the bidding facility.
 // Callers of this function are responsible for deallocating memory of MapLoader and the player created here.
 // Note that the player have to be retrieved with the static Player method.
-MapLoader* startGame()
+MapLoader* startGame(int gamemode)
 {
 	// Armies, tokens, cities, and bidding facility is all created within each instance of Player.
-	createPlayers();
+	createPlayers(gamemode);
 	string fileName = chooseFile();
 	return loadValidMap(fileName);
 }
@@ -228,17 +228,21 @@ MapLoader* loadValidMap(string fileName)
 // Asks for the number of players.
 // Creates them with the right amount of coins.
 // And creates a bot if needed.
-void createPlayers()
+void createPlayers(int gamemode)
 {
+	const int SINGLEMODE =1;
 	int numOfPlayers;
-
+	if(gamemode == SINGLEMODE){
 	// Seeing how many players there are.
 	do
 	{
 		cout << "Please enter the number of players in the game: ";
 		cin >> numOfPlayers;
 	} while (numOfPlayers <= 1 || numOfPlayers > 4);
-
+	}
+	else{
+		numOfPlayers = 2;
+	}
 	int coins = 0;
 	string lName;
 
