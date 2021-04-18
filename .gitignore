@@ -3,3 +3,4 @@ COMP345.*
 Debug/
 *vcxproj*
 .vs
+*.orig
