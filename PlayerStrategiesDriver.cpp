@@ -21,7 +21,7 @@ int main()
 {
     // Setting up players, bidding facility, and map.
     MapLoader* mapLoader;
-    mapLoader = startGame();
+    mapLoader = startGame(1);
 
     // Creating deck.
     Deck* deck = new Deck(Player::getPlayerNum());

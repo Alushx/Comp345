@@ -27,7 +27,7 @@ public:
     ~PlayerStrategies();
 
     // Main operations.
-    virtual int pickCard(Hand *hand) = 0;
+    virtual int pickCard(Hand *hand, int coinsAvailable) = 0;
     virtual std::string displayCurrentStrategy() = 0;
     
     // Helpful methods for strategy.
@@ -51,7 +51,7 @@ public:
     ~HumanPlayer();
 
     // Main operations.
-    virtual int pickCard(Hand *hand);
+    virtual int pickCard(Hand *hand, int coinsAvailable);
     virtual std::string displayCurrentStrategy();
 
     // Overrided methods in human player.
@@ -77,7 +77,7 @@ class GreedyComputer : public PlayerStrategies{
 
 
     // Helpful methods.
-    virtual int pickCard(Hand *hand);
+    virtual int pickCard(Hand *hand, int coinsAvailable);
     virtual std::string displayCurrentStrategy();
     virtual int selectOrAction(Card* card);
 
@@ -95,7 +95,7 @@ class ModerateComputer : public PlayerStrategies{
      ~ModerateComputer();
 
     // Helpful methods.
-    virtual int pickCard(Hand *hand);
+    virtual int pickCard(Hand *hand, int coinsAvailable);
     virtual std::string displayCurrentStrategy();
     virtual int selectOrAction(Card* card);
 

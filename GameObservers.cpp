@@ -209,7 +209,7 @@ void Turn::playTurn()
 	
 	do
 	{
-		index = playerTurn->getStrategy()->pickCard(gameHand);
+		index = playerTurn->getStrategy()->pickCard(gameHand, playerTurn->getCoins());
 		
 		// Player skips their turn.
 		if (index < 0 || index > 5)
