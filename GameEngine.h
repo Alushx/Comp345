@@ -23,5 +23,5 @@ public:
     void singleGame(int selectedMode);
     void tournamentGame(int selectedMode);
     MapLoader* startTournament();
-    void playTournamentGame(Hand* hand, MapLoader* mapLoader);
+    void playTournamentGame(Hand* hand, Deck* deck, MapLoader* mapLoader);
 };

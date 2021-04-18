@@ -98,7 +98,7 @@ void GameEngine::tournamentGame(int selectedMode){
     placeArmies(mapLoader);
 
     // Main game loop
-    playTournamentGame(hand, mapLoader);
+    playTournamentGame(hand, deck, mapLoader);
 
     // Compute score
     calculateScore(mapLoader);
@@ -123,7 +123,7 @@ MapLoader* GameEngine::startTournament()
     return loadValidMap("map1.txt");
 }
 
-void GameEngine::playTournamentGame(Hand* hand, MapLoader* mapLoader)
+void GameEngine::playTournamentGame(Hand* hand, Deck* deck, MapLoader* mapLoader)
 {
     // Setting up variables.
     vector<Player*> player = Player::getPlayerList();
@@ -141,9 +141,21 @@ void GameEngine::playTournamentGame(Hand* hand, MapLoader* mapLoader)
         new CardBonusViewer(subjectPlayer);
     }
 
+    Deck* newDeck = nullptr;
+    Hand* newHand = nullptr;
+
     // Main game loop.
     for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
     {
+        // Near the end, we run out of cards. So this just resets the number of cards.
+        if (i == 13) 
+        { 
+            newDeck = new Deck(4);
+            createDeck(deck);
+            newHand = new Hand(newDeck);
+            turn->setGameHand(newHand);
+        }
+
         for (int j = 0; j < player.size(); j++)
         {
             turn->setPlayerTurn(player[j]);
@@ -152,6 +164,10 @@ void GameEngine::playTournamentGame(Hand* hand, MapLoader* mapLoader)
         }
     }
 
+    if (newDeck == nullptr)
+        delete newDeck;
+    if (newHand == nullptr)
+        delete newHand;
     delete turn;
     delete state;
 }
