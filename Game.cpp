@@ -15,6 +15,7 @@
 #include "PlayerStrategies.h"
 #include "GameEngine.h"
 
+using namespace std;
 
 //Deallocate MapLoader, Deck, Hand, and Players.
 // Armies, Cities, Cards, and Maps are deleted by the former 4.
