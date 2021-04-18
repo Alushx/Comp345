@@ -47,6 +47,10 @@ private:
 	int ownNumElixer;
 	PlayerStrategies* strategy;
 	string currentAction;
+	int cardMoveBonus;
+	int cardArmyBonus;
+	int cardFlightBonus;
+	bool hasCardImmunityBonus;
 
 	// Static variables.
 	static vector<Player*> playerList;
@@ -89,6 +93,10 @@ public:
 	int getOwnNumElixer();
 	PlayerStrategies* getStrategy();
 	string getCurrentAction();
+	int getCardMoveBonus();
+	int getCardArmyBonus();
+	int getCardFlightBonus();
+	bool getCardImmunityBonus();
 
 	// Mutators.
 	void setName(string n);
@@ -99,6 +107,10 @@ public:
 	void setOwnNumElixer(int numElixer);
 	void setStrategy(PlayerStrategies*);
 	void setCurrentAction(string);
+	void setCardMoveBonus(int newBonus);
+	void setCardArmyBonus(int newBonus);
+	void setCardFlightBonus(int newBonus);
+	void setCardImmunityBonus(bool hasImmunity);
 
 	// Operators.
 	friend ostream& operator<<(ostream&, const Player&);

@@ -114,8 +114,11 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	new PlayerTurnViewer(turn);
 	new CardPickViewer(turn);
 	for (Player* subjectPlayer : player)
+	{
 		new PlayerActionViewer(subjectPlayer);
-
+		new CardBonusViewer(subjectPlayer);
+	}
+		
 	// Main game loop.
 	for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
 	{
@@ -149,7 +152,11 @@ void displayTournamentResults()
 // Takes in an int and creates a turn object with the appropriate number of turns.
 Turn* createTurns(int selectedMode, Map* map, Hand* hand)
 {
-	if (selectedMode == 1) {
+	const int NORMAL_MODE = 1;
+	const int TOURNAMENT_MODE = 2;
+	const int DRIVER2_MODE = 3;
+
+	if (selectedMode == NORMAL_MODE) {
 		switch (Player::getPlayerNum())
 		{
 		case 2:
@@ -160,8 +167,10 @@ Turn* createTurns(int selectedMode, Map* map, Hand* hand)
 			return new Turn(8, map, hand);
 		}
 	}
-	else 
+	else if (selectedMode == TOURNAMENT_MODE)
 		return new Turn(20, map, hand);
+	else if (selectedMode == DRIVER2_MODE)
+		return new Turn(4, map, hand);
 }
 
 // Allows the player to select a map file that's currently available, and returns the file's name.

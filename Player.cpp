@@ -39,6 +39,10 @@ Player::Player()
 	numOfDisks = 3;
 	strategy = nullptr;
 	currentAction = "";
+	cardMoveBonus = 0;
+	cardArmyBonus = 0;
+	cardFlightBonus = 0;
+	hasCardImmunityBonus = false;
 
 	// Handling static variables.
 	playerNum++;
@@ -61,6 +65,10 @@ Player::Player(string aName, int coinNum, PlayerStrategies* aStrategy, bool isBo
 	ownNumElixer = 0;
 	strategy = aStrategy;
 	currentAction = "";
+	cardMoveBonus = 0;
+	cardArmyBonus = 0;
+	cardFlightBonus = 0;
+	hasCardImmunityBonus = false;
 
 	// Handling static variables.
 	if (isBot)
@@ -86,6 +94,10 @@ Player::Player(const Player& anotherPlayer)
 	ownNumElixer = anotherPlayer.ownNumElixer;
 	strategy = anotherPlayer.strategy;
 	currentAction = anotherPlayer.currentAction;
+	cardMoveBonus = anotherPlayer.cardMoveBonus;
+	cardArmyBonus = anotherPlayer.cardArmyBonus;
+	cardFlightBonus = anotherPlayer.cardFlightBonus;
+	hasCardImmunityBonus = anotherPlayer.hasCardImmunityBonus;
 
 	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));
@@ -258,6 +270,10 @@ list<Territory*>* Player::getPlayerTerritories()
 void Player::addCard(Card* card)
 {
 	playerHand.push_back(card);
+	calculateArmyBonus();
+	calculateFlightBonus();
+	calculateImmunityBonus();
+	calculateMoveBonus();
 }
 
 
@@ -329,7 +345,7 @@ void Player::destroyArmy(Army* army)
 {
 	army->getPosition()->removeArmy(army);
 	army->getOwner()->armies.remove(army);
-	cout << *army << " is destroyed!";
+	cout << *army << " is destroyed!" << endl;
 	delete army;
 	army = nullptr;
 }
@@ -474,7 +490,7 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles all "Move X Armies" actions.
 	if (keyWord == "Move")
 	{
-		setCurrentAction(name + " is moving armies...\n");
+		setCurrentAction(name + " is moving armies...");
 		int numOfArmiesToMove = 0;
 		actionStream >> numOfArmiesToMove;
 		moveArmiesAction(numOfArmiesToMove, map);
@@ -482,13 +498,13 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Build City" action.
 	else if (keyWord == "Build")
 	{
-		setCurrentAction(name + " is building a city...\n");
+		setCurrentAction(name + " is building a city...");
 		buildCityAction();
 	}
 	// Handles "Add X Armies" actions.
 	else if (keyWord == "Add")
 	{
-		setCurrentAction(name + " is adding armies...\n");
+		setCurrentAction(name + " is adding armies...");
 		int numOfArmiesToCreate = 0;
 		actionStream >> numOfArmiesToCreate;
 		addArmiesAction(numOfArmiesToCreate);
@@ -496,7 +512,7 @@ void Player::playCardAction(string anAction, Map* map)
 	// Handles "Destroy Army" action.
 	else if (keyWord == "Destroy")
 	{
-		setCurrentAction(name + " is destroying an army...\n");
+		setCurrentAction(name + " is destroying an army...");
 		destroyArmyAction();
 	}
 }
@@ -506,18 +522,19 @@ void Player::moveArmiesAction(int numOfArmiesToMove, Map* map)
 {
 	Army* army = nullptr;
 	pair<Territory*, int> endLocation;
-
-	numOfArmiesToMove += calculateMoveBonus();
+	int moveBonus = calculateMoveBonus();
+	numOfArmiesToMove += moveBonus;
+	cout << "Player has " << moveBonus << " bonus moves..." << endl;
 
 	// Moves an army for each number of moves a player has.
 	while (numOfArmiesToMove > 0)
 	{
-		cout << endl;
 		cout << name << " has " << numOfArmiesToMove << " moves left..." << endl;
 		army = strategy->selectArmy(armies);
 		endLocation = strategy->selectNeighbouringTerritory(army->getPosition(), map);
 
 		int flightBonus = calculateFlightBonus();
+		cout << "Player has " << flightBonus << " bonus flight..." << endl;
 		int moveCost = max(endLocation.second - flightBonus, 1);
 
 		// Check if player has the needed number of moves.
@@ -547,11 +564,12 @@ void Player::addArmiesAction(int numOfArmiesToAdd)
 {
 	// Adds an army according to the number of armies in the argument.
 	Territory* position = nullptr;
-	numOfArmiesToAdd += calculateArmyBonus();
+	int armyBonus = calculateArmyBonus();
+	numOfArmiesToAdd += armyBonus;
+	cout << "Player has " << armyBonus << " bonus armies..." << endl;
 
 	for (int i = 0; i < numOfArmiesToAdd; i++)
 	{
-		cout << endl;
 		cout << name << " has " << numOfArmiesToAdd - i<< " armies left to add..." << endl;
 		position = strategy->selectTerritoryWithCity(cities);
 		placeNewArmies(position);
@@ -568,6 +586,8 @@ void Player::destroyArmyAction()
 	{
 		player = strategy->selectPlayer();
 		isImmune = player->calculateImmunityBonus();
+		if (isImmune)
+			cout << "Cannot attack this player! They are immune..." << endl;
 	} while (isImmune);
 	
 	Army* army = strategy->selectArmy(*(player->getArmies()));
@@ -588,8 +608,7 @@ int Player::calculateMoveBonus()
 			moveBonus++;
 	}
 
-	cout << "\n Player has " << moveBonus << " bonus moves... \n" << endl;
-
+	setCardMoveBonus(moveBonus);
 	return moveBonus;
 }
 
@@ -605,8 +624,7 @@ int Player::calculateArmyBonus()
 			armyBonus++;
 	}
 
-	cout << "Player has " << armyBonus << " bonus armies... \n" << endl;
-
+	setCardArmyBonus(armyBonus);
 	return armyBonus;
 }
 
@@ -622,8 +640,7 @@ int Player::calculateFlightBonus()
 			flightBonus++;
 	}
 
-	cout << "Player has " << flightBonus << " bonus flight... \n" << endl;
-
+	setCardFlightBonus(flightBonus);
 	return flightBonus;
 }
 
@@ -637,15 +654,40 @@ bool Player::calculateImmunityBonus()
 		// Immediately exit and return true.
 		if (card->getAbility() == "Immune to attack")
 		{
-			cout << "Cannot attack this player! They are immune...\n" << endl;
 			isImmune = true;
+			setCardImmunityBonus(isImmune);
 			return isImmune;
 		}
 	}
 
+	setCardImmunityBonus(isImmune);
 	// Return false otherwise.
 	return false;
 }
+
+// Accessor for cardMoveBonus.
+int Player::getCardMoveBonus() { return cardMoveBonus; }
+
+// Accessor for cardArmyBonus.
+int Player::getCardArmyBonus() { return cardArmyBonus; }
+
+// Accessor for cardFlightBonus.
+int Player::getCardFlightBonus() { return cardFlightBonus; }
+
+// Accessor for hasImmunityBonus.
+bool Player::getCardImmunityBonus() { return hasCardImmunityBonus; }
+
+// Mutator for cardMoveBonus.
+void Player::setCardMoveBonus(int newBonus) { cardMoveBonus = newBonus; Notify(); }
+
+// Mutator for cardArmyBonus.
+void Player::setCardArmyBonus(int newBonus) { cardArmyBonus = newBonus; Notify(); }
+
+// Mutator for cardFlightBonus.
+void Player::setCardFlightBonus(int newBonus) { cardFlightBonus = newBonus; Notify(); }
+
+// Mutator for hasImmunityBonus.
+void Player::setCardImmunityBonus(bool hasImmunity) { hasCardImmunityBonus = hasImmunity; Notify(); }
 
 // toString
 ostream& operator<<(ostream& strm, const Player& player)
@@ -667,6 +709,10 @@ Player& Player::operator= (const Player& anotherPlayer)
 	numOfCubes = anotherPlayer.numOfCubes;
 	numOfDisks = anotherPlayer.numOfDisks;
 	currentAction = anotherPlayer.currentAction;
+	cardMoveBonus = anotherPlayer.cardMoveBonus;
+	cardArmyBonus = anotherPlayer.cardArmyBonus;
+	cardFlightBonus = anotherPlayer.cardFlightBonus;
+	hasCardImmunityBonus = anotherPlayer.hasCardImmunityBonus;
 
 	if (anotherPlayer.bidFaci != NULL)
 		bidFaci = new BiddingFacility(*(anotherPlayer.bidFaci));

@@ -26,7 +26,7 @@ void calculateScore(MapLoader* mapLoader);
 void calculateScore(Map* map);
 void determineWinner();
 MapLoader* startGame();
-void playGame(Hand* hand, int, MapLoader* mapLoader, int selectedMode);
+void playGame(Hand* hand, int bidWinnerIndex, MapLoader* mapLoader, int selectedMode);
 void displayTournamentResults();
 Turn* createTurns(int selectedMode, Map* map, Hand* hand);
 string chooseFile();

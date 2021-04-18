@@ -480,7 +480,7 @@ void PlayerTurnViewer::Update()
 	{
 		playerTurn = subject->getPlayerTurn();
 		turnCount++;
-		cout << "Turn " << (turnCount / Player::getPlayerNum()) + 1 << ": " << playerTurn->getName() << " is now playing!" << endl;
+		cout << "Observer::PlayerTurnViewer: Turn " << (turnCount / Player::getPlayerNum()) + 1 << ": " << playerTurn->getName() << " is now playing!" << endl;
 	}
 }
 
@@ -545,7 +545,7 @@ void CardPickViewer::Update()
 	{
 		selectedCard = subject->getSelectedCard();
 
-		cout << subject->getPlayerTurn()->getName() << " has selected " << selectedCard->getGood() << " in index " << subject->getSelectedIndex()
+		cout << "Observer::CardPickViewer: " << subject->getPlayerTurn()->getName() << " has selected " << selectedCard->getGood() << " in index " << subject->getSelectedIndex()
 			<< " and has paid " << indexCosts[subject->getSelectedIndex()] << " for it." << endl;
 	}
 }
@@ -606,7 +606,7 @@ void PlayerActionViewer::Update()
 	if (subject->getCurrentAction() != playerAction)
 	{
 		playerAction = subject->getCurrentAction();
-		cout << playerAction << endl;
+		cout << "Observer::PlayerActionViewer: " << playerAction << endl;
 	}
 }
 
@@ -625,6 +625,89 @@ PlayerActionViewer PlayerActionViewer::operator =(const PlayerActionViewer& othe
 	subject->Detach(this);
 	subject = other.subject;
 	playerAction = other.playerAction;
+	subject->Attach(this);
+
+	return *this;
+}
+
+// CardBonusViewer default constructor.
+CardBonusViewer::CardBonusViewer()
+{
+	subject = nullptr;
+	moveBonus = 0;
+	armyBonus = 0;
+	flightBonus = 0;
+	immunityBonus = false;
+}
+
+// Parameterized constructor. Adds self to the subject.
+CardBonusViewer::CardBonusViewer(Player* player)
+{
+	subject = player;
+	moveBonus = player->getCardMoveBonus();
+	armyBonus = player->getCardArmyBonus();
+	flightBonus = player->getCardFlightBonus();
+	immunityBonus = player->getCardImmunityBonus();
+	subject->Attach(this);
+}
+
+// Copy constructor. Automatically adds self to the subject.
+CardBonusViewer::CardBonusViewer(const CardBonusViewer& other)
+{
+	subject = other.subject;
+	moveBonus = other.moveBonus;
+	armyBonus = other.armyBonus;
+	flightBonus = other.flightBonus;
+	immunityBonus = other.immunityBonus;
+	subject->Attach(this);
+}
+
+// Destructor. Does nothing.
+CardBonusViewer::~CardBonusViewer() {}
+
+// Prints appropriate message if a bonus changes.
+void CardBonusViewer::Update()
+{
+	if (subject->getCardMoveBonus() != moveBonus)
+	{
+		moveBonus = subject->getCardMoveBonus();
+		cout << "Observer::CardBonusViewer: " << subject->getName() << " now has " << moveBonus << " bonus moves." << endl;
+	}
+	if (subject->getCardArmyBonus() != armyBonus)
+	{
+		armyBonus = subject->getCardArmyBonus();
+		cout << "Observer::CardBonusViewer: " << subject->getName() << " now has " << armyBonus << " bonus armies." << endl;
+	}
+	if (subject->getCardFlightBonus() != flightBonus)
+	{
+		flightBonus = subject->getCardFlightBonus();
+		cout << "Observer::CardBonusViewer: " << subject->getName() << " now has " << flightBonus << " bonus flight." << endl;
+	}
+	if (subject->getCardImmunityBonus() != immunityBonus)
+	{
+		immunityBonus = subject->getCardImmunityBonus();
+		cout << "Observer::CardBonusViewer: " << subject->getName() << (immunityBonus ? " has " : " no longer has ") << " immunity." << endl;
+	}
+}
+
+// Prints class name.
+ostream& operator <<(ostream& strm, const CardBonusViewer& obj) 
+{
+	return strm << "CardBonusViewer";
+}
+
+// Assigns values. Attaches and detaches as appropriate.
+CardBonusViewer CardBonusViewer::operator =(const CardBonusViewer& other)
+{
+	if (&other == this)
+		return *this;
+
+	subject->Detach(this);
+	subject = other.subject;
+	moveBonus = other.moveBonus;
+	armyBonus = other.armyBonus;
+	flightBonus = other.flightBonus;
+	immunityBonus = other.immunityBonus;
 	subject->Attach(this);
 
 	return *this;

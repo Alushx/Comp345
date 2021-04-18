@@ -164,6 +164,30 @@ private:
 
 };
 
+// Keeps track of a players card bonuses and prints a message if one changes.
+class CardBonusViewer : public Observer
+{
+public:
+	CardBonusViewer();
+	CardBonusViewer(Player* player);
+	CardBonusViewer(const CardBonusViewer& other);
+	~CardBonusViewer();
+
+	// Important method.
+	void Update();
+
+	// Operators.
+	friend ostream& operator <<(ostream& stream, const CardBonusViewer& obj);
+	CardBonusViewer operator =(const CardBonusViewer& other);
+
+private:
+	Player* subject;
+	int moveBonus;
+	int flightBonus;
+	int armyBonus;
+	bool immunityBonus;
+};
+
 class GameState : public Subject {
 private:
 	Map* map;
