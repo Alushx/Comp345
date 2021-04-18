@@ -39,6 +39,35 @@ MapLoader* setUpDriver2()
 	return loadValidMap(fileName);
 }
 
+void playGamePart2(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
+{
+	// Setting up variables.
+	vector<Player*> player = Player::getPlayerList();
+	int playerNum = Player::getPlayerNum();
+	Turn* turn = createTurns(selectedMode, mapLoader->getMap(), hand);
+
+	// Adding observers. Automatically deleted by subject.
+	new PlayerTurnViewer(turn);
+	new CardPickViewer(turn);
+	for (Player* subjectPlayer : player)
+	{
+		new PlayerActionViewer(subjectPlayer);
+		new CardBonusViewer(subjectPlayer);
+	}
+
+	// Main game loop.
+	for (int i = 0; i < turn->getMaxNumOfTurns(); i++)
+	{
+		for (int j = 0; j < player.size(); j++)
+		{
+			turn->setPlayerTurn(player[(bidWinner + j) % playerNum]);
+			turn->playTurn();
+		}
+	}
+
+	delete turn;
+}
+
 int main()
 {
 	// Setting up players, bidding facility, and map.
@@ -53,7 +82,7 @@ int main()
 	placeArmies(mapLoader);
 
 	// Main game loop
-	playGame(hand, 0, mapLoader, 3);
+	playGamePart2(hand, 0, mapLoader, 3);
 
 	// Deallocating Players and Bot armies.
 	deallocateResources(mapLoader, deck, hand);
