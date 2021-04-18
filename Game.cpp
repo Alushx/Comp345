@@ -111,8 +111,10 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	vector<Player*> player = Player::getPlayerList();
 	int playerNum = Player::getPlayerNum();
 	Turn* turn = createTurns(selectedMode, mapLoader->getMap(), hand);
+	GameState* state = new GameState(mapLoader->getMap());
 
 	// Adding observers. Automatically deleted by subject.
+	new View(state);
 	new PlayerTurnViewer(turn);
 	new CardPickViewer(turn);
 	for (Player* subjectPlayer : player)
@@ -129,10 +131,12 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 			changePlayerStrategy(player[(bidWinner + j) % playerNum]);
 			turn->setPlayerTurn(player[(bidWinner + j) % playerNum]);
 			turn->playTurn();
+			state->computeGameState();
 		}
 	}
 
 	delete turn;
+	delete state;
 }
 
 // Displays the tournament results as a table.
