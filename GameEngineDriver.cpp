@@ -7,10 +7,10 @@ int main(){
 
     if (gameMode == 2)
     {
-        //gameEngine->tournamentGame();//To do
+        gameEngine->tournamentGame(gameMode);
     }
     else
     {
-        //gameEngine->singleGame();//To do
+        gameEngine->singleGame(gameMode);
     }
 }
