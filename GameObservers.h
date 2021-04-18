@@ -237,4 +237,9 @@ public:
 
 private:
 	void printbar(int);
+	std::vector<int> coins;
+	std::vector<int> continents;
+	std::vector<int> victoryPoints;
+	std::vector<int> territories;
+	std::vector<int> elixirAmount;
 };

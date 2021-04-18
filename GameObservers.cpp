@@ -390,12 +390,23 @@ void GameState::computeGameState() {
 // Default Constructors  
 View :: View(){
 	gmstate = nullptr;
+	coins = vector<int>();
+	continents = vector<int>();
+	victoryPoints = vector<int>();
+	territories = vector<int>();
+	elixirAmount = vector<int>();
 }
 // Parameterized constructor
 View :: View(GameState * gt){
 	gmstate = gt;
 	gt->Attach(this);
+	coins = gmstate->getCoins();
+	continents = gmstate->getContinents();
+	victoryPoints = gmstate->getVictoryPoints();
+	territories = gmstate->getTerritories();
+	elixirAmount = gmstate->getElixirAmount();
 }
+
 //Destructor
 View :: ~View(){
 	// Game state deletes this. Not the other way around.
@@ -432,9 +443,28 @@ void View :: printbar(int length){
 
 void View::Update()
 {
-	for (int i = 0; i < Player::getPlayerNum(); i++)
+	const int MAX_CARDS[] = { 4, 5, 6 }; // Should be 13, 10, 8 but that takes ages for testing and demo purposes.
+
+	if (!(coins == gmstate->getCoins() && continents == gmstate->getContinents() && territories == gmstate->getTerritories()
+		&& elixirAmount == gmstate->getElixirAmount() && victoryPoints == gmstate->getVictoryPoints()))
 	{
-		display(i);
+		coins = gmstate->getCoins();
+		continents = gmstate->getContinents();
+		victoryPoints = gmstate->getVictoryPoints();
+		territories = gmstate->getTerritories();
+		elixirAmount = gmstate->getElixirAmount();
+		for (int i = 0; i < Player::getPlayerNum(); i++)
+			display(i);
+	}
+
+	for (Player* player : Player::getPlayerList())
+	{
+		if (player->getPlayerHand()->size() == MAX_CARDS[Player::getPlayerNum() - 2])
+		{
+			cout << "Congratulations! " << player->getName() << " has " << MAX_CARDS[Player::getPlayerNum() - 2] << " cards!" << endl;
+			cout << player->getName() << "'s Score: ";
+			printbar(player->getScore());
+		}
 	}
 }
 
