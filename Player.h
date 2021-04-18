@@ -37,6 +37,10 @@ private:
 	int numOfCubes;
 	int numOfDisks;
 	BiddingFacility* bidFaci;
+	std::list<Territory*> playerTerritory;
+	std::list<Card*> playerHand;
+	std::list<City*> cities;
+	std::list<Army*> armies;
 	int score;
 	int ownNumElixer;
 	PlayerStrategies* strategy;

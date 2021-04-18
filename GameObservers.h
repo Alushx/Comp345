@@ -177,7 +177,7 @@ public:
 	void Update();
 
 	// Operators.
-	friend ostream& operator <<(ostream& stream, const CardBonusViewer& obj);
+	friend std::ostream& operator <<(std::ostream& stream, const CardBonusViewer& obj);
 	CardBonusViewer operator =(const CardBonusViewer& other);
 
 private:
