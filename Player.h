@@ -18,8 +18,6 @@
 #include "BiddingFacility.h"
 #include "GameObservers.h"
 
-using std::string;
-
 // Forward declarations to make compiler happy.
 class Army;
 class City;
@@ -34,22 +32,22 @@ class Player : public Subject
 
 private:
 	// Member variables.
-	string name;
+	std::string name;
 	int numOfCoins;
 	int numOfCubes;
 	int numOfDisks;
 	BiddingFacility* bidFaci;
-	list<Territory*> playerTerritory;
-	list<Card*> playerHand;
-	list<City*> cities;
-	list<Army*> armies;
+	std::list<Territory*> playerTerritory;
+	std::list<Card*> playerHand;
+	std::list<City*> cities;
+	std::list<Army*> armies;
 	int score;
 	int ownNumElixer;
 	PlayerStrategies* strategy;
-	string currentAction;
+	std::string currentAction;
 
 	// Static variables.
-	static vector<Player*> playerList;
+	static std::vector<Player*> playerList;
 	static int playerNum;
 	static Territory* startingRegion;
 	static Player* bot;
@@ -58,7 +56,7 @@ public:
 
 	// Constructors and destructors.
 	Player();
-	Player(string name, int coinNum, PlayerStrategies* aStrategy = nullptr, bool isBot = false);
+	Player(std::string name, int coinNum, PlayerStrategies* aStrategy = nullptr, bool isBot = false);
 	Player(const Player&);
 	~Player();
 
@@ -76,32 +74,32 @@ public:
 	int computeContinentsOwned(Map*);
 
 	// Accessors.
-	string getName();
+	std::string getName();
 	int getCoins();
 	int getNumOfCubes();
 	int getNumOfDisks();
 	BiddingFacility* getBidFaci() const;
-	list<Territory*>* getPlayerTerritories();
-	list<Card*>* getPlayerHand();
-	list<City*>* getCities();
-	list<Army*>* getArmies();
+	std::list<Territory*>* getPlayerTerritories();
+	std::list<Card*>* getPlayerHand();
+	std::list<City*>* getCities();
+	std::list<Army*>* getArmies();
 	int getScore();
 	int getOwnNumElixer();
 	PlayerStrategies* getStrategy();
-	string getCurrentAction();
+	std::string getCurrentAction();
 
 	// Mutators.
-	void setName(string n);
+	void setName(std::string n);
 	void setCoins(int c);
 	void setNumOfCubes(int);
 	void setNumOfDisks(int);
 	void setBidFaci(BiddingFacility*);
 	void setOwnNumElixer(int numElixer);
 	void setStrategy(PlayerStrategies*);
-	void setCurrentAction(string);
+	void setCurrentAction(std::string);
 
 	// Operators.
-	friend ostream& operator<<(ostream&, const Player&);
+	friend std::ostream& operator<<(std::ostream&, const Player&);
 	Player& operator= (const Player&);
 
 	// Static methods.
@@ -109,16 +107,16 @@ public:
 	static void setBot(Player*);
 	static void placeBotArmies(int, Map*);
 	static int getPlayerNum();
-	static vector<Player*>& getPlayerList();
+	static std::vector<Player*>& getPlayerList();
 	static void setStartingRegion(Territory*);
 	static Territory* getStartingRegion();
-	static Player* announcement(vector<Player*> player);
+	static Player* announcement(std::vector<Player*> player);
 	static Player* computeElixerScore();
 
 private:
 	// Helping methods.
-	void andOrAction(Card*, string&, Map*);
-	void playCardAction(string, Map*);
+	void andOrAction(Card*, std::string&, Map*);
+	void playCardAction(std::string, Map*);
 	void moveArmiesAction(int, Map*);
 	void buildCityAction();
 	void addArmiesAction(int);
@@ -144,7 +142,7 @@ public:
 	Army(const Army&);
 	~Army();
 	// Useful methods.
-	string getOwnerName();
+	std::string getOwnerName();
 	Player* getOwner();
 	Territory* getPosition();
 	void setPosition(Territory*);
@@ -152,7 +150,7 @@ public:
 
 // Operators.
 private:
-	friend ostream& operator<<(ostream&, const Army&);
+	friend std::ostream& operator<<(std::ostream&, const Army&);
 };
 
 class City
@@ -167,14 +165,13 @@ public:
 	City(const City&);
 	~City();
 	// Useful methods.
-	string getOwnerName();
+	std::string getOwnerName();
 	Player* getOwner();
 	Territory* getPosition();
 	City& operator=(City&);
 
 	// Operators.
 private:
-	friend ostream& operator<<(ostream&, const City&);
+	friend std::ostream& operator<<(std::ostream&, const City&);
 };
 #endif
-

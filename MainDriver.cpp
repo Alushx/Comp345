@@ -10,16 +10,22 @@
 //      Vithura Muthiah - 40062305
 //===================================================================
 
-#pragma once
+//===================================================================
+//							Main driver 
+//===================================================================
 
-#include "GameObservers.h"
+
+#include "BiddingFacility.h"
+#include "Cards.h"
 #include "Game.h"
+#include "GameObservers.h"
+#include "Map.h"
+#include "MapLoader.h"
+#include "Player.h"
 
-class GameEngine{
 
-public:
-    int selectGameMode();
-    void singleGame(int selectedMode);
-    void tournamentGame(int selectedMode);
+int main() {
 
-};
+
+	return 0;
+}

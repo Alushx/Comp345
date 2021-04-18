@@ -14,6 +14,7 @@
 #include "GameObservers.h"
 #include "PlayerStrategies.h"
 
+using namespace std;
 
 //Deallocate MapLoader, Deck, Hand, and Players.
 // Armies, Cities, Cards, and Maps are deleted by the former 4.
