@@ -100,9 +100,6 @@ void GameEngine::tournamentGame(int selectedMode){
     // Main game loop
     playTournamentGame(hand, deck, mapLoader);
 
-    // Compute score
-    calculateScore(mapLoader);
-
     displayTournamentResults();
 
     // Determine winner
@@ -164,9 +161,9 @@ void GameEngine::playTournamentGame(Hand* hand, Deck* deck, MapLoader* mapLoader
         }
     }
 
-    if (newDeck == nullptr)
+    if (newDeck != nullptr)
         delete newDeck;
-    if (newHand == nullptr)
+    if (newHand != nullptr)
         delete newHand;
     delete turn;
     delete state;

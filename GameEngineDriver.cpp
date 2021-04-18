@@ -25,4 +25,6 @@ int main(){
     {
         gameEngine->singleGame(gameMode);
     }
+
+    delete gameEngine;
 }
