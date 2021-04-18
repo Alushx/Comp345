@@ -480,8 +480,7 @@ void PlayerTurnViewer::Update()
 	if (subject->getPlayerTurn() != playerTurn)
 	{
 		playerTurn = subject->getPlayerTurn();
-		turnCount++;
-		cout << "Observer::PlayerTurnViewer: Turn " << (turnCount / Player::getPlayerNum()) + 1 << ": " << playerTurn->getName() << " is now playing!" << endl;
+		cout << "Observer::PlayerTurnViewer: Turn " << (turnCount++ / Player::getPlayerNum()) + 1 << ": " << playerTurn->getName() << " is now playing!" << endl;
 	}
 }
 
@@ -687,7 +686,7 @@ void CardBonusViewer::Update()
 	if (subject->getCardImmunityBonus() != immunityBonus)
 	{
 		immunityBonus = subject->getCardImmunityBonus();
-		cout << "Observer::CardBonusViewer: " << subject->getName() << (immunityBonus ? " has " : " no longer has ") << " immunity." << endl;
+		cout << "Observer::CardBonusViewer: " << subject->getName() << (immunityBonus ? " has " : " no longer has ") << "immunity." << endl;
 	}
 }
 
