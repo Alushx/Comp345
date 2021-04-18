@@ -13,6 +13,7 @@
 #include "Game.h"
 #include "GameObservers.h"
 #include "PlayerStrategies.h"
+#include "GameEngine.h"
 
 
 //Deallocate MapLoader, Deck, Hand, and Players.
@@ -121,6 +122,7 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	{
 		for (int j = 0; j < player.size(); j++)
 		{
+			changePlayerStrategy(player[(bidWinner + j) % playerNum]);
 			turn->setPlayerTurn(player[(bidWinner + j) % playerNum]);
 			turn->playTurn();
 		}
