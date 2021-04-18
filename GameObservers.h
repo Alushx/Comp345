@@ -14,7 +14,7 @@
 #include <list>
 #include <iostream>
 #include <vector>
-using namespace std;
+
 
 class Observer
 {
@@ -34,7 +34,7 @@ public:
 	Subject();
 	virtual ~Subject();
 private:
-	list<Observer*>* _observers;
+	std::list<Observer*>* _observers;
 
 };
 
@@ -81,7 +81,7 @@ public:
 	void playTurn();
 
 	// Operators.
-	friend ostream& operator <<(ostream& output, const Turn& turn);
+	friend std::ostream& operator <<(std::ostream& output, const Turn& turn);
 	const Turn& operator =(const Turn&);
 };
 
@@ -111,7 +111,7 @@ public:
 	void Update();
 
 	// Operators.
-	friend ostream& operator <<(ostream& stream, const PlayerTurnViewer& obj);
+	friend std::ostream& operator <<(std::ostream& stream, const PlayerTurnViewer& obj);
 	PlayerTurnViewer operator =(const PlayerTurnViewer& other);
 
 private:
@@ -134,7 +134,7 @@ public:
 	void Update();
 
 	// Operators.
-	friend ostream& operator <<(ostream& stream, const CardPickViewer& obj);
+	friend std::ostream& operator <<(std::ostream& stream, const CardPickViewer& obj);
 	CardPickViewer operator =(const CardPickViewer& other);
 
 private:
@@ -155,12 +155,12 @@ public:
 	void Update();
 
 	// Operators.
-	friend ostream& operator <<(ostream& stream, const PlayerActionViewer& obj);
+	friend std::ostream& operator <<(std::ostream& stream, const PlayerActionViewer& obj);
 	PlayerActionViewer operator =(const PlayerActionViewer& other);
 
 private:
 	Player* subject;
-	string playerAction;
+	std::string playerAction;
 
 };
 
@@ -191,11 +191,11 @@ private:
 class GameState : public Subject {
 private:
 	Map* map;
-	vector<int> coins;
-	vector<int> continents;
-	vector<int> victoryPoints;
-	vector<int> territories;
-	vector<int> elixirAmount;
+	std::vector<int> coins;
+	std::vector<int> continents;
+	std::vector<int> victoryPoints;
+	std::vector<int> territories;
+	std::vector<int> elixirAmount;
 
 public:
 	// Constructors & destructor
@@ -205,16 +205,16 @@ public:
 	~GameState();
 
 	// Accessors & Mutators
-	vector<int> getCoins();
-	vector<int> getContinents();
-	vector<int> getVictoryPoints();
-	vector<int> getTerritories();
-	vector<int> getElixirAmount();
-	void setCoins(vector<int>);
-	void setContinents(vector<int>);
-	void setVictoryPoints(vector<int>);
-	void setTerritories(vector<int>);
-	void setElixirAmount(vector<int>);
+	std::vector<int> getCoins();
+	std::vector<int> getContinents();
+	std::vector<int> getVictoryPoints();
+	std::vector<int> getTerritories();
+	std::vector<int> getElixirAmount();
+	void setCoins(std::vector<int>);
+	void setContinents(std::vector<int>);
+	void setVictoryPoints(std::vector<int>);
+	void setTerritories(std::vector<int>);
+	void setElixirAmount(std::vector<int>);
 
 	// Functions
 	void computeGameState();

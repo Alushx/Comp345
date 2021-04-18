@@ -100,6 +100,8 @@ void GameEngine::tournamentGame(int selectedMode){
     // Compute score
     calculateScore(mapLoader);
 
+    displayTournamentResults();
+
     // Determine winner
     determineWinner();
 

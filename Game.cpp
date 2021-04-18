@@ -13,7 +13,9 @@
 #include "Game.h"
 #include "GameObservers.h"
 #include "PlayerStrategies.h"
+#include "GameEngine.h"
 
+using namespace std;
 
 //Deallocate MapLoader, Deck, Hand, and Players.
 // Armies, Cities, Cards, and Maps are deleted by the former 4.
@@ -124,6 +126,7 @@ void playGame(Hand* hand, int bidWinner, MapLoader* mapLoader, int selectedMode)
 	{
 		for (int j = 0; j < player.size(); j++)
 		{
+			changePlayerStrategy(player[(bidWinner + j) % playerNum]);
 			turn->setPlayerTurn(player[(bidWinner + j) % playerNum]);
 			turn->playTurn();
 		}

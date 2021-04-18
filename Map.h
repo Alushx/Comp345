@@ -16,14 +16,12 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-
 // Forward declaration to make compiler happy.
 class Territory;
 class Army;
 class Player;
 
-struct Map {
+class Map {
 
 private:
 	// Data members.
@@ -43,7 +41,7 @@ public:
 	void addEdge(Territory*, Territory*, int);
 	void printList();
 	Territory* getTerritory(std::string);
-	map<string, Territory*> getTerritories();
+	std::map<std::string, Territory*> getTerritories();
 	Territory* selectTerritory();
 	std::list<std::list<Territory*>> getContinents();
 	Player* getContinentOwner(std::list<Territory*>);
