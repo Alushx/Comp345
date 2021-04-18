@@ -65,7 +65,7 @@ void placeArmies(MapLoader* mapLoader) {
 void placeBotArmies(MapLoader* mapLoader) {
 	if (Player::getPlayerNum() == 2)
 	{
-		Player* bot = Player::getBot();
+		Player* bot = new Player("BOT", 999, nullptr, true);;
 		bot->placeBotArmies(10, mapLoader->getMap());
 	}
 }
@@ -257,9 +257,6 @@ void createPlayers(int gamemode)
 		cin >> lName;
 		new Player(lName, coins, new HumanPlayer);
 	}
-
-	if (numOfPlayers == 2)
-		new Player("BOT", 999, nullptr, true);
 }
 
 // Receives player input to change strategy.
